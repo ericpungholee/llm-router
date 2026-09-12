@@ -1,4 +1,0 @@
-{"prompt_id":"sample_mc_001","prompt":"Which planet is known as the Red Planet?","task_type":"multiple_choice","benchmark_name":"sample_benchmark","reference_answer":"B","choices":{"A":"Venus","B":"Mars","C":"Jupiter","D":"Mercury"}}
-{"prompt_id":"sample_math_001","prompt":"Compute 17 × 6. Return only the number.","task_type":"short_answer_math","benchmark_name":"sample_benchmark","reference_answer":"102"}
-{"prompt_id":"sample_code_001","prompt":"Write a Python function add(a, b) that returns the sum of a and b. Return only the function definition.","task_type":"code","benchmark_name":"sample_benchmark","reference_answer":"def add(a, b):\n    return a + b","tests":["assert add(2, 3) == 5","assert add(-1, 1) == 0"]}
-
