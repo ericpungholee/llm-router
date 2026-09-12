@@ -2,7 +2,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from benchmark_loaders import BenchmarkRecord, load_enabled_benchmarks
+from benchmark_loaders import BenchmarkRecord, load_enabled_benchmarks, load_hard_pilot
 from generate_dataset import (
     generate_results,
     is_completed_result,
@@ -18,6 +18,17 @@ from providers import call_model_with_retries, validate_provider_registry
 
 
 class ModeSelectionTests(unittest.TestCase):
+    def test_hard_pilot_has_five_prompts_per_benchmark(self):
+        _, records = load_enabled_benchmarks(Path("benchmarks/manifest.json"))
+        selected = load_hard_pilot(Path("benchmarks/hard_pilot.json"), records)
+        self.assertEqual(len(selected), 15)
+        for name in ("mmlu_pro", "math_500", "livecodebench"):
+            self.assertEqual(sum(row.benchmark_name == name for row in selected), 5)
+        self.assertTrue(all(row.difficulty for row in selected))
+        self.assertTrue(
+            all(row.problem_date for row in selected if row.benchmark_name == "livecodebench")
+        )
+
     def test_smoke_selects_exactly_one_prompt_times_five_models(self):
         records = [smoke_test_prompt()]
         calls = planned_calls(records, enabled_models(), max_output_tokens=128)
@@ -25,13 +36,13 @@ class ModeSelectionTests(unittest.TestCase):
         self.assertEqual(len(calls), 5)
         self.assertEqual({call[2] for call in calls}, {128})
 
-    def test_pilot_selects_exactly_nine_prompts_times_five_models(self):
+    def test_pilot_selects_exactly_fifteen_prompts_times_five_models(self):
         _, records = load_enabled_benchmarks(Path("benchmarks/manifest.json"))
         selected = select_pilot_prompts(records)
-        self.assertEqual(len(selected), 9)
-        self.assertEqual(len(planned_calls(selected, enabled_models())), 45)
+        self.assertEqual(len(selected), 15)
+        self.assertEqual(len(planned_calls(selected, enabled_models())), 75)
         for name in ("mmlu_pro", "math_500", "livecodebench"):
-            self.assertEqual(sum(row.benchmark_name == name for row in selected), 3)
+            self.assertEqual(sum(row.benchmark_name == name for row in selected), 5)
 
     def test_registry_identifiers_are_implemented_exactly(self):
         validate_provider_registry(enabled_models())

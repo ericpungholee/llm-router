@@ -28,6 +28,10 @@ class BenchmarkRecord:
     choices: Optional[Mapping[str, str]] = None
     tests: Tuple[Mapping[str, str], ...] = ()
     mock_solution: Optional[str] = None
+    task_category: str = ""
+    difficulty: str = ""
+    source_split: str = ""
+    problem_date: Optional[str] = None
 
 
 LOADER_TASK_TYPES = {
@@ -81,6 +85,9 @@ def load_mmlu_pro(spec: BenchmarkSpec) -> List[BenchmarkRecord]:
                 benchmark_name=spec.name,
                 reference_answer=answer,
                 choices=choices,
+                task_category=str(row.get("category", "general")),
+                difficulty=str(row.get("difficulty", "hard")),
+                source_split=str(row.get("source_split", "test")),
             )
         )
     return records
@@ -99,6 +106,9 @@ def load_math_500(spec: BenchmarkSpec) -> List[BenchmarkRecord]:
                 task_type=spec.task_type,
                 benchmark_name=spec.name,
                 reference_answer=answer,
+                task_category=str(row.get("subject", "mathematics")),
+                difficulty=str(row.get("difficulty", f"level_{row.get('level', 'unknown')}")),
+                source_split=str(row.get("source_split", "test")),
             )
         )
     return records
@@ -118,7 +128,13 @@ def load_livecodebench(spec: BenchmarkSpec) -> List[BenchmarkRecord]:
             {"input": _require_text(test, "input", spec.name), "output": _require_text(test, "output", spec.name)}
             for test in raw_tests
         )
-        mock_solution = _require_text(row, "mock_solution", spec.name)
+        mock_solution_value = row.get("mock_solution")
+        mock_solution = (
+            str(mock_solution_value)
+            if mock_solution_value is not None and str(mock_solution_value).strip()
+            else None
+        )
+        platform = str(row.get("platform", "competition"))
         records.append(
             BenchmarkRecord(
                 prompt_id=f"{spec.name}:{question_id}",
@@ -128,6 +144,10 @@ def load_livecodebench(spec: BenchmarkSpec) -> List[BenchmarkRecord]:
                 reference_answer=json.dumps(tests, ensure_ascii=False),
                 tests=tests,
                 mock_solution=mock_solution,
+                task_category=f"competitive_programming:{platform}",
+                difficulty=str(row.get("difficulty", "unknown")),
+                source_split=str(row.get("source_split", "test")),
+                problem_date=str(row["contest_date"]) if row.get("contest_date") else None,
             )
         )
     return records
@@ -201,6 +221,9 @@ def validate_benchmark_records(records: Sequence[BenchmarkRecord]) -> None:
             raise ValueError(f"{record.prompt_id} is missing a reference answer")
         if record.task_type not in {"multiple_choice", "math", "code"}:
             raise ValueError(f"{record.prompt_id} has invalid task_type")
+        for field_name in ("task_category", "difficulty", "source_split"):
+            if not getattr(record, field_name).strip():
+                raise ValueError(f"{record.prompt_id} is missing {field_name}")
 
 
 def load_enabled_benchmarks(path: Path) -> Tuple[List[BenchmarkSpec], List[BenchmarkRecord]]:
@@ -212,3 +235,29 @@ def load_enabled_benchmarks(path: Path) -> Tuple[List[BenchmarkSpec], List[Bench
     validate_benchmark_records(records)
     return specs, records
 
+
+def load_hard_pilot(
+    path: Path, records: Sequence[BenchmarkRecord]
+) -> List[BenchmarkRecord]:
+    """Load an ordered, outcome-blind hard-pilot subset definition."""
+    with path.open(encoding="utf-8") as handle:
+        definition = json.load(handle)
+    if definition.get("version") != 1 or not isinstance(definition.get("prompts"), dict):
+        raise ValueError("Hard-pilot definition must have version 1 and prompt groups")
+    ordered_ids = [
+        str(prompt_id)
+        for benchmark_name in ("mmlu_pro", "math_500", "livecodebench")
+        for prompt_id in definition["prompts"].get(benchmark_name, [])
+    ]
+    if len(ordered_ids) != 15 or len(set(ordered_ids)) != 15:
+        raise ValueError("Hard pilot must contain exactly 15 unique prompt IDs")
+    records_by_id = {record.prompt_id: record for record in records}
+    missing = [prompt_id for prompt_id in ordered_ids if prompt_id not in records_by_id]
+    if missing:
+        raise ValueError(f"Hard-pilot prompt IDs are missing from the candidate pool: {missing}")
+    selected = [records_by_id[prompt_id] for prompt_id in ordered_ids]
+    for benchmark_name in ("mmlu_pro", "math_500", "livecodebench"):
+        count = sum(record.benchmark_name == benchmark_name for record in selected)
+        if count != 5:
+            raise ValueError(f"Hard pilot requires 5 {benchmark_name} prompts, found {count}")
+    return selected

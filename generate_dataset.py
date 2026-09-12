@@ -3,7 +3,9 @@
 import argparse
 import csv
 import hashlib
+import json
 import os
+import re
 from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
@@ -24,7 +26,7 @@ except ImportError:  # Keep --dry-run usable in a dependency-free checkout.
             os.environ.setdefault(key.strip(), value.strip().strip("\"'"))
         return True
 
-from benchmark_loaders import BenchmarkRecord, load_enabled_benchmarks
+from benchmark_loaders import BenchmarkRecord, load_enabled_benchmarks, load_hard_pilot
 from dataset_schema import RESULT_FIELDS, validate_results
 from graders import (
     MalformedModelOutput,
@@ -48,8 +50,8 @@ from spend_control import RunPlan, SpendLimitError, SpendTracker, build_run_plan
 
 SMOKE_MAX_OUTPUT_TOKENS = 128
 SMOKE_MAX_API_CALLS = 5
-PILOT_PROMPTS_PER_BENCHMARK = 3
-PILOT_MAX_MODEL_CALLS = 45
+PILOT_MAX_MODEL_CALLS = 75
+HARD_PILOT_DEFINITION = Path("benchmarks/hard_pilot.json")
 PAID_TERMINAL_STATUSES = frozenset(("success", "parsing_failure", "grading_failure"))
 
 
@@ -76,18 +78,8 @@ def smoke_test_prompt() -> BenchmarkRecord:
 
 
 def select_pilot_prompts(records: Sequence[BenchmarkRecord]) -> List[BenchmarkRecord]:
-    """Select exactly three records from each required benchmark, in source order."""
-    selected = []
-    for benchmark_name in ("mmlu_pro", "math_500", "livecodebench"):
-        matches = [record for record in records if record.benchmark_name == benchmark_name]
-        if len(matches) < PILOT_PROMPTS_PER_BENCHMARK:
-            raise ValueError(
-                f"Pilot requires 3 {benchmark_name} prompts, but only {len(matches)} are available"
-            )
-        selected.extend(matches[:PILOT_PROMPTS_PER_BENCHMARK])
-    if len(selected) != 9:
-        raise AssertionError("Pilot prompt selection must contain exactly 9 prompts")
-    return selected
+    """Select the fixed 15-prompt hard pilot without using model outcomes."""
+    return load_hard_pilot(HARD_PILOT_DEFINITION, records)
 
 
 def incorrect_mock_answer(record: BenchmarkRecord) -> str:
@@ -105,9 +97,9 @@ def mock_answer(record: BenchmarkRecord, model: ModelConfig) -> str:
     simulated_correct = hashlib.sha256(identity.encode("utf-8")).digest()[0] % 3 != 0
     if simulated_correct:
         if record.task_type == "code":
-            if record.mock_solution is None:
-                raise ValueError(f"{record.prompt_id} needs a mock solution")
-            return record.mock_solution
+            # Real benchmark exports do not include solutions. Keep dry-run
+            # fully offline by using a deterministic incorrect placeholder.
+            return record.mock_solution or incorrect_mock_answer(record)
         return record.reference_answer
     return incorrect_mock_answer(record)
 
@@ -525,12 +517,49 @@ def regrade_results(
     return regraded
 
 
+def benchmark_records_from_saved_results(
+    rows: Sequence[Dict[str, object]],
+) -> List[BenchmarkRecord]:
+    """Reconstruct grading inputs embedded in a historical result CSV."""
+    records = []
+    seen = set()
+    for row in rows:
+        prompt_id = str(row["prompt_id"])
+        if prompt_id in seen:
+            continue
+        seen.add(prompt_id)
+        task_type = str(row["task_type"])
+        choices = None
+        tests = ()
+        if task_type == "multiple_choice":
+            labels = re.findall(r"(?m)^([A-Z])\.\s", str(row["prompt"]))
+            choices = {label: label for label in labels}
+        elif task_type == "code":
+            decoded = json.loads(str(row["reference_answer"]))
+            tests = tuple(
+                {"input": str(test["input"]), "output": str(test["output"])}
+                for test in decoded
+            )
+        records.append(
+            BenchmarkRecord(
+                prompt_id=prompt_id,
+                prompt=str(row["prompt"]),
+                task_type=task_type,
+                benchmark_name=str(row["benchmark"]),
+                reference_answer=str(row["reference_answer"]),
+                choices=choices,
+                tests=tests,
+            )
+        )
+    return records
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     modes = parser.add_mutually_exclusive_group(required=True)
     modes.add_argument("--dry-run", action="store_true", help="Use offline deterministic responses.")
     modes.add_argument("--smoke-test", action="store_true", help="Run one prompt against five models.")
-    modes.add_argument("--pilot", action="store_true", help="Run the 9-prompt, 45-pair pilot.")
+    modes.add_argument("--pilot", action="store_true", help="Run the 15-prompt, 75-pair hard pilot.")
     modes.add_argument(
         "--regrade-pilot",
         action="store_true",
@@ -562,8 +591,10 @@ def parse_args() -> argparse.Namespace:
 def _default_output(args: argparse.Namespace) -> Path:
     if args.smoke_test:
         return Path("data/results/smoke_test_results.csv")
-    if args.pilot or args.regrade_pilot:
+    if args.regrade_pilot:
         return Path("data/results/pilot_results.csv")
+    if args.pilot:
+        return Path("data/results/hard_pilot_results.csv")
     if args.dry_run:
         return Path("data/results/dry_run_results.csv")
     return Path("data/results/live_results.csv")
@@ -576,21 +607,12 @@ def main() -> None:
     _, all_records = load_enabled_benchmarks(args.manifest)
 
     if args.regrade_pilot:
-        try:
-            benchmark = select_pilot_prompts(all_records)
-        except ValueError as error:
-            raise SystemExit(str(error)) from error
         output = args.output or _default_output(args)
         if not output.exists():
             raise SystemExit(f"Pilot results do not exist: {output}")
         existing_results = read_results(output)
-        expected_keys = {
-            (record.prompt_id, model.api_model_identifier or "UNRESOLVED")
-            for record in benchmark
-            for model in models
-        }
-        existing_keys = {result_key(row) for row in existing_results}
-        if len(existing_results) != PILOT_MAX_MODEL_CALLS or existing_keys != expected_keys:
+        benchmark = benchmark_records_from_saved_results(existing_results)
+        if len(existing_results) != 45 or len(benchmark) != 9:
             raise SystemExit(
                 "Offline regrade requires the complete 9-prompt x 5-model pilot CSV"
             )
@@ -654,7 +676,7 @@ def main() -> None:
     if args.smoke_test and len(remaining) > SMOKE_MAX_API_CALLS:
         raise SystemExit("Smoke test safety invariant failed: more than 5 calls selected")
     if args.pilot and len(planned_calls(benchmark, models)) != PILOT_MAX_MODEL_CALLS:
-        raise SystemExit("Pilot safety invariant failed: selection is not exactly 9 prompts x 5 models")
+        raise SystemExit("Pilot safety invariant failed: selection is not exactly 15 prompts x 5 models")
 
     run_plan = None
     if live_mode:

@@ -47,8 +47,25 @@ python generate_dataset.py --dry-run
 ```
 
 Dry-run uses deterministic local responses and never accesses a provider. It
-evaluates the local nine-prompt matrix and writes synthetic metrics to
+evaluates the local 150-prompt candidate pool and writes synthetic metrics to
 `data/results/dry_run_results.csv`.
+
+## Hard candidate pool
+
+The active manifest contains 150 held-out candidates: 50 domain-balanced
+MMLU-Pro test questions, 50 exact-gradeable level-5 MATH-500 test problems, and
+50 recent medium/hard LiveCodeBench competition problems from the
+`release_v6/test6` window. Coding records are genuine AtCoder stdin problems
+dated February-April 2025; functional-interface records and simple handwritten
+fixtures are excluded.
+
+Selection uses source metadata and deterministic heuristics only, never model
+outcomes. `benchmarks/hard_pilot.json` identifies a future 15-prompt pilot with
+five prompts per benchmark. Inspect it without making provider calls:
+
+```bash
+python3 benchmark_pool_summary.py
+```
 
 ## Five-call smoke test
 
@@ -67,22 +84,22 @@ Live outputs are resumed automatically when the output file already exists, so
 paid terminal prompt/model pairs are never called twice. Use a different
 `--output` path only when an intentionally separate run is desired.
 
-## Nine-prompt pilot
+## Hard pilot (not run yet)
 
-Do not run this until the smoke results have been reviewed.
+The fixed hard-pilot definition selects five prompts from each benchmark. A
+future run will evaluate 15 prompts across five models for 75 prompt/model
+pairs, writing to `data/results/hard_pilot_results.csv` so it cannot overwrite
+the completed nine-prompt pilot.
 
 ```bash
-python generate_dataset.py --pilot --max-spend-usd 1.00 --resume
+python3 generate_dataset.py --pilot --max-spend-usd 1.00 --resume
 ```
 
-Pilot selects exactly three MMLU-Pro, three MATH-500, and three LiveCodeBench
-records and evaluates five models, for at most 45 prompt/model pairs. Calls are
-sequential. Transient failures retry at most twice; authentication, invalid
-model, and invalid parameter errors never retry. Every failed attempt consumes
-its conservative maximum reservation before a retry can occur.
+Do not run it until its source summary and spend estimate have been reviewed.
+Calls remain sequential, and the existing retry and spend controls apply.
 
-Regrade an existing completed pilot entirely offline after deterministic grader
-changes:
+The previous 45-row pilot remains at `data/results/pilot_results.csv`. Regrade
+that historical artifact entirely offline with:
 
 ```bash
 python3 generate_dataset.py --regrade-pilot
@@ -104,7 +121,8 @@ and code is extracted from a Python fence (or a code-shaped raw response) before
 tests. Parsing failures have null `score` and `correct` values and a
 `parsing_failure` status; they are never labeled as wrong answers.
 
-The code grader rejects imports, dangerous built-ins, and dunder access, then
+The code grader allows an explicit competitive-programming standard-library
+import set, rejects other imports, dangerous built-ins, and dunder access, then
 runs the accepted restricted Python subset with `-I -S` and per-test timeouts.
 Rejected or malformed programs are grading failures rather than wrong answers.
 

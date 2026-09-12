@@ -7,6 +7,7 @@ from pathlib import Path
 
 from benchmark_loaders import (
     BenchmarkRecord,
+    load_enabled_benchmarks,
     load_manifest,
     validate_benchmark_records,
 )
@@ -59,6 +60,23 @@ def valid_result():
 
 
 class ValidationTests(unittest.TestCase):
+    def test_hard_candidate_pool_has_required_counts_and_metadata(self):
+        _, records = load_enabled_benchmarks(Path("benchmarks/manifest.json"))
+        self.assertEqual(len(records), 150)
+        for benchmark in ("mmlu_pro", "math_500", "livecodebench"):
+            selected = [row for row in records if row.benchmark_name == benchmark]
+            self.assertEqual(len(selected), 50)
+            self.assertTrue(all(row.task_category for row in selected))
+            self.assertTrue(all(row.difficulty for row in selected))
+            self.assertTrue(all(row.source_split == "test" for row in selected))
+        code = [row for row in records if row.benchmark_name == "livecodebench"]
+        self.assertTrue(all(row.problem_date for row in code))
+        self.assertTrue(all(row.difficulty in {"medium", "hard"} for row in code))
+        self.assertTrue(
+            all(row.task_category == "competitive_programming:atcoder" for row in code)
+        )
+        self.assertFalse(any("fixture" in row.prompt_id for row in records))
+
     def test_duplicate_prompt_ids_are_rejected(self):
         record = BenchmarkRecord(
             "duplicate", "Question", "math", "math_500", "1"
