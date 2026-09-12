@@ -1,64 +1,29 @@
 # Multi-provider ML-powered LLM Router
 
-The final project will predict which hosted LLM should handle a prompt using
-expected quality, cost, and latency. Fresh, per-prompt evaluations will become
-the router's training data. No local GPU or local model serving is required.
+This repository builds deterministic evaluation data for a future learned LLM
+router. It does **not** train or serve the router yet.
 
-This repository is currently at **Phase 2: experiment design and live-evaluation
-readiness**. Live evaluation has not started. Provider implementations remain
-stubs; any future live run is guarded by the spend controls below.
+## Enabled hosted models
 
-## Six-model comparison
+| Creator | Model | Provider | Exact API identifier |
+| --- | --- | --- | --- |
+| OpenAI | GPT-5.6 Sol | OpenAI | `gpt-5.6-sol` |
+| Anthropic | Claude Opus 5 | Anthropic | `claude-opus-5` |
+| xAI | Grok 4.6 | xAI | `grok-4.6` |
+| DeepSeek | DeepSeek V4.1 Flash | DeepSeek | `deepseek-flash` |
+| Qwen / Alibaba | Qwen3.8 2.4T-A95B | OpenRouter | `qwen/qwen3.8-2.4t-a95b` |
 
-All model metadata is centralized in `model_registry.py`.
+`model_registry.py` is the central source of model metadata. Before any live
+call, `providers.py` checks every provider/identifier pair against the exact IDs
+implemented by the five adapters under `provider_clients/`. An adapter never
+substitutes a fallback model. A provider rejection is saved and printed with the
+provider's error message; an invalid model remains disabled on resume until its
+registry identifier changes or the failed row is deliberately removed after a
+manual correction.
 
-| Creator | Canonical model | Inference provider | Type | API identifier |
-| --- | --- | --- | --- | --- |
-| OpenAI | GPT-5.6 Sol | OpenAI | closed | `gpt-5.6-sol` |
-| Anthropic | Claude Opus 5 | Anthropic | closed | `claude-opus-5` |
-| Google | Gemini 3.1 Pro | Google | closed | `gemini-3.1-pro-preview` |
-| xAI | Grok 4.6 | xAI | closed | `grok-4.6` |
-| DeepSeek | DeepSeek V4.1 Flash | DeepSeek | open_weight | `deepseek-flash` |
-| Qwen / Alibaba | Qwen3.8 2.4T-A95B | OpenRouter | open_weight | `qwen/qwen3.8-2.4t-a95b` |
-
-Creator and inference provider are deliberately separate. Qwen / Alibaba is
-the model creator; OpenRouter is the inference provider for this evaluation.
-
-The registry also holds enabled status, temperature handling, reasoning/thinking
-settings, maximum output tokens, token prices, and uncertainty notes. The newly
-changed DeepSeek V4.1 pricing remains explicitly unresolved and prevents that
-entry from becoming live-ready.
-
-Verified documentation used for the initial registry:
-
-- [OpenAI GPT-5.6 Sol](https://developers.openai.com/api/docs/models/gpt-5.6-sol)
-- [Anthropic Claude Opus 5](https://platform.claude.com/docs/en/models/opus-5/whats-new-opus-5)
-- [Google Gemini 3](https://ai.google.dev/gemini-api/docs/gemini-3)
-- [xAI Grok 4.6](https://docs.x.ai/developers/models/grok-4.6)
-- [DeepSeek V4.1 Flash](https://deepseek.com/en/news/deepseek-v4-1-flash/)
-- [Qwen3.8 2.4T-A95B on OpenRouter](https://openrouter.ai/qwen/qwen3.8-2.4t-a95b)
-
-## Benchmark design
-
-`benchmarks/manifest.json` declares enabled benchmarks, task types, source
-repositories, pinned source revisions, loader names, and local sample files.
-Phase 2 contains one verified source-shaped fixture from each benchmark:
-
-- MMLU-Pro: hard multiple-choice reasoning and knowledge
-- MATH-500: math problems with known answers
-- LiveCodeBench: modern code generation with executable stdin/stdout tests
-
-Source adapters live in `benchmark_loaders.py`; no full benchmark is downloaded.
-Deterministic graders live separately in `graders.py`:
-
-- Multiple choice requires exactly one normalized valid option.
-- Math uses conservative numeric/fraction comparison, then normalized exact text.
-- Code goes through a test-runner interface. Only committed mock code is executed
-  by the local dry-run runner; live model code will require a real sandbox.
-
-We begin with deterministic grading because it is reproducible, inexpensive, and
-does not introduce another LLM's preferences into the labels. Subjective writing,
-summarization, and LLM-judge tasks are intentionally excluded.
+DeepSeek uses peak, uncached pricing ($0.30/M input and $1.20/M output) for
+conservative spend checks. Actual off-peak rates may be lower. OpenRouter's
+provider-reported cost is retained when available.
 
 ## Setup
 
@@ -68,68 +33,101 @@ Python 3.9 or newer is required.
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-```
-
-Copy the environment template when preparing provider credentials:
-
-```bash
 cp .env.example .env
 ```
 
-Never commit `.env`.
+Populate the five API keys in `.env`; never commit that file. No mode is selected
+by default, so invoking `generate_dataset.py` without an explicit mode cannot
+make a live call.
 
-`GLOBAL_MAX_SPEND_USD` is a hard upper bound for every live run. Each run uses
-a `$1.00` spend cap by default; `--spend-cap` may select a different cap only
-when it remains at or below the global maximum.
-
-## Read-only experiment summary
-
-```bash
-python experiment_summary.py
-```
-
-This prints the six enabled models and providers, per-benchmark prompt counts,
-expected model calls and result rows, a live-run confirmation preview, missing
-API keys, unresolved API identifiers, and unresolved prices. It never calls a
-model API.
-
-## Dry run
+## Fully offline dry run
 
 ```bash
 python generate_dataset.py --dry-run
 ```
 
-The dry run simulates the full 3-prompt × 6-model matrix, grades it, validates
-every row, and writes `data/results/dry_run_results.csv`. Mock token counts,
-latencies, and any zero cost caused by unresolved pricing are synthetic test data.
+Dry-run uses deterministic local responses and never accesses a provider. It
+evaluates the local nine-prompt matrix and writes synthetic metrics to
+`data/results/dry_run_results.csv`.
 
-Each completed row records prompt and benchmark metadata, raw model output,
-creator, canonical model name, API identifier, inference provider, model type,
-temperature, reasoning/thinking setting, max output tokens, UTC timestamp, token
-counts, latency, estimated cost, score, and correctness.
+## Five-call smoke test
 
-## Live-run spend protection
+```bash
+python generate_dataset.py --smoke-test --max-spend-usd 0.25
+```
 
-Live evaluation is opt-in with `python generate_dataset.py --live`. Before the
-first provider call, the CLI prints the planned call count, enabled model names,
-the conservative maximum estimated cost, the configured per-run cap, and the
-global maximum. The run starts only with `--confirm`.
+The smoke test uses one arithmetic multiple-choice prompt, five enabled models,
+sequential dispatch, a 128-token output bound, no retries, and at most five HTTP
+inference attempts. It prints the exact model before each attempt, prints
+accumulated spend after each success, and atomically rewrites
+`data/results/smoke_test_results.csv` after every outcome. Provider failures are
+recorded and do not stop the other providers.
 
-The default per-run cap is `$1.00`; it cannot exceed `GLOBAL_MAX_SPEND_USD`.
-Every call is checked against the remaining cap before dispatch, then its
-reported token cost is added immediately after completion. A cap violation
-stops the run and no automatic retry is attempted. Unresolved model pricing
-also stops live preflight because an unbounded call cannot be made safely.
+Live outputs are resumed automatically when the output file already exists, so
+paid terminal prompt/model pairs are never called twice. Use a different
+`--output` path only when an intentionally separate run is desired.
 
-Completed rows are written after each call. A stopped run can be continued with
-`--resume`; completed prompt/model pairs are skipped and their recorded spend
-continues to count against the same cap.
+## Nine-prompt pilot
+
+Do not run this until the smoke results have been reviewed.
+
+```bash
+python generate_dataset.py --pilot --max-spend-usd 1.00 --resume
+```
+
+Pilot selects exactly three MMLU-Pro, three MATH-500, and three LiveCodeBench
+records and evaluates five models, for at most 45 prompt/model pairs. Calls are
+sequential. Transient failures retry at most twice; authentication, invalid
+model, and invalid parameter errors never retry. Every failed attempt consumes
+its conservative maximum reservation before a retry can occur.
+
+Regrade an existing completed pilot entirely offline after deterministic grader
+changes:
+
+```bash
+python3 generate_dataset.py --regrade-pilot
+```
+
+This reparses the preserved raw responses and atomically updates only their
+grading fields. It does not load API keys or call a provider.
+
+The default live cap is $1.00. `--max-spend-usd` cannot exceed
+`GLOBAL_MAX_SPEND_USD`. Immediately before every attempt, the remaining cap is
+checked against the prompt plus that mode's maximum output tokens. A run stops
+before dispatch if the bound could exceed its cap.
+
+## Parsing, grading, and result records
+
+Raw provider text and parsed answers are separate fields. Multiple choice is
+normalized to one option, math uses deterministic boxed/final-answer extraction,
+and code is extracted from a Python fence (or a code-shaped raw response) before
+tests. Parsing failures have null `score` and `correct` values and a
+`parsing_failure` status; they are never labeled as wrong answers.
+
+The code grader rejects imports, dangerous built-ins, and dunder access, then
+runs the accepted restricted Python subset with `-I -S` and per-test timeouts.
+Rejected or malformed programs are grading failures rather than wrong answers.
+
+Each row contains prompt and benchmark metadata; creator, canonical model, exact
+API ID, provider, and model type; raw and parsed outputs; score and correctness;
+token counts, cost, and latency; generation/reasoning settings and timestamp;
+provider request/response metadata; retry count; and structured status/error
+fields. Writes use a temporary file plus atomic replacement for crash-resistant
+incremental persistence.
+
+## Tests and read-only summary
+
+```bash
+python -m unittest discover -s tests -v
+python experiment_summary.py
+```
+
+Tests mock every provider adapter and cover mode cardinality, spend caps and
+failed-attempt accounting, resume behavior, parsing failures, provider isolation,
+exact model IDs, and retry ceilings. Neither command makes provider calls.
 
 ## Scope boundary
 
-This phase does not train LightGBM or any other router, create embeddings, add
-routing logic, issue model API calls, run large benchmark sweeps, serve models,
-or include FastAPI, a frontend, deployment, or a database.
-
-The old RouterBench work remains under `experiments/` and
-`data/legacy/routerbench/` as a historical baseline only.
+No ML router training, embedding generation, routing policy, web service,
+frontend, or full benchmark sweep is part of this phase. Historical RouterBench
+work remains under `experiments/` and `data/legacy/routerbench/` only.

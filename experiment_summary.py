@@ -1,10 +1,23 @@
 """Print the complete experiment plan without making any model API calls."""
 
 import argparse
+import os
 from collections import Counter
 from pathlib import Path
 
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    def load_dotenv() -> bool:
+        path = Path(".env")
+        if not path.exists():
+            return False
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if not line.strip() or line.lstrip().startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            os.environ.setdefault(key.strip(), value.strip().strip("\"'"))
+        return True
 
 from benchmark_loaders import load_enabled_benchmarks
 from dataset_schema import RESULT_FIELDS
@@ -105,7 +118,7 @@ def main() -> None:
     else:
         print("- none")
 
-    print("\nLive evaluation has not started; provider implementations remain stubs.")
+    print("\nRead-only summary complete; no provider API calls were made.")
 
 
 if __name__ == "__main__":

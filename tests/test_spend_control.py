@@ -1,5 +1,6 @@
 import os
 import unittest
+from dataclasses import replace
 from pathlib import Path
 from unittest.mock import patch
 
@@ -21,12 +22,16 @@ from spend_control import (
 
 
 class SpendControlTests(unittest.TestCase):
-    def test_registry_has_six_enabled_models_without_meta_provider(self):
+    def test_registry_has_five_enabled_models(self):
         models = enabled_models()
-        self.assertEqual(len(models), 6)
-        self.assertNotIn("meta", {model.inference_provider for model in models})
-        self.assertNotIn("meta", API_KEY_ENV)
-        self.assertNotIn("meta", LIVE_CALLERS)
+        providers = {model.inference_provider for model in models}
+        self.assertEqual(len(models), 5)
+        self.assertEqual(
+            providers,
+            {"openai", "anthropic", "xai", "deepseek", "openrouter"},
+        )
+        self.assertEqual(set(API_KEY_ENV), providers)
+        self.assertEqual(set(LIVE_CALLERS), providers)
 
     def test_qwen_uses_openrouter_without_dashscope(self):
         qwen = next(model for model in MODEL_REGISTRY if model.key == "qwen_3_8_2_4t_a95b")
@@ -68,7 +73,7 @@ class SpendControlTests(unittest.TestCase):
                 build_run_plan([(model, "prompt")], spend_cap="0.51")
 
     def test_unresolved_pricing_blocks_maximum_estimate(self):
-        unresolved = next(model for model in MODEL_REGISTRY if model.input_price_per_million_usd is None)
+        unresolved = replace(MODEL_REGISTRY[0], input_price_per_million_usd=None)
         with self.assertRaises(SpendPreflightError):
             estimate_max_spend_usd([(unresolved, "prompt")])
 
@@ -90,6 +95,16 @@ class SpendControlTests(unittest.TestCase):
         self.assertGreater(cost, 0)
         self.assertEqual(tracker.completed_calls, 1)
         self.assertEqual(tracker.spent_usd, cost)
+
+    def test_failed_retry_attempt_counts_against_cap(self):
+        model = MODEL_REGISTRY[0]
+        plan = build_run_plan([(model, "prompt", 10)], spend_cap="0.01")
+        tracker = SpendTracker(plan)
+        tracker.assert_can_call(model, "prompt", 10)
+        reserved = tracker.record_failed_attempt(model, "prompt", 10)
+        self.assertGreater(reserved, 0)
+        self.assertEqual(tracker.attempted_calls, 1)
+        self.assertEqual(tracker.spent_usd, reserved)
 
 
 if __name__ == "__main__":

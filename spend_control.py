@@ -3,7 +3,7 @@
 import os
 from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
-from typing import Optional, Sequence, Tuple
+from typing import Optional, Sequence, Tuple, Union
 
 from model_registry import ModelConfig
 from providers import ProviderResponse
@@ -48,10 +48,16 @@ def run_spend_cap_usd(value: Optional[object] = None) -> Decimal:
 
 def conservative_input_tokens(prompt: str) -> int:
     """Bound input tokens conservatively before a provider has tokenized text."""
-    return max(1, len(prompt))
+    # Byte length bounds byte-level tokenization even for non-ASCII benchmark text.
+    return max(1, len(prompt.encode("utf-8")))
 
 
-def max_call_cost_usd(model: ModelConfig, prompt: str) -> Decimal:
+PlannedCall = Union[Tuple[ModelConfig, str], Tuple[ModelConfig, str, int]]
+
+
+def max_call_cost_usd(
+    model: ModelConfig, prompt: str, max_output_tokens: Optional[int] = None
+) -> Decimal:
     if (
         model.input_price_per_million_usd is None
         or model.output_price_per_million_usd is None
@@ -61,18 +67,24 @@ def max_call_cost_usd(model: ModelConfig, prompt: str) -> Decimal:
         )
     input_price = Decimal(str(model.input_price_per_million_usd))
     output_price = Decimal(str(model.output_price_per_million_usd))
+    output_limit = max_output_tokens or model.generation.max_output_tokens
+    if output_limit <= 0 or output_limit > model.generation.max_output_tokens:
+        raise SpendPreflightError("Invalid per-call maximum output token limit.")
     return (
         Decimal(conservative_input_tokens(prompt)) * input_price
-        + Decimal(model.generation.max_output_tokens) * output_price
+        + Decimal(output_limit) * output_price
     ) / Decimal(1_000_000)
 
 
 def estimate_max_spend_usd(
-    calls: Sequence[Tuple[ModelConfig, str]],
+    calls: Sequence[PlannedCall],
 ) -> Decimal:
     """Estimate the maximum token spend for all planned calls."""
     return sum(
-        (max_call_cost_usd(model, prompt) for model, prompt in calls),
+        (
+            max_call_cost_usd(call[0], call[1], call[2] if len(call) == 3 else None)
+            for call in calls
+        ),
         Decimal("0"),
     ).quantize(Decimal("0.000001"))
 
@@ -95,13 +107,12 @@ class RunPlan:
                 f"- Estimated maximum cost: ${self.estimated_max_cost_usd:.6f}",
                 f"- Configured spend cap: ${self.configured_spend_cap_usd:.2f}",
                 f"- Global maximum spend: ${self.global_max_spend_usd:.2f}",
-                "Pass --confirm to authorize this live run.",
             )
         )
 
 
 def build_run_plan(
-    calls: Sequence[Tuple[ModelConfig, str]],
+    calls: Sequence[PlannedCall],
     *,
     spend_cap: Optional[object] = None,
 ) -> RunPlan:
@@ -114,7 +125,7 @@ def build_run_plan(
     estimated = estimate_max_spend_usd(calls)
     return RunPlan(
         planned_calls=len(calls),
-        enabled_models=tuple(dict.fromkeys(model.canonical_model_name for model, _ in calls)),
+        enabled_models=tuple(dict.fromkeys(call[0].canonical_model_name for call in calls)),
         estimated_max_cost_usd=estimated,
         configured_spend_cap_usd=configured_cap,
         global_max_spend_usd=global_cap,
@@ -137,6 +148,7 @@ class SpendTracker:
                 "Existing completed-call spend already exceeds the configured run cap."
             )
         self._completed_calls = 0
+        self._attempted_calls = 0
 
     @property
     def spent_usd(self) -> Decimal:
@@ -146,8 +158,14 @@ class SpendTracker:
     def completed_calls(self) -> int:
         return self._completed_calls
 
-    def assert_can_call(self, model: ModelConfig, prompt: str) -> None:
-        possible_cost = max_call_cost_usd(model, prompt)
+    @property
+    def attempted_calls(self) -> int:
+        return self._attempted_calls
+
+    def assert_can_call(
+        self, model: ModelConfig, prompt: str, max_output_tokens: Optional[int] = None
+    ) -> None:
+        possible_cost = max_call_cost_usd(model, prompt, max_output_tokens)
         if self._spent_usd + possible_cost > self.plan.configured_spend_cap_usd:
             raise SpendCapExceeded(
                 "Live run stopped before the next call: "
@@ -173,15 +191,42 @@ class SpendTracker:
                 raise SpendLimitError(f"Provider returned invalid {field_name}.")
         input_price = Decimal(str(model.input_price_per_million_usd))
         output_price = Decimal(str(model.output_price_per_million_usd))
-        actual_cost = (
-            Decimal(response.input_tokens) * input_price
-            + Decimal(response.output_tokens) * output_price
-        ) / Decimal(1_000_000)
+        if response.provider_reported_cost_usd is not None:
+            actual_cost = Decimal(str(response.provider_reported_cost_usd))
+            if not actual_cost.is_finite() or actual_cost < 0:
+                raise SpendLimitError("Provider returned invalid reported cost.")
+        else:
+            actual_cost = (
+                Decimal(response.input_tokens) * input_price
+                + Decimal(response.output_tokens) * output_price
+            ) / Decimal(1_000_000)
         next_spend = self._spent_usd + actual_cost
         self._spent_usd = next_spend
         self._completed_calls += 1
+        self._attempted_calls += 1
         if next_spend > self.plan.configured_spend_cap_usd:
             raise SpendCapExceeded(
                 "Live run stopped after a call reported spend above the configured cap."
             )
         return actual_cost
+
+    def record_failed_attempt(
+        self,
+        model: ModelConfig,
+        prompt: str,
+        max_output_tokens: Optional[int] = None,
+    ) -> Decimal:
+        """Conservatively charge a failed dispatch its maximum possible cost.
+
+        Some providers can bill work even when a connection fails before usage is
+        returned. Counting the full bound ensures retries cannot evade the cap.
+        """
+        possible_cost = max_call_cost_usd(model, prompt, max_output_tokens)
+        next_spend = self._spent_usd + possible_cost
+        self._spent_usd = next_spend
+        self._attempted_calls += 1
+        if next_spend > self.plan.configured_spend_cap_usd:
+            raise SpendCapExceeded(
+                "Live run stopped after a failed attempt consumed its reserved spend."
+            )
+        return possible_cost

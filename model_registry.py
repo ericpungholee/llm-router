@@ -68,19 +68,6 @@ MODEL_REGISTRY: Tuple[ModelConfig, ...] = (
         resolution_note="Verified for the first-party Claude API.",
     ),
     ModelConfig(
-        key="google_gemini_3_1_pro",
-        creator="Google",
-        canonical_model_name="Gemini 3.1 Pro",
-        api_model_identifier="gemini-3.1-pro-preview",
-        inference_provider="google",
-        model_type="closed",
-        generation=GenerationSettings(None, "thinking_level=high", DEFAULT_MAX_OUTPUT_TOKENS),
-        input_price_per_million_usd=2.00,
-        output_price_per_million_usd=12.00,
-        enabled=True,
-        resolution_note="Preview ID and prices apply below 200K input tokens.",
-    ),
-    ModelConfig(
         key="xai_grok_4_6",
         creator="xAI",
         canonical_model_name="Grok 4.6",
@@ -100,13 +87,14 @@ MODEL_REGISTRY: Tuple[ModelConfig, ...] = (
         api_model_identifier="deepseek-flash",
         inference_provider="deepseek",
         model_type="open_weight",
-        generation=GenerationSettings(None, "thinking=enabled", DEFAULT_MAX_OUTPUT_TOKENS),
-        input_price_per_million_usd=None,
-        output_price_per_million_usd=None,
+        generation=GenerationSettings(None, "thinking=enabled;reasoning_effort=high", DEFAULT_MAX_OUTPUT_TOKENS),
+        # Peak, uncached rates are used so preflight remains conservative.
+        input_price_per_million_usd=0.30,
+        output_price_per_million_usd=1.20,
         enabled=True,
         resolution_note=(
-            "Official alias verified. V4.1 pricing changed on 2026-09-10 and must "
-            "be transcribed from the current pricing table before live use."
+            "Official V4.1 alias verified. Peak uncached prices apply; off-peak "
+            "rates are 50% lower."
         ),
     ),
     ModelConfig(
