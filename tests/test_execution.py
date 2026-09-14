@@ -42,18 +42,19 @@ class ModeSelectionTests(unittest.TestCase):
         self.assertEqual(HARD_PILOT_MAX_ATTEMPTS, 225)
         for mode in ("--hard-pilot", "--pilot"):
             with self.subTest(mode=mode), tempfile.TemporaryDirectory() as directory:
-                with patch("sys.argv", ["generate_dataset.py", mode, "--max-spend-usd", "2.00", "--confirm", "--output", str(Path(directory) / "pilot.csv")]):
+                with patch("sys.argv", ["generate_dataset.py", mode, "--max-spend-usd", "2.00", "--exclude-xai", "--confirm", "--output", str(Path(directory) / "pilot.csv")]):
                     with patch("generate_dataset.generate_results", return_value=rows) as generator, patch("generate_dataset.write_results"), patch("generate_dataset.load_dotenv"), patch("builtins.print") as printer:
                         main()
                 kwargs = generator.call_args.kwargs
                 self.assertEqual(kwargs["max_retries"], 2)
                 self.assertEqual(kwargs["max_api_attempts"], 225)
-                self.assertEqual(kwargs["run_plan"].planned_calls, 75)
-                self.assertEqual(kwargs["run_plan"].maximum_provider_attempts, 225)
+                self.assertTrue(kwargs["exclude_xai"])
+                self.assertEqual(kwargs["run_plan"].planned_calls, 60)
+                self.assertEqual(kwargs["run_plan"].maximum_provider_attempts, 180)
                 self.assertEqual(kwargs["run_plan"].estimated_max_cost_usd,
-                                 build_run_plan(planned_calls(records), spend_cap="2.00", max_retries=2).estimated_max_cost_usd)
+                                 build_run_plan([c for c in planned_calls(records) if c[0].inference_provider != "xai"], spend_cap="2.00", max_retries=2).estimated_max_cost_usd)
                 output = "\n".join(str(call.args[0]) for call in printer.call_args_list)
-                for label in ("Remaining prompt/model pairs: 75", "Maximum provider attempts for pending pairs: 225",
+                for label in ("Remaining prompt/model pairs: 60", "Maximum provider attempts for pending pairs: 180",
                               "Previously recorded spend:", "Conservative maximum additional spend:",
                               "Conservative maximum total spend:", "Configured spend cap: $2.00",
                               "Conservative maximum exceeds the configured cap"):
@@ -78,18 +79,18 @@ class ModeSelectionTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "pilot.csv"
             write_results(existing, path)
-            with patch("sys.argv", ["generate_dataset.py", "--hard-pilot", "--max-spend-usd", "2.00", "--resume", "--confirm", "--output", str(path)]):
+            with patch("sys.argv", ["generate_dataset.py", "--hard-pilot", "--max-spend-usd", "2.00", "--resume", "--exclude-xai", "--confirm", "--output", str(path)]):
                 with patch("generate_dataset.build_run_plan", wraps=build_run_plan) as planner, patch("generate_dataset.generate_results", return_value=rows) as generator, patch("generate_dataset.write_results"), patch("generate_dataset.load_dotenv"), patch("builtins.print"):
                     main()
         pending = planner.call_args.args[0]
-        self.assertEqual(pending, planned_calls(records)[3:])
+        self.assertEqual(pending, [c for c in planned_calls(records)[3:] if c[0].inference_provider != "xai"])
         self.assertEqual(planner.call_args.kwargs["max_retries"], 2)
-        self.assertEqual(generator.call_args.kwargs["run_plan"].planned_calls, 72)
-        self.assertEqual(generator.call_args.kwargs["run_plan"].maximum_provider_attempts, 216)
+        self.assertEqual(generator.call_args.kwargs["run_plan"].planned_calls, 58)
+        self.assertEqual(generator.call_args.kwargs["run_plan"].maximum_provider_attempts, 174)
         self.assertEqual(generator.call_args.kwargs["initial_spend_usd"], Decimal("0.01"))
 
     def test_hard_pilot_alias_requires_confirmation_before_calls(self):
-        with patch("sys.argv", ["generate_dataset.py", "--hard-pilot", "--max-spend-usd", "2.00"]):
+        with patch("sys.argv", ["generate_dataset.py", "--hard-pilot", "--max-spend-usd", "2.00", "--exclude-xai"]):
             self.assertTrue(parse_args().pilot)
             with patch("generate_dataset.call_model_with_retries") as caller:
                 with patch("builtins.print"):
@@ -127,11 +128,30 @@ class ModeSelectionTests(unittest.TestCase):
     def test_registry_identifiers_are_implemented_exactly(self):
         validate_provider_registry(enabled_models())
 
+    def test_full_hard_pilot_resume_rejects_unresolved_xai_before_dispatch_or_write(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "pilot.csv"
+            with patch("sys.argv", ["generate_dataset.py", "--hard-pilot", "--resume",
+                                    "--max-spend-usd", "2.00", "--confirm", "--output", str(path)]):
+                with patch("generate_dataset.generate_results") as generator, patch("generate_dataset.write_results") as writer:
+                    with self.assertRaisesRegex(SystemExit, "xAI pre-dispatch cost bound is unresolved"):
+                        main()
+            generator.assert_not_called()
+            writer.assert_not_called()
+            self.assertFalse(path.exists())
+
 
 class ParsingTests(unittest.TestCase):
     def test_normalizes_multiple_choice_and_math_final_answer(self):
         self.assertEqual(parse_multiple_choice("Final answer: (b).", ["A", "B"]), "B")
         self.assertEqual(parse_math_answer("Work\nTherefore the final answer is: \\frac{3}{2}"), "\\frac{3}{2}")
+
+    def test_parses_standalone_bold_option_without_guessing(self):
+        self.assertEqual(parse_multiple_choice("**F**", ["A", "F"]), "F")
+        self.assertEqual(parse_multiple_choice(" **a** ", ["A", "F"]), "A")
+        for output in ("**Z**", "**A** or **F**", "**AF**", "**F*", "I considered **F**"):
+            with self.subTest(output=output), self.assertRaises(MalformedModelOutput):
+                parse_multiple_choice(output, ["A", "F"])
 
     def test_ambiguous_or_unmarked_output_is_a_parsing_failure(self):
         with self.assertRaises(MalformedModelOutput):
@@ -284,7 +304,8 @@ class ExecutionSafetyTests(unittest.TestCase):
         rows, _ = self.run_mocked([self.error(), self.response], max_retries=0)
         third = replace(self.records[0], prompt_id="smoke_test:third")
         skipped = dict(rows[0], prompt_id=third.prompt_id, status="skipped_model", error_type="model_disabled_after_provider_failure")
-        legacy = [{k: v for k, v in r.items() if k in RESULT_FIELDS[:-6]} for r in rows + [skipped]]
+        from dataset_schema import LEGACY_RESULT_FIELDS
+        legacy = [{k: v for k, v in r.items() if k in LEGACY_RESULT_FIELDS} for r in rows + [skipped]]
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "legacy.csv"
             write_results(legacy, path)
@@ -384,15 +405,109 @@ class ExecutionSafetyTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "smoke.csv"
             write_results([row], path)
-            with patch("sys.argv", ["generate_dataset.py", "--smoke-test", "--max-spend-usd", "0.25", "--resume", "--output", str(path)]):
+            with patch("sys.argv", ["generate_dataset.py", "--smoke-test", "--max-spend-usd", "0.25", "--resume", "--exclude-xai", "--output", str(path)]):
                 with patch("providers.call_model", return_value=self.response) as calls, patch("builtins.print"):
                     main()
             saved = read_results(path)
-        self.assertEqual(calls.call_count, 5)
-        self.assertEqual(len(saved), 5)
+        self.assertEqual(calls.call_count, 4)
+        self.assertEqual(len(saved), 4)
         self.assertEqual(saved[0]["api_model_identifier"], self.model.api_model_identifier)
         self.assertEqual(saved[0]["provider_attempts"], 2)
         self.assertGreater(saved[0]["estimated_cost_usd"], 0.005)
+
+    def test_qwen_billing_rejection_and_historical_skip_are_eligible_on_new_run(self):
+        qwen = next(m for m in enabled_models() if m.inference_provider == "openrouter")
+        prior = generate_results(self.records, dry_run=True, models=[qwen])
+        for row, status, cost in zip(prior, ("provider_error", "skipped_model"), (0.032152, 0.030254)):
+            row.update(status=status, score=None, correct=None, raw_response="", parsed_answer="",
+                       stop_reason="", error_type="quota_or_billing_error" if status == "provider_error" else "blocked_by_permanent_failure",
+                       error_message="prior billing rejection", failure_scope="provider",
+                       failure_retryable=False, provider_attempts=3 if status == "provider_error" else 1,
+                       provider_response_count=0, response_cost_usd=0.0, estimated_cost_usd=cost)
+        plan = build_run_plan(planned_calls(self.records, [qwen]), spend_cap="2.00")
+        rows, calls = self.run_mocked([self.response, self.response], models=[qwen],
+                                      completed_results=prior, run_plan=plan)
+        self.assertEqual(calls, 2)
+        self.assertTrue(all(r["status"] == "success" for r in rows))
+        self.assertEqual([r["provider_attempts"] for r in rows], [4, 2])
+        for previous, row in zip(prior, rows):
+            self.assertGreater(row["estimated_cost_usd"], previous["estimated_cost_usd"])
+
+    def test_exclude_xai_preserves_full_matrix_paid_rows_and_all_recorded_reservations(self):
+        grok = next(m for m in enabled_models() if m.inference_provider == "xai")
+        prior = generate_results(self.records, dry_run=True, models=[self.model, grok])
+        prior[1].update(output_tokens=10015, estimated_cost_usd=0.061516,
+                        response_cost_usd=0.061516, stop_reason="completed", provider_response_count=1)
+        prior[3].update(status="provider_error", score=None, correct=None, raw_response="", parsed_answer="",
+                        error_type="interrupted_inflight", error_message="Interrupted historical dispatch",
+                        failure_retryable=True, failure_scope="pair", stop_reason="", estimated_cost_usd=0.115856,
+                        provider_response_count=0, provider_attempts=4,
+                        provider_diagnostics='[{"outcome": "interrupted_inflight"}]')
+        for row in (prior[0], prior[2]):
+            row.update(status="skipped_model", score=None, correct=None, raw_response="", parsed_answer="",
+                       error_type="model_disabled_after_provider_failure", estimated_cost_usd=0.0)
+        # A cap equal to prior Grok spend cannot dispatch another provider either.
+        total = Decimal("0.177372")
+        plan = build_run_plan(planned_calls(self.records, [self.model]), spend_cap=total)
+        rows, calls = self.run_mocked([], models=[self.model, grok], completed_results=prior,
+                                      run_plan=plan, exclude_xai=True)
+        self.assertEqual(calls, 0)
+        self.assertEqual(len(rows), 4)
+        self.assertEqual(rows[1], prior[1])
+        self.assertEqual(rows[3], prior[3])
+        self.assertEqual(sum((Decimal(str(r["estimated_cost_usd"])) for r in rows), Decimal(0)), total)
+        larger = build_run_plan(planned_calls(self.records, [self.model]), spend_cap="2.00")
+        rows, calls = self.run_mocked([self.response, self.response], models=[self.model, grok],
+                                      completed_results=prior, run_plan=larger, exclude_xai=True)
+        self.assertEqual(calls, 2)
+        self.assertEqual(len(rows), 4)
+        self.assertEqual(rows[1], prior[1])
+        self.assertEqual(rows[3], prior[3])
+
+    def test_historical_xai_without_billed_ticks_is_never_rewritten_or_dispatched(self):
+        grok = next(m for m in enabled_models() if m.inference_provider == "xai")
+        prior = generate_results([self.records[0]], dry_run=True, models=[grok])[0]
+        prior.update(output_tokens=10610, estimated_cost_usd=0.066436,
+                     response_cost_usd=0.066436, stop_reason="completed", provider_diagnostics="[]")
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "historical.csv"
+            write_results([prior], path)
+            saved = read_results(path)
+            before = path.read_bytes()
+            regraded = regrade_results(saved, [self.records[0]])
+            self.assertEqual(regraded[0]["estimated_cost_usd"], prior["estimated_cost_usd"])
+            self.assertEqual(regraded[0]["response_cost_usd"], prior["response_cost_usd"])
+            for excluded in (False, True):
+                rows, calls = self.run_mocked([], records=[self.records[0]], models=[grok],
+                                              completed_results=saved, exclude_xai=excluded,
+                                              run_plan=build_run_plan([], spend_cap="2.00"))
+                self.assertEqual(calls, 0)
+                self.assertEqual(rows, saved)
+            self.assertEqual(path.read_bytes(), before)
+        self.assertNotIn("cost_in_usd_ticks", rows[0]["provider_diagnostics"])
+
+    def test_successful_xai_response_checkpoints_billed_cost_despite_token_limit_discrepancy(self):
+        from provider_clients.normalization import normalize_response
+        grok = next(m for m in enabled_models() if m.inference_provider == "xai")
+        response = normalize_response({
+            "status": "completed", "model": grok.api_model_identifier,
+            "output": [{"type": "message", "content": [{"type": "output_text", "text": "B"}]}],
+            "usage": {"input_tokens": 13, "output_tokens": 10015, "cost_in_usd_ticks": 37_756_000},
+        }, "xai", grok.api_model_identifier, 1.0, 4096, "responses")
+        # Replay an already returned response offline; the real dispatch guard
+        # remains closed for Grok. This mock deliberately makes no dispatch.
+        with patch("generate_dataset.call_model_with_retries", return_value=(response, 0)), patch("provider_clients.base.urllib.request.urlopen", side_effect=AssertionError("offline only")):
+            rows = generate_results([self.records[0]], dry_run=False, models=[grok],
+                                    run_plan=build_run_plan([], spend_cap="2.00"))
+        self.assertEqual(rows[0]["status"], "success")
+        self.assertEqual(rows[0]["raw_response"], "B")
+        self.assertEqual(rows[0]["output_tokens"], 10015)
+        self.assertEqual(rows[0]["response_cost_usd"], 0.0037756)
+        self.assertEqual(rows[0]["estimated_cost_usd"], 0.0037756)
+        import json
+        diagnostics = json.loads(rows[0]["provider_diagnostics"])[0]
+        self.assertEqual(diagnostics["cost_in_usd_ticks"], 37_756_000)
+        self.assertTrue(diagnostics["output_tokens_exceed_requested_limit"])
 
 
     def test_offline_regrade_preserves_raw_response_and_api_telemetry(self):

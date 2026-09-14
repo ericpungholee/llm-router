@@ -58,6 +58,17 @@ PlannedCall = Union[Tuple[ModelConfig, str], Tuple[ModelConfig, str, int]]
 def max_call_cost_usd(
     model: ModelConfig, prompt: str, max_output_tokens: Optional[int] = None
 ) -> Decimal:
+    if model.inference_provider == "xai":
+        # The Responses reference says the request limit includes reasoning.
+        # Historical Grok responses exceed that documented limit, however, and
+        # lack raw usage/request telemetry to reconcile the discrepancy. Actual
+        # billed ticks arrive after dispatch and cannot repair an unsafe bound.
+        raise SpendPreflightError(
+            f"xAI pre-dispatch cost bound is unresolved for {model.canonical_model_name} "
+            f"({model.generation.reasoning_setting}). Historical output usage exceeds "
+            "the requested limit despite the documented shared output/reasoning ceiling. "
+            "Exclude xAI with --exclude-xai; reported billed cost is available only after dispatch."
+        )
     if (
         model.input_price_per_million_usd is None
         or model.output_price_per_million_usd is None

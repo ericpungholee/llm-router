@@ -3,7 +3,8 @@
 from time import perf_counter
 
 from model_registry import ModelConfig
-from provider_clients.base import ProviderResponse, post_json, require_int, response_text
+from provider_clients.base import ProviderResponse, post_json
+from provider_clients.normalization import normalize_response
 
 
 def call_xai(model: ModelConfig, prompt: str, api_key: str, max_tokens: int) -> ProviderResponse:
@@ -22,13 +23,7 @@ def call_xai(model: ModelConfig, prompt: str, api_key: str, max_tokens: int) -> 
             "store": False,
         },
     )
-    usage = data.get("usage") if isinstance(data.get("usage"), dict) else {}
-    return ProviderResponse(
-        text=response_text(data, "xai", model_id),
-        input_tokens=require_int(usage, "input_tokens", "xai", model_id),
-        output_tokens=require_int(usage, "output_tokens", "xai", model_id),
-        latency_ms=(perf_counter() - started) * 1000,
-        request_id=str(data.get("id") or ""),
-        response_model_identifier=str(data.get("model") or ""),
-        stop_reason=str(data.get("status") or ""),
+    return normalize_response(
+        data, "xai", model.api_model_identifier or "",
+        (perf_counter() - started) * 1000, max_tokens, "responses",
     )

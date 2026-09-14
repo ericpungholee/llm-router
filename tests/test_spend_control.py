@@ -70,12 +70,13 @@ class SpendControlTests(unittest.TestCase):
         self.assertIn("$1.00", confirmation)
 
     def test_retry_aware_plan_bounds_three_attempts_for_each_pending_pair(self):
-        calls = [(model, "pending prompt", 128) for model in enabled_models()]
+        calls = [(model, "pending prompt", 128) for model in enabled_models()
+                 if model.inference_provider != "xai"]
         plan = build_run_plan(calls, spend_cap="2.00", max_retries=2)
         expected = sum((max_call_cost_usd(*call) * 3 for call in calls), Decimal(0))
         self.assertEqual(plan.estimated_max_cost_usd, expected.quantize(Decimal("0.000001"), rounding=ROUND_CEILING))
-        self.assertEqual(plan.planned_calls, 5)
-        self.assertEqual(plan.maximum_provider_attempts, 15)
+        self.assertEqual(plan.planned_calls, 4)
+        self.assertEqual(plan.maximum_provider_attempts, 12)
         self.assertEqual(plan.configured_spend_cap_usd, Decimal("2.00"))
 
     def test_retry_estimate_rejects_unsupported_retry_counts(self):
@@ -122,6 +123,46 @@ class SpendControlTests(unittest.TestCase):
         self.assertGreater(reserved, 0)
         self.assertEqual(tracker.attempted_calls, 1)
         self.assertEqual(tracker.spent_usd, reserved)
+
+    def test_xai_bound_is_unresolved_in_preflight_runtime_and_failure_reservation(self):
+        grok = next(m for m in enabled_models() if m.inference_provider == "xai")
+        tracker = SpendTracker(build_run_plan([], spend_cap="2.00"))
+        for limit in (128, 4096):
+            for operation in (
+                lambda: max_call_cost_usd(grok, "prompt", limit),
+                lambda: build_run_plan([(grok, "prompt", limit)]),
+                lambda: tracker.assert_can_call(grok, "prompt", limit),
+                lambda: tracker.record_failed_attempt(grok, "prompt", limit),
+            ):
+                with self.subTest(limit=limit), self.assertRaisesRegex(SpendPreflightError, "xAI pre-dispatch cost bound is unresolved"):
+                    operation()
+        self.assertEqual(tracker.spent_usd, Decimal(0))
+        self.assertEqual(tracker.attempted_calls, 0)
+
+    def test_xai_reported_billing_overrides_token_estimate_after_response(self):
+        from provider_clients.normalization import normalize_response
+        grok = next(m for m in enabled_models() if m.inference_provider == "xai")
+        # Recording an already returned response needs no dispatch authorization.
+        tracker = SpendTracker(build_run_plan([], spend_cap="2.00"), initial_spend_usd="0.8135937")
+        data = {
+            "status": "completed",
+            "output": [{"type": "message", "content": [{"type": "output_text", "text": "B"}]}],
+            "usage": {"input_tokens": 13, "output_tokens": 10015,
+                      "output_tokens_details": {"reasoning_tokens": 9500},
+                      "cost_in_usd_ticks": 37_756_000},
+        }
+        response = normalize_response(data, "xai", grok.api_model_identifier, 1.0, 4096, "responses")
+        cost = tracker.record_call(grok, response)
+        self.assertEqual(cost, Decimal("0.0037756"))
+        self.assertNotEqual(cost, Decimal("0.060116"))
+        self.assertEqual(tracker.spent_usd, Decimal("0.8173693"))
+        self.assertEqual(tracker.completed_calls, 1)
+
+    def test_xai_reported_zero_cost_is_authoritative(self):
+        grok = next(m for m in enabled_models() if m.inference_provider == "xai")
+        tracker = SpendTracker(build_run_plan([]))
+        self.assertEqual(tracker.record_call(grok, ProviderResponse("B", 13, 10015, 1.0,
+                                                                  provider_reported_cost_usd=0.0)), Decimal(0))
 
 
 if __name__ == "__main__":

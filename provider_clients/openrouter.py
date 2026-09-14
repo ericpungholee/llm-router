@@ -3,7 +3,8 @@
 from time import perf_counter
 
 from model_registry import ModelConfig
-from provider_clients.base import ProviderResponse, post_json, require_int, require_text
+from provider_clients.base import ProviderResponse, post_json
+from provider_clients.normalization import normalize_response
 
 
 def call_openrouter(model: ModelConfig, prompt: str, api_key: str, max_tokens: int) -> ProviderResponse:
@@ -26,24 +27,7 @@ def call_openrouter(model: ModelConfig, prompt: str, api_key: str, max_tokens: i
             "stream": False,
         },
     )
-    choices = data.get("choices")
-    message = {}
-    stop_reason = ""
-    if isinstance(choices, list) and choices and isinstance(choices[0], dict):
-        stop_reason = str(choices[0].get("finish_reason") or "")
-        if isinstance(choices[0].get("message"), dict):
-            message = choices[0]["message"]
-    usage = data.get("usage") if isinstance(data.get("usage"), dict) else {}
-    reported_cost = usage.get("cost")
-    if not isinstance(reported_cost, (int, float)) or isinstance(reported_cost, bool):
-        reported_cost = None
-    return ProviderResponse(
-        text=require_text(message.get("content"), "openrouter", model_id),
-        input_tokens=require_int(usage, "prompt_tokens", "openrouter", model_id),
-        output_tokens=require_int(usage, "completion_tokens", "openrouter", model_id),
-        latency_ms=(perf_counter() - started) * 1000,
-        request_id=str(data.get("id") or ""),
-        response_model_identifier=str(data.get("model") or ""),
-        stop_reason=stop_reason,
-        provider_reported_cost_usd=float(reported_cost) if reported_cost is not None else None,
+    return normalize_response(
+        data, "openrouter", model.api_model_identifier or "",
+        (perf_counter() - started) * 1000, max_tokens, "chat",
     )

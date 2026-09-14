@@ -45,7 +45,8 @@ from providers import (
     provider_display_name,
     validate_provider_registry,
 )
-from spend_control import RunPlan, SpendCapExceeded, SpendLimitError, SpendTracker, build_run_plan
+from spend_control import (RunPlan, SpendCapExceeded, SpendLimitError, SpendTracker,
+                           build_run_plan, run_spend_cap_usd)
 
 
 SMOKE_MAX_OUTPUT_TOKENS = 128
@@ -167,6 +168,31 @@ def configuration_fingerprint(model: ModelConfig, output_limit: int) -> str:
     return hashlib.sha256(json.dumps(settings).encode()).hexdigest()
 
 
+def saved_pair_blocks(rows, models, output_limit=None):
+    """Budget exhaustion is terminal only for this pair and configuration."""
+    configurations = {
+        (m.inference_provider, m.api_model_identifier): configuration_fingerprint(
+            m, output_limit or m.generation.max_output_tokens
+        ) for m in models
+    }
+    return {
+        result_key(row) for row in rows
+        if row.get("status") == "provider_error"
+        and row.get("error_type") == "output_limit_exhausted"
+        and row.get("configuration_fingerprint") == configurations.get(
+            (row.get("inference_provider"), row.get("api_model_identifier"))
+        )
+    }
+
+
+def record_diagnostics(row, diagnostics, outcome):
+    """Append safe metadata so a retry/resume cannot erase earlier evidence."""
+    history = json.loads(row.get("provider_diagnostics") or "[]")
+    history.append({**diagnostics, "provider_attempt": row["provider_attempts"],
+                    "outcome": outcome})
+    row["provider_diagnostics"] = json.dumps(history, sort_keys=True)
+
+
 def saved_model_blocks(rows, models, output_limit=None):
     """Persist invalid/configuration blocks only; auth/billing is rechecked per run.
 
@@ -277,6 +303,7 @@ def _base_result(
         "failure_retryable": None,
         "failure_scope": "",
         "configuration_fingerprint": configuration_fingerprint(model, max_output_tokens),
+        "provider_diagnostics": "[]",
     }
 
 
@@ -304,12 +331,15 @@ def generate_results(
     max_retries: int = 2,
     max_api_attempts: Optional[int] = None,
     print_before_call: bool = False,
+    exclude_xai: bool = False,
 ) -> List[Dict[str, object]]:
     selected_models = tuple(models) if models is not None else enabled_models()
     results = list(completed_results or [])
     completed_keys = {
         result_key(row) for row in results if is_completed_result(row)
     }
+    if not dry_run:
+        completed_keys |= saved_pair_blocks(results, selected_models, max_output_tokens)
     if initial_spend_usd is None:
         initial_spend_usd = sum((Decimal(str(r["estimated_cost_usd"])) for r in results), Decimal(0))
     tracker = (
@@ -327,6 +357,10 @@ def generate_results(
             break
         prompt = render_prompt(record)
         for model in selected_models:
+            # Exclusion affects dispatch only. Preserve the full experiment
+            # matrix, paid outputs, pending telemetry, and historical reserves.
+            if exclude_xai and model.inference_provider == "xai":
+                continue
             model_id = model.api_model_identifier or "UNRESOLVED"
             key = (record.prompt_id, model.inference_provider, model_id)
             if key in completed_keys:
@@ -334,6 +368,7 @@ def generate_results(
             output_limit = max_output_tokens or model.generation.max_output_tokens
             row = _base_result(record, prompt, model, output_limit)
             prior_row = next((r for r in results if result_key(r) == key), {})
+            row["provider_diagnostics"] = prior_row.get("provider_diagnostics") or "[]"
             row["provider_attempts"] = historical_attempts(prior_row) if prior_row else 0
             row["provider_response_count"] = historical_responses(prior_row) if prior_row else 0
             prior_recorded_cost = next(
@@ -388,8 +423,17 @@ def generate_results(
             def failed_attempt(attempt_error: ProviderError) -> None:
                 # Connection failures and malformed responses may have billed
                 # inference. Auth/model/parameter rejections do not run inference.
-                if tracker and (attempt_error.retryable or attempt_error.error_type == "invalid_provider_response"):
+                if tracker and attempt_error.may_have_been_billed:
                     tracker.record_failed_attempt(model, prompt, output_limit)
+                diagnostics = attempt_error.diagnostics
+                record_diagnostics(row, diagnostics, attempt_error.error_type)
+                row.update(
+                    input_tokens=diagnostics.get("input_tokens") or 0,
+                    output_tokens=diagnostics.get("output_tokens") or 0,
+                    stop_reason=diagnostics.get("stop_reason") or "",
+                    provider_request_id=diagnostics.get("response_id") or diagnostics.get("request_id") or "",
+                    response_model_identifier=diagnostics.get("response_model_identifier") or "",
+                )
                 # Checkpoint attempts and reserved cost before a possible retry.
                 row.update(
                     status="provider_error", error_type=attempt_error.error_type,
@@ -444,6 +488,7 @@ def generate_results(
                     ),
                 )
                 row.update(failure_retryable=None, failure_scope="", error_code="", http_status=None)
+                record_diagnostics(row, response.diagnostics, "success")
             except ProviderError as error:
                 row.update(
                     status="provider_error",
@@ -716,6 +761,10 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Document that an existing output should be resumed (live modes resume automatically).",
     )
+    parser.add_argument(
+        "--exclude-xai", action="store_true",
+        help="Exclude xAI from dispatch while retaining its rows and cumulative recorded spend.",
+    )
     parser.add_argument("--manifest", type=Path, default=Path("benchmarks/manifest.json"))
     parser.add_argument("--output", type=Path, default=None)
     return parser.parse_args()
@@ -794,6 +843,7 @@ def main() -> None:
     completed_keys = {
         result_key(row) for row in existing_results if is_completed_result(row)
     }
+    completed_keys |= saved_pair_blocks(existing_results, models, output_limit)
     persistent_blocks = saved_model_blocks(existing_results, models, output_limit)
     remaining = [
         call
@@ -801,6 +851,7 @@ def main() -> None:
         for call in planned_calls((record,), models, max_output_tokens=output_limit)
         if (record.prompt_id, call[0].inference_provider, call[0].api_model_identifier or "UNRESOLVED") not in completed_keys
         and (call[0].inference_provider, call[0].api_model_identifier) not in persistent_blocks
+        and not (args.exclude_xai and call[0].inference_provider == "xai")
     ]
     if args.smoke_test and len(remaining) > SMOKE_MAX_API_CALLS:
         raise SystemExit("Smoke test safety invariant failed: more than 5 calls selected")
@@ -812,10 +863,19 @@ def main() -> None:
     run_plan = None
     if live_mode:
         try:
+            if args.pilot and run_spend_cap_usd(spend_cap) > HARD_PILOT_MAX_SPEND_USD:
+                raise SystemExit("Hard pilot cap cannot exceed $2.00.")
             run_plan = build_run_plan(remaining, spend_cap=spend_cap, max_retries=max_retries)
         except SpendLimitError as error:
             raise SystemExit(str(error)) from error
         print(run_plan.confirmation_text())
+        if args.exclude_xai:
+            deferred_xai_pairs = sum(
+                (record.prompt_id, model.inference_provider, model.api_model_identifier) not in completed_keys
+                for record in benchmark for model in models if model.inference_provider == "xai"
+            )
+            print(f"xAI dispatch excluded: {deferred_xai_pairs} pending pairs deferred; "
+                  "all xAI rows and historical recorded spend remain in the pilot ledger.")
         recorded_spend = sum(Decimal(str(r["estimated_cost_usd"])) for r in existing_results)
         print(f"Previously recorded spend: ${recorded_spend:.6f}")
         maximum_total = recorded_spend + run_plan.estimated_max_cost_usd
@@ -826,8 +886,6 @@ def main() -> None:
         print(f"Retry policy: {max_retries} retries; attempt ceiling: {max_attempts or 'uncapped'}")
         if args.pilot:
             print(f"Hard pilot selection: {len(benchmark)} prompts x {len(models)} models = 75 pairs")
-            if run_plan.configured_spend_cap_usd > HARD_PILOT_MAX_SPEND_USD:
-                raise SystemExit("Hard pilot cap cannot exceed $2.00.")
         if (args.live or args.pilot) and not args.confirm:
             raise SystemExit("Live run not started: pass --confirm after reviewing the plan.")
 
@@ -847,6 +905,7 @@ def main() -> None:
         max_retries=max_retries,
         max_api_attempts=max_attempts,
         print_before_call=live_mode,
+        exclude_xai=args.exclude_xai,
     )
     write_results(results, output)
 

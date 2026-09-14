@@ -1,0 +1,157 @@
+{
+  "base_commit": "ee278cb63abc4921affd2d2d7d04b194309cb596",
+  "before_offline_regrade": {
+    "metrics": {
+      "accuracy_over_graded": 0.5217391304347826,
+      "attempted_provider_calls": 31,
+      "average_response_latency_ms": 16409.038107708333,
+      "correct_responses": 12,
+      "expected_pairs": 75,
+      "failed_provider_attempts": 7,
+      "grading_failures": 0,
+      "parsing_failures": 1,
+      "provider_failures": 6,
+      "recorded_pairs": 75,
+      "skipped_pairs": 45,
+      "spend_limit_stops": 0,
+      "successful_provider_responses": 24,
+      "successfully_graded_pairs": 23,
+      "successfully_graded_responses": 23,
+      "total_recorded_cost_usd": 0.3449374,
+      "unrecorded_pairs": 0
+    },
+    "row_count": 75,
+    "sha256": "a807bea092612d340cda0ac6415d19a55588a88341141c5c1ed10a2ef3bf8359",
+    "size_bytes": 155973
+  },
+  "earlier_intermediate_snapshot": {
+    "path": "data/results/hard_pilot_analysis_snapshot.csv",
+    "role": "Superseded; not required for reproduction",
+    "same_bytes_as_final": true
+  },
+  "final_artifact": {
+    "metrics": {
+      "accuracy_over_graded": 0.5416666666666666,
+      "attempted_provider_calls": 31,
+      "average_response_latency_ms": 16409.038107708333,
+      "correct_responses": 13,
+      "expected_pairs": 75,
+      "failed_provider_attempts": 7,
+      "grading_failures": 0,
+      "parsing_failures": 0,
+      "provider_failures": 6,
+      "recorded_pairs": 75,
+      "skipped_pairs": 45,
+      "spend_limit_stops": 0,
+      "successful_provider_responses": 24,
+      "successfully_graded_pairs": 24,
+      "successfully_graded_responses": 24,
+      "total_recorded_cost_usd": 0.3449374,
+      "unrecorded_pairs": 0
+    },
+    "row_count": 75,
+    "sha256": "a58e79eb58519bb4a170142a4c1b60bbbc799fb671d40eb512488bfb52becf85",
+    "size_bytes": 155902
+  },
+  "frozen_at_utc": "2026-09-14T01:57:53.090980+00:00",
+  "offline_regrade": {
+    "all_other_fields_unchanged": true,
+    "allowed_changed_fields": [
+      "correct",
+      "error_code",
+      "error_message",
+      "error_type",
+      "parsed_answer",
+      "score",
+      "status"
+    ],
+    "changed_rows": [
+      {
+        "api_model_identifier": "claude-opus-5",
+        "fields": {
+          "correct": {
+            "after": "True",
+            "before": ""
+          },
+          "error_message": {
+            "after": "",
+            "before": "Could not extract one unambiguous multiple-choice option"
+          },
+          "error_type": {
+            "after": "",
+            "before": "parsing_failure"
+          },
+          "parsed_answer": {
+            "after": "F",
+            "before": ""
+          },
+          "score": {
+            "after": "1.0",
+            "before": ""
+          },
+          "status": {
+            "after": "success",
+            "before": "parsing_failure"
+          }
+        },
+        "inference_provider": "anthropic",
+        "prompt_id": "mmlu_pro:12015"
+      }
+    ],
+    "command": "python3 generate_dataset.py --regrade-results --output data/results/hard_pilot_results.csv",
+    "runs_on_final_source": 1
+  },
+  "secret_inspection": {
+    "checks": [
+      "credential_key_or_header",
+      "bearer_token",
+      "known_key_prefix",
+      "private_key",
+      "environment_reference",
+      "exact local credential value comparison",
+      "schema and populated text fields inspection"
+    ],
+    "findings": 0,
+    "sanitization": "None: complete normalized CSV preserved byte-for-byte after offline regrade; no credentials or environment values found."
+  },
+  "snapshot_path": "reports/snapshots/hard_pilot_final.csv",
+  "source_final_csv": "data/results/hard_pilot_results.csv",
+  "stability": {
+    "observations": [
+      {
+        "mtime_ns": 1789350464523668320,
+        "observed_at": "2026-09-14T01:56:31.601521+00:00",
+        "row_count": 75,
+        "sha256": "a807bea092612d340cda0ac6415d19a55588a88341141c5c1ed10a2ef3bf8359",
+        "size": 155973,
+        "statuses": {
+          "parsing_failure": 1,
+          "provider_error": 6,
+          "skipped_model": 45,
+          "success": 23
+        }
+      },
+      {
+        "mtime_ns": 1789350464523668320,
+        "observed_at": "2026-09-14T01:57:14.728262+00:00",
+        "row_count": 75,
+        "sha256": "a807bea092612d340cda0ac6415d19a55588a88341141c5c1ed10a2ef3bf8359",
+        "size": 155973
+      }
+    ],
+    "process_evidence": "Elevated ps inspection found no Python or generate_dataset/hard-pilot writer; original exit status/log unavailable."
+  },
+  "verification": {
+    "checks": [
+      "standalone bold parser accepts only an unambiguous valid option",
+      "audit reconstructs original CSV with matching SHA-256",
+      "offline regrade changes only parsing/grading fields",
+      "analysis and all reports reproduce byte-for-byte without data/ or credentials",
+      "report references tracked snapshot and verifies SHA-256",
+      "tampered snapshot fails hash verification"
+    ],
+    "offline_test_command": "python3 -m unittest discover -s tests -v",
+    "status": "passed",
+    "tests_passed": 84
+  }
+}

@@ -43,7 +43,11 @@ RESULT_FIELDS = (
     "failure_retryable",
     "failure_scope",
     "configuration_fingerprint",
+    "provider_diagnostics",
 )
+
+# Keep the original mandatory schema stable as optional telemetry grows.
+LEGACY_RESULT_FIELDS = RESULT_FIELDS[:31]
 
 ALWAYS_REQUIRED_TEXT_FIELDS = (
     "prompt_id",
@@ -78,7 +82,7 @@ def _is_null(value: object) -> bool:
 def validate_result(row: Mapping[str, object]) -> None:
     """Raise ValueError if an evaluation row does not match the required schema."""
     # Additional telemetry is optional in historical CSVs.
-    missing_fields = [field for field in RESULT_FIELDS[:-6] if field not in row]
+    missing_fields = [field for field in LEGACY_RESULT_FIELDS if field not in row]
     if missing_fields:
         raise ValueError(f"Missing result fields: {missing_fields}")
 

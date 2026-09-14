@@ -3,7 +3,8 @@
 from time import perf_counter
 
 from model_registry import ModelConfig
-from provider_clients.base import ProviderResponse, post_json, require_int, response_text
+from provider_clients.base import ProviderResponse, post_json
+from provider_clients.normalization import normalize_response
 
 
 def call_openai(model: ModelConfig, prompt: str, api_key: str, max_tokens: int) -> ProviderResponse:
@@ -21,13 +22,7 @@ def call_openai(model: ModelConfig, prompt: str, api_key: str, max_tokens: int) 
             "store": False,
         },
     )
-    usage = data.get("usage") if isinstance(data.get("usage"), dict) else {}
-    return ProviderResponse(
-        text=response_text(data, "openai", model.api_model_identifier or ""),
-        input_tokens=require_int(usage, "input_tokens", "openai", model.api_model_identifier or ""),
-        output_tokens=require_int(usage, "output_tokens", "openai", model.api_model_identifier or ""),
-        latency_ms=(perf_counter() - started) * 1000,
-        request_id=str(data.get("id") or ""),
-        response_model_identifier=str(data.get("model") or ""),
-        stop_reason=str(data.get("status") or ""),
+    return normalize_response(
+        data, "openai", model.api_model_identifier or "",
+        (perf_counter() - started) * 1000, max_tokens, "responses",
     )

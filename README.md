@@ -3,6 +3,29 @@
 This repository builds deterministic evaluation data for a future learned LLM
 router. It does **not** train or serve the router yet.
 
+## Frozen final hard-pilot artifact
+
+The stopped run's normalized, offline-regraded CSV is included at
+`reports/snapshots/hard_pilot_final.csv`. Its provenance file records stability
+observations, the before/after SHA-256 hashes, the complete regrade audit, and
+credential inspection. This supersedes the earlier ignored intermediate snapshot.
+The final matrix has 24/75 graded pairs and no fully graded five-model prompts;
+ML training remains deferred. See `reports/hard_pilot_routing_analysis.md`.
+
+Reproduce from a fresh clone with Python 3.9+; these commands require neither
+`data/results/` nor API keys and make no provider calls:
+
+```bash
+python3 pilot_analysis.py reports/snapshots/hard_pilot_final.csv
+python3 reports/reproduce_hard_pilot.py
+python3 -m unittest discover -s tests -v
+```
+
+The report script verifies the frozen input hash and regenerates the Markdown
+and JSON reports. Keep the frozen CSV immutable; use a separate working CSV for
+any later authorized resume. The report lists all incomplete pairs and the exact
+preflight/resume commands; further calls are not part of this offline analysis.
+
 ## Enabled hosted models
 
 | Creator | Model | Provider | Exact API identifier |
@@ -91,19 +114,32 @@ pairs, writing to `data/results/hard_pilot_results.csv` so it cannot overwrite
 the completed nine-prompt pilot.
 
 ```bash
-python3 generate_dataset.py --hard-pilot --max-spend-usd 2.00 --resume
+python3 generate_dataset.py --hard-pilot --resume --exclude-xai \
+  --max-spend-usd 2.00 --output data/results/hard_pilot_results.csv
 ```
 
-Do not run it until its source summary and spend estimate have been reviewed.
-Pass `--confirm` only after reviewing the preflight. Calls remain sequential,
+This command prints preflight and exits before dispatch because `--confirm` is
+absent. xAI is currently blocked by spend preflight and the runtime guard: its
+historical usage exceeds the documented shared answer/reasoning limit, so its
+pre-dispatch cost bound remains unresolved. `--exclude-xai` defers dispatch only;
+the registry and 75-pair experiment matrix retain all five models, every paid
+response, and all historical recorded spend. See the
+[xAI accounting audit](reports/xai_cost_safety.md) for official semantics and the
+remaining historical billing uncertainty.
+
+Pass `--confirm` only after reviewing preflight and reconciling historical
+billing. Calls remain sequential,
 with 75 unique pairs, up to two retries per pair for transient failures, at most
 225 provider attempts in the worst case, and a maximum cap of $2.00.
 
-After reviewing preflight, resume the existing artifact with:
-
-```bash
-python3 generate_dataset.py --hard-pilot --max-spend-usd 2.00 --resume --confirm
-```
+The current ledger omits a previously reported Grok dispatch interrupted before
+checkpointing. Obtain its charge or a verified cumulative pilot total from an
+existing billing record before paid resume; do not estimate it from 4,096 tokens.
+If verified prior spend exceeds the recorded ledger, reduce `--max-spend-usd`
+by that difference so the actual cumulative ceiling remains $2.00. Historical
+paid rows need no guessed cost edits. Once reconciled, authorize the other four
+providers by adding `--confirm` with the reconciled cap and retaining
+`--exclude-xai`. Finishing all remaining pairs within the cap is not guaranteed.
 
 Preflight reports remaining pairs, up to three provider attempts per pending
 pair, previously recorded spend, conservative maximum additional/total spend,
@@ -136,6 +172,9 @@ Failure and resume rules:
   Corrected registry IDs/providers move pending unpaid rows for the same canonical
   model to the new identity, retaining prior spend/attempts. Paid rows retain their
   original identity; a CSV with paid models outside the new plan is rejected.
+* Explicit `output_limit_exhausted` outcomes block only the same pair under its
+  saved configuration. Historical blank responses without that evidence remain
+  retryable. xAI spend exclusion is separate from these provider retry states.
 
 Transient failures and invalid provider responses reserve their maximum possible
 cost because inference may have been billed without returned usage. Reserves and
@@ -143,6 +182,14 @@ attempt counts are checkpointed before retrying and retained when a failed pair
 is replaced on resume. Historical CSVs remain readable; their attempt counts are
 inferred from status/retry telemetry where necessary. No historical costs or raw
 responses are rewritten merely by preflight or analysis.
+
+xAI successful responses use `usage.cost_in_usd_ticks / 10_000_000_000` as their
+provider-reported billed cost when available. Safe diagnostics retain integer
+ticks and token telemetry, without reasoning content. A successful answer with
+output usage above the requested limit is retained and flagged. Missing ticks
+leave the existing local estimate as an estimate; historical bills are never
+fabricated. Reported billing arrives after dispatch and does not establish a
+pre-dispatch bound.
 
 The previous 45-row pilot remains at `data/results/pilot_results.csv`. Regrade
 that historical artifact entirely offline with:
