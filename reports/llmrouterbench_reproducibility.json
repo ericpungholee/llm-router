@@ -1,0 +1,406 @@
+{
+  "artifacts": {
+    "audit_raw_coverage.parquet": {
+      "rows": 1200,
+      "schema": {
+        "dataset": "object",
+        "labeled_outcomes": "int64",
+        "model_id": "object",
+        "observed_prompts": "int64",
+        "positive_cost_outcomes": "int64",
+        "prompt_universe": "int64",
+        "source_split": "object"
+      },
+      "sha256": "f3eaac00373e23bc05c82ec76a40bb50beb77b189353ad940d521a731c2ce012",
+      "size_bytes": 8013
+    },
+    "audit_raw_outcomes.parquet": {
+      "rows": 548059,
+      "schema": {
+        "dataset": "object",
+        "demo": "bool",
+        "generation_failure": "bool",
+        "has_output": "bool",
+        "input_tokens": "int64",
+        "model_id": "object",
+        "origin_sha256": "object",
+        "output_tokens": "int64",
+        "prompt_sha256": "object",
+        "raw_cost_usd": "float64",
+        "raw_score": "float64",
+        "source_file": "object",
+        "source_index": "int64",
+        "source_split": "object"
+      },
+      "sha256": "05c3d28e65f274660bb6382dbf7050982b5cb3489f6261ab6459eb298bd3c79d",
+      "size_bytes": 10541235
+    },
+    "audit_selected_outcomes.parquet": {
+      "rows": 70080,
+      "schema": {
+        "cost_available": "bool",
+        "cost_source": "object",
+        "cost_usd": "float64",
+        "dataset": "object",
+        "demo": "bool",
+        "eligible": "bool",
+        "generation_failure": "bool",
+        "has_output": "bool",
+        "input_tokens": "int64",
+        "label_available": "bool",
+        "model_id": "object",
+        "origin_sha256": "object",
+        "output_tokens": "int64",
+        "prompt_id": "object",
+        "prompt_sha256": "object",
+        "raw_cost_usd": "float64",
+        "raw_score": "float64",
+        "source_file": "object",
+        "source_index": "int64",
+        "source_split": "object",
+        "success": "Int8",
+        "success_label": "Int8",
+        "task_type": "object",
+        "tokens_available": "bool",
+        "unavailable_reason": "object"
+      },
+      "sha256": "8101dd3ae200239691a136600d5e174c6b3a5c34523ab7403ca22ca9c5460763",
+      "size_bytes": 2193649
+    },
+    "audit_source_files.parquet": {
+      "rows": 700,
+      "schema": {
+        "bytes": "int64",
+        "data_fingerprint": "object",
+        "dataset": "object",
+        "demo": "bool",
+        "header_cost_usd": "float64",
+        "model_id": "object",
+        "path_identity_consistent": "bool",
+        "record_cost_sum_usd": "float64",
+        "records": "int64",
+        "reported_counts": "int64",
+        "sha256": "object",
+        "source_file": "object",
+        "source_split": "object"
+      },
+      "sha256": "79d41b209aa0ec7b1c8a75c652d0d6882d73d33b19a03aadb2e935051daa6c73",
+      "size_bytes": 59232
+    },
+    "baseline_choices.parquet": {
+      "rows": 9440,
+      "schema": {
+        "cost_usd": "float64",
+        "model_id": "object",
+        "policy": "object",
+        "prompt_id": "object",
+        "regime": "object",
+        "success": "Int64"
+      },
+      "sha256": "67d183e4782fab4926378e7df562467322ba48e6dc71441c14aa0d71713536b0",
+      "size_bytes": 143151
+    },
+    "missingness_by_dataset.parquet": {
+      "rows": 6,
+      "schema": {
+        "coverage": "float64",
+        "dataset": "object",
+        "eligible_pairs": "int64",
+        "expected_pairs": "int64",
+        "labeled_pairs": "int64",
+        "missing_pairs": "int64",
+        "outcome_coverage": "float64",
+        "present_pairs": "int64",
+        "priced_pairs": "int64",
+        "valid_token_pairs": "int64"
+      },
+      "sha256": "bf6ddc9c46dbe244c5729f2e19c4ecdd9c2b8ed68e5822c375ae9997aa531761",
+      "size_bytes": 6864
+    },
+    "missingness_by_model.parquet": {
+      "rows": 8,
+      "schema": {
+        "coverage": "float64",
+        "eligible_pairs": "int64",
+        "expected_pairs": "int64",
+        "labeled_pairs": "int64",
+        "missing_pairs": "int64",
+        "model_id": "object",
+        "outcome_coverage": "float64",
+        "present_pairs": "int64",
+        "priced_pairs": "int64",
+        "valid_token_pairs": "int64"
+      },
+      "sha256": "3e987ccce23fc678d214787ad2d18d4d70f2c357343b936705b0e554068d81a0",
+      "size_bytes": 6895
+    },
+    "missingness_by_model_dataset.parquet": {
+      "rows": 48,
+      "schema": {
+        "coverage": "float64",
+        "dataset": "object",
+        "eligible_pairs": "int64",
+        "expected_pairs": "int64",
+        "labeled_pairs": "int64",
+        "missing_pairs": "int64",
+        "model_id": "object",
+        "outcome_coverage": "float64",
+        "present_pairs": "int64",
+        "priced_pairs": "int64",
+        "valid_token_pairs": "int64"
+      },
+      "sha256": "fdee0a0df499c44bfb18ac4422057d0944a35580340575991e410da62f6ae27e",
+      "size_bytes": 7886
+    },
+    "missingness_by_prompt.parquet": {
+      "rows": 8760,
+      "schema": {
+        "available_models": "int64",
+        "complete": "bool",
+        "dataset": "object",
+        "missing_models": "int64",
+        "prompt_id": "object",
+        "task_type": "object"
+      },
+      "sha256": "6a2613c3256e9b2d6227817c9fcf266410176c13f4c54dd112f0e2c13768da79",
+      "size_bytes": 312824
+    },
+    "missingness_by_task_type.parquet": {
+      "rows": 4,
+      "schema": {
+        "coverage": "float64",
+        "eligible_pairs": "int64",
+        "expected_pairs": "int64",
+        "labeled_pairs": "int64",
+        "missing_pairs": "int64",
+        "outcome_coverage": "float64",
+        "present_pairs": "int64",
+        "priced_pairs": "int64",
+        "task_type": "object",
+        "valid_token_pairs": "int64"
+      },
+      "sha256": "e6a3184cfb0c07aaa7c724d9c7b3348088fe61a9aa28500bff6ed9f879cc3f69",
+      "size_bytes": 6797
+    },
+    "oracle_targets.parquet": {
+      "rows": 2360,
+      "schema": {
+        "any_success": "int64",
+        "cheapest_success_cost_usd": "float64",
+        "cheapest_success_model_id": "object",
+        "fallback_model_id": "object",
+        "oracle_policy_cost_usd": "float64",
+        "prompt_id": "object",
+        "regime": "object"
+      },
+      "sha256": "75824fd7155af57dd3200801518083e8d3495149c2a60fcfb6f34800e5fff3e0",
+      "size_bytes": 120065
+    },
+    "outcomes.parquet": {
+      "rows": 69648,
+      "schema": {
+        "cost_source": "object",
+        "cost_usd": "float64",
+        "dataset": "object",
+        "input_tokens": "int64",
+        "model_id": "object",
+        "ood_split": "object",
+        "output_tokens": "int64",
+        "prompt": "object",
+        "prompt_id": "object",
+        "raw_score": "float64",
+        "source_file": "object",
+        "source_index": "int64",
+        "source_split": "object",
+        "standard_split": "object",
+        "success": "Int8",
+        "success_label": "Int8",
+        "task_type": "object"
+      },
+      "sha256": "afd0904b6b798bc9ea453ec7f1c49e3fcd07571ec664515762d92acb8cbb7be3",
+      "size_bytes": 2784618
+    },
+    "prompt_features.parquet": {
+      "rows": 8706,
+      "schema": {
+        "answer_choice_count": "int64",
+        "bracket_count": "int64",
+        "character_length": "int64",
+        "code_fence_count": "int64",
+        "colon_count": "int64",
+        "comma_count": "int64",
+        "contains_code": "int64",
+        "contains_math": "int64",
+        "digit_count": "int64",
+        "line_count": "int64",
+        "period_count": "int64",
+        "prompt_id": "object",
+        "punctuation_count": "int64",
+        "question_mark_count": "int64",
+        "semicolon_count": "int64",
+        "token_estimate": "int64",
+        "word_count": "int64"
+      },
+      "sha256": "fe54c92c6aa2aa56b8599d2ad7697e1884949b3f61046213bf02766467a8aba7",
+      "size_bytes": 390087
+    },
+    "prompts.parquet": {
+      "rows": 8706,
+      "schema": {
+        "dataset": "object",
+        "leakage_group": "object",
+        "ood_split": "object",
+        "origin_sha256": "object",
+        "prompt": "object",
+        "prompt_id": "object",
+        "prompt_sha256": "object",
+        "source_index": "int64",
+        "source_split": "object",
+        "standard_split": "object",
+        "task_type": "object"
+      },
+      "sha256": "229a75158cb5cffaef7ba5bc7ebd8f2cc0d4c00b37e854e72cfcfebc2dbeefae",
+      "size_bytes": 2797520
+    },
+    "splits.parquet": {
+      "rows": 8706,
+      "schema": {
+        "leakage_group": "object",
+        "ood_split": "object",
+        "prompt_id": "object",
+        "standard_split": "object"
+      },
+      "sha256": "58d8f85758537fb383c8fec765fe4aa27e4a3a2b545e6c7769c5ecacb6bff3e0",
+      "size_bytes": 626565
+    },
+    "static_model_summary.parquet": {
+      "rows": 280,
+      "schema": {
+        "accuracy": "Float64",
+        "coverage": "float64",
+        "dataset": "object",
+        "mean_cost_usd": "float64",
+        "mean_raw_score": "float64",
+        "median_cost_usd": "float64",
+        "model_id": "object",
+        "outcomes": "int64",
+        "regime": "object",
+        "split": "object"
+      },
+      "sha256": "ea15de0c90bc9738cd9d748e263f01ec5d1bdbeb3d46ecf27e53a233c65622e2",
+      "size_bytes": 15162
+    }
+  },
+  "code_sha256": {
+    "experiments/requirements-llmrouterbench.txt": "f1266e0f1bcef763d71b63b2be350a40b31d317ee8b5a82bd4ee8b2aaabac27c",
+    "routing_data/__init__.py": "4a132e7650196186cae35244f9b3bc22e0fe1f13f85e0a2cb1b9f612ec21bf8d",
+    "routing_data/baselines.py": "0ad3ff97ab44e2c4b702885b1bde80ca0d8d8d7525ab0e6d5f4211165448262d",
+    "routing_data/features.py": "9a93d2a4eeb2a3177611c4237ea26b8ca42b45affe9ba3629c9e4784794222eb",
+    "routing_data/loading.py": "c69e930cf88663ef57a60f4abb72d00bee61f5a02ce93e8fbecd6dd1a161fd3a",
+    "routing_data/matrix.py": "28cab1f5f5ae2e4fa4d8cff2c543803eac1e03b56a85b4933eb61d80f4d5ad34",
+    "routing_data/prepare.py": "d8991a86cdfb1b92da84612c5c2297a02043a1696f8c91b5ff61ffe3132528a2",
+    "routing_data/source.py": "905625d24f471d6b4a4841d768c656ea1649df93e3b82224d807020c542324f2",
+    "routing_data/splits.py": "d01046c0f402dc7653f0f16346c35605f1fe3836f806ba61031a93db151a2b77",
+    "scripts/prepare_llmrouterbench.py": "5ebc59168c7c9aa47759ba876b00e7b2338f53694a9cc82c90af8f9a00e76237"
+  },
+  "config_sha256": {
+    "llmrouterbench_source.json": "8fecc2bef85554f75fa6f36008fab9bc2f4f8159f8af3b07f111726c179a4a5f",
+    "router_model_pool.json": "b318793f9663974dbbde1efdb9a8bfd0b371e8d0b9359a6fb03925273dfd48f1",
+    "router_tasks.json": "b70f10191e55bb69e5dce39be9194f94b9285add08d51d1484b115c0844ea837"
+  },
+  "environment": {
+    "numpy": "2.0.2",
+    "pandas": "2.2.3",
+    "pyarrow": "19.0.1",
+    "python": "3.9.6"
+  },
+  "matrix_metadata_sha256": "38e586ddb3145e4d056705f687829b3c64e6532f9229e313abb5908db80b53b3",
+  "no_provider_calls": true,
+  "no_training": true,
+  "reproduction_command": ".venv/bin/python scripts/prepare_llmrouterbench.py --download",
+  "schema_version": 1,
+  "source": {
+    "archive": {
+      "filename": "bench-release.tar.gz",
+      "sha256": "b79f8cde1a6f029c2efa663a3a3b6f7748defb22341fe59f328cebef6648c8f1",
+      "size_bytes": 1283503080,
+      "url": "https://huggingface.co/datasets/NPULH/LLMRouterBench/resolve/0e5af1b84bf73437a01a1849c0f1d2468baa93fc/bench-release.tar.gz?download=true"
+    },
+    "audited_source_files": {
+      "README.md": {
+        "sha256": "a52088d30b99d9cfaf8b0795673c351cdfa1a9f99053902f240455879068b290",
+        "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/README.md"
+      },
+      "config/baseline_config_performance_cost.yaml": {
+        "sha256": "4a4d35d72b9ec6e94175c770c24d02096a344ef5ccb08ee7372cc185d8426cca",
+        "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/config/baseline_config_performance_cost.yaml"
+      },
+      "config/data_collector_proprietary_model_config.yaml": {
+        "sha256": "8f167197aabd010fd2e54df58284ae46a27c600a4fa08a6473b5d8c2993ee7f6",
+        "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/config/data_collector_proprietary_model_config.yaml"
+      },
+      "data_collector/runner.py": {
+        "sha256": "e883d9aa94a279cba0d7375a6329fca4d6b21f77ff0165077e0c85dc1a4fd6cf",
+        "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/data_collector/runner.py"
+      },
+      "data_collector/storage.py": {
+        "sha256": "5ccf625a8f00e7d4ba79cb4690dcb7803ffd04c73d1087df5d29442a781b7d81",
+        "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/data_collector/storage.py"
+      },
+      "evaluation/AIME/aime.py": {
+        "sha256": "7678f34add4d7ab4434a671c976c7eee64103df43ccc183c46422acac0200076",
+        "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/evaluation/AIME/aime.py"
+      },
+      "evaluation/ArenaHard/arenahard.py": {
+        "sha256": "f1acbc46d06f83fbf2f1a4b4b21dffa8eb51514239ab7a901b458914d6a39b4d",
+        "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/evaluation/ArenaHard/arenahard.py"
+      },
+      "evaluation/GPQA/gpqa.py": {
+        "sha256": "4796bdbcc6c09fbacd78858b388f957a6bb0175f9921ef370721b6a7401a85dd",
+        "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/evaluation/GPQA/gpqa.py"
+      },
+      "evaluation/HLE/hle.py": {
+        "sha256": "00cf8ffd0c4cac89f2a44a455cd030294d996c7315282a582d11c6c446e4fc62",
+        "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/evaluation/HLE/hle.py"
+      },
+      "evaluation/LiveCodeBench/livecodebench.py": {
+        "sha256": "daef34365316f85223b6ffb79066a1c5ec7025df5a69e129d97e33072feadac6",
+        "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/evaluation/LiveCodeBench/livecodebench.py"
+      },
+      "evaluation/LiveMathBench/livemathbench.py": {
+        "sha256": "26cb2ea81473c26fea96c785e41e045b40643ce22c01c7acf55a90ab5bfefdc6",
+        "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/evaluation/LiveMathBench/livemathbench.py"
+      },
+      "evaluation/MMLUPro/mmlupro.py": {
+        "sha256": "566dfc0925d2166a739b1e48d2a1d5f98be5ca6c873ae0201e48c19fe1fa34be",
+        "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/evaluation/MMLUPro/mmlupro.py"
+      },
+      "evaluation/SimpleQA/simpleqa.py": {
+        "sha256": "6a56f70885aef3db7ea99d9aeba61e539a1dae7c29694550bce83bef7c74868f",
+        "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/evaluation/SimpleQA/simpleqa.py"
+      },
+      "external_bench/README.md": {
+        "sha256": "19f9935e16c58525098bac07d935589f306a98f68e91ef774a0aec5b37562633",
+        "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/external_bench/README.md"
+      },
+      "generators/generator.py": {
+        "sha256": "67b891c12e67828da573aecfe8164b1d5e1c1a325b45af90fa099ad2878d02c6",
+        "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/generators/generator.py"
+      }
+    },
+    "dataset_repository": "https://huggingface.co/datasets/NPULH/LLMRouterBench",
+    "dataset_revision": "0e5af1b84bf73437a01a1849c0f1d2468baa93fc",
+    "notes": [
+      "Official README links this Hugging Face repository. It publishes a tar.gz of JSON results, not a datasets.load_dataset-compatible table.",
+      "Repository code is newer than the collected outputs. Its evaluator semantics are audited alongside observed scores; collection-time code versions are not provided per record.",
+      "No provider or embedding API is used. Existing benchmark costs are historical observations, not current pricing."
+    ],
+    "repository": "https://github.com/ynulihao/LLMRouterBench",
+    "repository_commit": "c77cb0506949d8f959e97967d2fefca0e8ff1b05",
+    "repository_commit_date": "2026-04-06T16:38:34Z",
+    "schema_version": 1,
+    "verified_on": "2026-09-14"
+  },
+  "split_algorithm": "sha256-group-order-largest-remainder-v1",
+  "split_seed": 3407
+}

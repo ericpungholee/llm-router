@@ -3,17 +3,74 @@
 This repository builds deterministic evaluation data for a future learned LLM
 router. It does **not** train or serve the router yet.
 
-## Frozen final hard-pilot artifact
+## Primary ML dataset: LLMRouterBench
 
-The stopped run's normalized, offline-regraded CSV is included at
-`reports/snapshots/hard_pilot_final.csv`. Its provenance file records stability
-observations, the before/after SHA-256 hashes, the complete regrade audit, and
-credential inspection. This supersedes the earlier ignored intermediate snapshot.
-The final matrix has 24/75 graded pairs and no fully graded five-model prompts;
-ML training remains deferred. See `reports/hard_pilot_routing_analysis.md`.
+The primary training source is now the official, hash-pinned LLMRouterBench
+release: **8,706 complete prompts × 8 models = 69,648 outcomes**, covering math,
+code, scientific reasoning, and knowledge QA. The provider harness and hard
+pilot below remain external evaluation infrastructure.
 
-Reproduce from a fresh clone with Python 3.9+; these commands require neither
-`data/results/` nor API keys and make no provider calls:
+Reproduce preparation from a fresh checkout; no API keys or provider calls:
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -r experiments/requirements-llmrouterbench.txt
+.venv/bin/python scripts/prepare_llmrouterbench.py --download
+.venv/bin/python tests/run_offline_suite.py
+```
+
+The first run downloads the public 1.28 GB JSON archive, verifies its SHA-256,
+and writes canonical Parquet to `data/processed/llmrouterbench/`. Later runs
+work offline. Raw and processed data are ignored by git; small frozen configs,
+audit reports, and reproduction metadata are tracked.
+
+Read the [source/schema audit](reports/llmrouterbench_data_audit.md),
+[model coverage, splits, and baselines](reports/llmrouterbench_preparation.md),
+and [future ML experiment specification](reports/ml_experiment_spec.md).
+Standard train/validation/test sizes are 6,094/1,307/1,305. The independent OOD
+regime holds out all 1,055 LiveCodeBench prompts. Labels, costs, and splits are
+validated; unknown grades are never converted to failures.
+
+The next experiment is eight per-model TF-IDF + logistic-regression success
+predictors, followed by validation-selected cost-aware decisions. Training has
+not started. `routing_data.loading.load_split()` returns aligned prompts,
+prompt-visible features, success targets, and evaluation costs separately.
+
+## Closed 4096-token hard pilot
+
+The completed 4096-token hard pilot is frozen separately from the earlier
+historical snapshot. Reproduce its accounting, common-subset comparisons,
+exhaustion diagnostics, and preregistered treatment plan entirely offline:
+
+```bash
+python3 reports/reproduce_4096_pilot.py --output-dir /tmp/hard-pilot-4096-report
+python3 tests/run_offline_suite.py
+```
+
+See [the completed pilot report](reports/hard_pilot_4096_analysis.md) and
+[provenance](reports/snapshots/hard_pilot_4096_final.provenance.json).
+There are 45/75 grades and only five fully graded five-model prompts; this
+experiment does not justify learned-router training or evaluation.
+`hard_pilot_treatment.py` selects only the 20 final `output_limit_exhausted`
+pairs, excludes Grok, preserves prompt/configuration/grading inputs, and allows
+one attempt per pair with zero retries in a fresh output. The default action
+is offline preflight; `--confirm` is a separate paid boundary.
+Both candidate paid treatments currently fail strict preflight because two
+new Qwen completions exceed their recorded request cap. Registry-contract
+estimates ($1.656349 at 8192, $3.216105 at 16384) are conditional, not verified
+worst-case billing bounds. The report documents the exact commands, the
+8192 feasibility recommendation, and success criteria. No treatment has run.
+
+## Earlier historical snapshot
+
+The earlier stopped run's normalized, offline-regraded CSV remains at
+`reports/snapshots/hard_pilot_final.csv`. Its provenance records stability,
+before/after hashes, a regrade audit, and credential inspection. That historical
+state has 24/75 grades and no five-model complete prompts; the newly closed
+4096 experiment above contains the later completed paid resume.
+
+Reproduce the historical reports with Python 3.9+ without `data/`, API keys,
+or provider calls:
 
 ```bash
 python3 pilot_analysis.py reports/snapshots/hard_pilot_final.csv

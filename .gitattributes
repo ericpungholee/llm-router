@@ -1,2 +1,4 @@
 # Preserve the audited CSV bytes, including original prompt whitespace and CRLF.
 reports/snapshots/hard_pilot_final.csv -text -whitespace
+# Preserve immutable experiment bytes, including CSV line endings and prompts.
+reports/snapshots/hard_pilot_4096_final.csv -text -whitespace

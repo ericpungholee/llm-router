@@ -1,0 +1,21 @@
+{
+  "command": ".venv/bin/python tests/run_offline_suite.py",
+  "errors": 0,
+  "existing_tests": 126,
+  "failures": 0,
+  "full_dataset_reproduction": {
+    "all_canonical_files_equal": true,
+    "all_parquet_sha256_equal": true,
+    "command": ".venv/bin/python scripts/prepare_llmrouterbench.py --output-dir data/processed/llmrouterbench_reproduction --report-dir /tmp/llmrouterbench_reproduction_reports",
+    "full_provenance_equal": true,
+    "parquet_artifacts": 16,
+    "passed": true,
+    "source_archive_sha256": "b79f8cde1a6f029c2efa663a3a3b6f7748defb22341fe59f328cebef6648c8f1"
+  },
+  "network_access_blocked": true,
+  "new_preprocessing_tests": 30,
+  "passed": true,
+  "skipped": 0,
+  "tests_run": 156,
+  "unexpected_network_attempts": 0
+}

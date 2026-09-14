@@ -1,0 +1,10 @@
+{
+  "command": "python3 tests/run_offline_suite.py",
+  "errors": 0,
+  "failures": 0,
+  "network_access_blocked": true,
+  "passed": true,
+  "skipped": 0,
+  "tests_run": 126,
+  "unexpected_network_attempts": 0
+}

@@ -1,0 +1,184 @@
+{
+  "configuration_file_sha256": {
+    "benchmark_loaders.py": "dc0cd481d59f66cb7ef00e06716134bb26a5594672d41993e2f299d466d6e666",
+    "benchmarks/hard_pilot.json": "4abffb2fcae899d6dcebcdc891601198a400aa89d7273bbda57e558c83020cb4",
+    "benchmarks/manifest.json": "742e0c6af01ca9dd02b824e1ae58dceef3e25f2e9f0410ce4620c15cecb133d7",
+    "benchmarks/samples/livecodebench.jsonl": "27ef0710bfb7bf40d8e39c52c21ae539aaa7ac20112c2d487350507e3939b303",
+    "benchmarks/samples/math_500.jsonl": "f355c0fe6c106747cc288fa72a6bfff58f93659d798da7f2a0e0b2540ae06669",
+    "benchmarks/samples/mmlu_pro.jsonl": "b632843e811c32fa2c703276e1bdd15bfc260ea00432954bbb7186f0a7f8baf8",
+    "generate_dataset.py": "73226f3f12a3888c7c90dc10a8cf98a87df0a860d5587ee98f7553bedaa7ad85",
+    "graders.py": "2f2271723af8d5c64c419beca81d21050bffd1fc790fbfaf539e0377e8e971ec",
+    "model_registry.py": "0bb070cb3c6f8dfc199343e9178540703ffad5bb216bf91a2e526e0be2367a16",
+    "provider_clients/anthropic.py": "f5af3b5d8c4d5ea5c52c0fa1a5913116c3d40997a176c0f69a41159d125fb9aa",
+    "provider_clients/base.py": "f9bd4f078ebb530788caee881f3fc2400a6287b2b8e2d407f86ad1c11c8ea0f4",
+    "provider_clients/deepseek.py": "05e4c3a38391a374a533267e4e5a692e91308be011399f364ba8ba948eb9247b",
+    "provider_clients/normalization.py": "6069383e2c636c5455360775e5f9bcd69188a9db3cc166ef2119e5d9a9366556",
+    "provider_clients/openai.py": "65df723c307cc6818333831428f76ac8df1d7bc840fb467bc127f3fd0195e38d",
+    "provider_clients/openrouter.py": "e8ccf0293a64278be215815bbe98e29b41f3c948e1cb681b1b5926b6aad41710",
+    "providers.py": "2bcfbc4dc3f14425cf5eaa671393e98e9cf028a31868d3e0cab197dd419f0fc1"
+  },
+  "experiment": "hard_pilot_4096_final",
+  "frozen_sha256": "f80c25a369eae3ef7ebb25713729c3327c20d6de5d6c4375a2912e86d04b94e7",
+  "generation_configuration": [
+    {
+      "api_model_identifier": "gpt-5.6-sol",
+      "canonical_model_name": "GPT-5.6 Sol",
+      "creator": "OpenAI",
+      "enabled": true,
+      "generation": {
+        "max_output_tokens": 4096,
+        "reasoning_setting": "reasoning_effort=medium",
+        "temperature": null
+      },
+      "inference_provider": "openai",
+      "input_price_per_million_usd": 4.0,
+      "key": "openai_gpt_5_6_sol",
+      "model_type": "closed",
+      "output_price_per_million_usd": 20.0,
+      "resolution_note": "Verified in official OpenAI model documentation."
+    },
+    {
+      "api_model_identifier": "claude-opus-5",
+      "canonical_model_name": "Claude Opus 5",
+      "creator": "Anthropic",
+      "enabled": true,
+      "generation": {
+        "max_output_tokens": 4096,
+        "reasoning_setting": "adaptive_thinking;effort=high",
+        "temperature": null
+      },
+      "inference_provider": "anthropic",
+      "input_price_per_million_usd": 5.0,
+      "key": "anthropic_claude_opus_5",
+      "model_type": "closed",
+      "output_price_per_million_usd": 25.0,
+      "resolution_note": "Verified for the first-party Claude API."
+    },
+    {
+      "api_model_identifier": "grok-4.6",
+      "canonical_model_name": "Grok 4.6",
+      "creator": "xAI",
+      "enabled": true,
+      "generation": {
+        "max_output_tokens": 4096,
+        "reasoning_setting": "reasoning_effort=high",
+        "temperature": null
+      },
+      "inference_provider": "xai",
+      "input_price_per_million_usd": 2.0,
+      "key": "xai_grok_4_6",
+      "model_type": "closed",
+      "output_price_per_million_usd": 6.0,
+      "resolution_note": "Standard prices apply below 200K input tokens."
+    },
+    {
+      "api_model_identifier": "deepseek-flash",
+      "canonical_model_name": "DeepSeek V4.1 Flash",
+      "creator": "DeepSeek",
+      "enabled": true,
+      "generation": {
+        "max_output_tokens": 4096,
+        "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+        "temperature": null
+      },
+      "inference_provider": "deepseek",
+      "input_price_per_million_usd": 0.3,
+      "key": "deepseek_v4_1_flash",
+      "model_type": "open_weight",
+      "output_price_per_million_usd": 1.2,
+      "resolution_note": "Official V4.1 alias verified. Peak uncached prices apply; off-peak rates are 50% lower."
+    },
+    {
+      "api_model_identifier": "qwen/qwen3.8-2.4t-a95b",
+      "canonical_model_name": "Qwen3.8 2.4T-A95B",
+      "creator": "Qwen / Alibaba",
+      "enabled": true,
+      "generation": {
+        "max_output_tokens": 4096,
+        "reasoning_setting": "thinking_only",
+        "temperature": null
+      },
+      "inference_provider": "openrouter",
+      "input_price_per_million_usd": 2.0,
+      "key": "qwen_3_8_2_4t_a95b",
+      "model_type": "open_weight",
+      "output_price_per_million_usd": 6.0,
+      "resolution_note": "OpenRouter listed pricing: $2/M input and $6/M output."
+    }
+  ],
+  "git_commit": "1b7622000cf703708a15ffa0e155a018397646c1",
+  "history": "Completed working CSV includes earlier attempts/resumes; no new calls, offline regrade, sanitization, or field changes during freezing.",
+  "http_200_exhausted_responses": 20,
+  "immutability": "Exclusive creation; SHA verified on every read; tracked artifact, never a resume/merge destination.",
+  "metrics": {
+    "accuracy_over_graded": 0.7111111111111111,
+    "attempted_provider_calls": 83,
+    "average_response_latency_ms": 29786.05253062221,
+    "correct_responses": 32,
+    "expected_pairs": 75,
+    "failed_provider_attempts": 38,
+    "grading_failures": 0,
+    "parsing_failures": 0,
+    "provider_failures": 21,
+    "recorded_pairs": 75,
+    "skipped_pairs": 8,
+    "spend_limit_stops": 1,
+    "successful_provider_responses": 45,
+    "successfully_graded_pairs": 45,
+    "successfully_graded_responses": 45,
+    "total_recorded_cost_usd": 1.9491623,
+    "unrecorded_pairs": 0
+  },
+  "no_provider_calls_while_freezing": true,
+  "observed_generation_configuration": [
+    {
+      "max_output_tokens": 4096,
+      "model_id": "claude-opus-5",
+      "provider": "anthropic",
+      "reasoning_setting": "adaptive_thinking;effort=high",
+      "temperature": "provider_default"
+    },
+    {
+      "max_output_tokens": 4096,
+      "model_id": "deepseek-flash",
+      "provider": "deepseek",
+      "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+      "temperature": "provider_default"
+    },
+    {
+      "max_output_tokens": 4096,
+      "model_id": "gpt-5.6-sol",
+      "provider": "openai",
+      "reasoning_setting": "reasoning_effort=medium",
+      "temperature": "provider_default"
+    },
+    {
+      "max_output_tokens": 4096,
+      "model_id": "qwen/qwen3.8-2.4t-a95b",
+      "provider": "openrouter",
+      "reasoning_setting": "thinking_only",
+      "temperature": "provider_default"
+    },
+    {
+      "max_output_tokens": 4096,
+      "model_id": "grok-4.6",
+      "provider": "xai",
+      "reasoning_setting": "reasoning_effort=high",
+      "temperature": "provider_default"
+    }
+  ],
+  "offline_audit": {
+    "blocked_network_attempts": 0,
+    "provider_calls": 0
+  },
+  "output_limit_exhausted_count": 20,
+  "recorded_spend_usd": "1.9491623",
+  "response_count_definition": "Successful normalized provider responses as recorded/inferred by the existing ledger; HTTP-200 exhausted responses are separate.",
+  "row_count": 75,
+  "size_bytes": 188957,
+  "snapshot_path": "reports/snapshots/hard_pilot_4096_final.csv",
+  "source_path": "data/results/hard_pilot_results.csv",
+  "source_sha256": "f80c25a369eae3ef7ebb25713729c3327c20d6de5d6c4375a2912e86d04b94e7",
+  "source_unchanged": true,
+  "timestamp_utc": "2026-09-14T17:31:34.782432+00:00"
+}

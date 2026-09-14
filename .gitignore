@@ -3,3 +3,6 @@ __pycache__/
 *.py[cod]
 .env
 data/
+# Public benchmark archives, audit tables, generated Parquet, and split files
+# live under data/ and are reproducible via scripts/prepare_llmrouterbench.py.
+# Keep only small configs/reports and synthetic test fixtures in git.

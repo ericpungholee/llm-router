@@ -1,0 +1,82 @@
+{
+  "archive": {
+    "filename": "bench-release.tar.gz",
+    "sha256": "b79f8cde1a6f029c2efa663a3a3b6f7748defb22341fe59f328cebef6648c8f1",
+    "size_bytes": 1283503080,
+    "url": "https://huggingface.co/datasets/NPULH/LLMRouterBench/resolve/0e5af1b84bf73437a01a1849c0f1d2468baa93fc/bench-release.tar.gz?download=true"
+  },
+  "audited_source_files": {
+    "README.md": {
+      "sha256": "a52088d30b99d9cfaf8b0795673c351cdfa1a9f99053902f240455879068b290",
+      "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/README.md"
+    },
+    "config/baseline_config_performance_cost.yaml": {
+      "sha256": "4a4d35d72b9ec6e94175c770c24d02096a344ef5ccb08ee7372cc185d8426cca",
+      "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/config/baseline_config_performance_cost.yaml"
+    },
+    "config/data_collector_proprietary_model_config.yaml": {
+      "sha256": "8f167197aabd010fd2e54df58284ae46a27c600a4fa08a6473b5d8c2993ee7f6",
+      "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/config/data_collector_proprietary_model_config.yaml"
+    },
+    "data_collector/runner.py": {
+      "sha256": "e883d9aa94a279cba0d7375a6329fca4d6b21f77ff0165077e0c85dc1a4fd6cf",
+      "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/data_collector/runner.py"
+    },
+    "data_collector/storage.py": {
+      "sha256": "5ccf625a8f00e7d4ba79cb4690dcb7803ffd04c73d1087df5d29442a781b7d81",
+      "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/data_collector/storage.py"
+    },
+    "evaluation/AIME/aime.py": {
+      "sha256": "7678f34add4d7ab4434a671c976c7eee64103df43ccc183c46422acac0200076",
+      "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/evaluation/AIME/aime.py"
+    },
+    "evaluation/ArenaHard/arenahard.py": {
+      "sha256": "f1acbc46d06f83fbf2f1a4b4b21dffa8eb51514239ab7a901b458914d6a39b4d",
+      "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/evaluation/ArenaHard/arenahard.py"
+    },
+    "evaluation/GPQA/gpqa.py": {
+      "sha256": "4796bdbcc6c09fbacd78858b388f957a6bb0175f9921ef370721b6a7401a85dd",
+      "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/evaluation/GPQA/gpqa.py"
+    },
+    "evaluation/HLE/hle.py": {
+      "sha256": "00cf8ffd0c4cac89f2a44a455cd030294d996c7315282a582d11c6c446e4fc62",
+      "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/evaluation/HLE/hle.py"
+    },
+    "evaluation/LiveCodeBench/livecodebench.py": {
+      "sha256": "daef34365316f85223b6ffb79066a1c5ec7025df5a69e129d97e33072feadac6",
+      "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/evaluation/LiveCodeBench/livecodebench.py"
+    },
+    "evaluation/LiveMathBench/livemathbench.py": {
+      "sha256": "26cb2ea81473c26fea96c785e41e045b40643ce22c01c7acf55a90ab5bfefdc6",
+      "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/evaluation/LiveMathBench/livemathbench.py"
+    },
+    "evaluation/MMLUPro/mmlupro.py": {
+      "sha256": "566dfc0925d2166a739b1e48d2a1d5f98be5ca6c873ae0201e48c19fe1fa34be",
+      "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/evaluation/MMLUPro/mmlupro.py"
+    },
+    "evaluation/SimpleQA/simpleqa.py": {
+      "sha256": "6a56f70885aef3db7ea99d9aeba61e539a1dae7c29694550bce83bef7c74868f",
+      "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/evaluation/SimpleQA/simpleqa.py"
+    },
+    "external_bench/README.md": {
+      "sha256": "19f9935e16c58525098bac07d935589f306a98f68e91ef774a0aec5b37562633",
+      "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/external_bench/README.md"
+    },
+    "generators/generator.py": {
+      "sha256": "67b891c12e67828da573aecfe8164b1d5e1c1a325b45af90fa099ad2878d02c6",
+      "url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/c77cb0506949d8f959e97967d2fefca0e8ff1b05/generators/generator.py"
+    }
+  },
+  "dataset_repository": "https://huggingface.co/datasets/NPULH/LLMRouterBench",
+  "dataset_revision": "0e5af1b84bf73437a01a1849c0f1d2468baa93fc",
+  "notes": [
+    "Official README links this Hugging Face repository. It publishes a tar.gz of JSON results, not a datasets.load_dataset-compatible table.",
+    "Repository code is newer than the collected outputs. Its evaluator semantics are audited alongside observed scores; collection-time code versions are not provided per record.",
+    "No provider or embedding API is used. Existing benchmark costs are historical observations, not current pricing."
+  ],
+  "repository": "https://github.com/ynulihao/LLMRouterBench",
+  "repository_commit": "c77cb0506949d8f959e97967d2fefca0e8ff1b05",
+  "repository_commit_date": "2026-04-06T16:38:34Z",
+  "schema_version": 1,
+  "verified_on": "2026-09-14"
+}

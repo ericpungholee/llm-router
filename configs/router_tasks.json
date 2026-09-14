@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "seed": 3407,
+  "standard_fractions": [0.7, 0.15, 0.15],
+  "ood_validation_fraction": 0.15,
+  "ood_held_out_datasets": ["livecodebench"],
+  "missingness_policy": "complete_case_valid_label_cost_and_tokens",
+  "cost_policy": "positive_benchmark_record_only_no_reconstruction",
+  "tasks": [
+    {"dataset": "aime", "source_split": "hybrid", "task_type": "math", "label_rule": "binary", "reason": "60 competition math prompts; deterministic math-equivalence grading."},
+    {"dataset": "livemathbench", "source_split": "test", "task_type": "math", "label_rule": "binary", "reason": "121 additional math prompts; good selected-model coverage."},
+    {"dataset": "gpqa", "source_split": "test", "task_type": "reasoning", "label_rule": "binary", "reason": "198 scientific multiple-choice reasoning prompts with full coverage."},
+    {"dataset": "livecodebench", "source_split": "test", "task_type": "code", "label_rule": "binary", "reason": "1055 execution-graded problems; full selected-model coverage and substantial OOD domain."},
+    {"dataset": "mmlupro", "source_split": "test_3000", "task_type": "knowledge", "label_rule": "binary", "reason": "3000 multi-subject MCQ prompts. Exclude overlapping test_1000."},
+    {"dataset": "simpleqa", "source_split": "test", "task_type": "knowledge", "label_rule": "binary", "reason": "4326 factual questions with standardized binary judge labels. Preserve label-noise caveat; exclude overlapping subset_500."}
+  ],
+  "excluded": {
+    "arc-agi": "Different structured/visual task interface; keep first experiment text-only.",
+    "arcc": "Coverage concentrated in small performance-only models; insufficient chosen cost-aware pool coverage.",
+    "arenahard": "Relative 0/0.5/1 preference reward, with invalid judgments mapped to zero; no arbitrary binarization.",
+    "arenahard_coding": "Overlapping ArenaHard export with relative preference rewards and stale aggregate costs.",
+    "arenahard_creative_writing": "Overlapping ArenaHard export with relative preference rewards and stale aggregate costs.",
+    "arenahard_math": "Overlapping ArenaHard export with relative preference rewards and stale aggregate costs.",
+    "bbh": "No selected flagship pool coverage.",
+    "emorynlp": "No selected flagship pool coverage; repeated prompt strings.",
+    "finqa": "No selected flagship pool coverage; repeated prompt strings.",
+    "hle": "GPT-5 has 507/2158 zero costs and prompt-text inconsistencies; would disproportionately reduce complete coverage. Judge labels also have parsing ambiguity.",
+    "humaneval": "Insufficient selected flagship pool coverage; LiveCodeBench supplies larger execution-graded code coverage.",
+    "kandk": "No selected flagship pool coverage.",
+    "korbench": "No selected flagship pool coverage; repeated prompt strings.",
+    "math500": "No selected flagship pool coverage.",
+    "mathbench": "No selected flagship pool coverage.",
+    "mbpp": "No selected flagship pool coverage; one null grade.",
+    "medqa": "No selected flagship pool coverage.",
+    "meld": "No selected flagship pool coverage; repeated prompt strings.",
+    "swe-bench": "Agent workflow costs/context are not comparable to one-shot model calls; external evaluation details incomplete.",
+    "tau2": "Stored text contains user-simulator goals and scenario IDs, not a verified agent-visible request; multi-turn workflow costs and no GPT-5-chat coverage.",
+    "winogrande": "No selected flagship pool coverage."
+  }
+}

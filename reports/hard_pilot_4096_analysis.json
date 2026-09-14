@@ -1,0 +1,3249 @@
+{
+  "analysis": {
+    "by_benchmark_and_model": {
+      "livecodebench": {
+        "anthropic/claude-opus-5": {
+          "accuracy_over_graded": null,
+          "attempted_provider_calls": 6,
+          "average_response_latency_ms": null,
+          "correct_responses": 0,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 6,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 4,
+          "recorded_pairs": 5,
+          "skipped_pairs": 1,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 0,
+          "successfully_graded_pairs": 0,
+          "successfully_graded_responses": 0,
+          "total_recorded_cost_usd": 0.57051,
+          "unrecorded_pairs": 0
+        },
+        "deepseek/deepseek-flash": {
+          "accuracy_over_graded": null,
+          "attempted_provider_calls": 4,
+          "average_response_latency_ms": null,
+          "correct_responses": 0,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 4,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 4,
+          "recorded_pairs": 5,
+          "skipped_pairs": 1,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 0,
+          "successfully_graded_pairs": 0,
+          "successfully_graded_responses": 0,
+          "total_recorded_cost_usd": 0.0223728,
+          "unrecorded_pairs": 0
+        },
+        "openai/gpt-5.6-sol": {
+          "accuracy_over_graded": 1.0,
+          "attempted_provider_calls": 6,
+          "average_response_latency_ms": 98026.53139549989,
+          "correct_responses": 2,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 4,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 2,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 1,
+          "successful_provider_responses": 2,
+          "successfully_graded_pairs": 2,
+          "successfully_graded_responses": 2,
+          "total_recorded_cost_usd": 0.398996,
+          "unrecorded_pairs": 0
+        },
+        "openrouter/qwen/qwen3.8-2.4t-a95b": {
+          "accuracy_over_graded": null,
+          "attempted_provider_calls": 5,
+          "average_response_latency_ms": null,
+          "correct_responses": 0,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 5,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 4,
+          "recorded_pairs": 5,
+          "skipped_pairs": 1,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 0,
+          "successfully_graded_pairs": 0,
+          "successfully_graded_responses": 0,
+          "total_recorded_cost_usd": 0.143192,
+          "unrecorded_pairs": 0
+        },
+        "xai/grok-4.6": {
+          "accuracy_over_graded": null,
+          "attempted_provider_calls": 0,
+          "average_response_latency_ms": null,
+          "correct_responses": 0,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 5,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 0,
+          "successfully_graded_pairs": 0,
+          "successfully_graded_responses": 0,
+          "total_recorded_cost_usd": 0.0,
+          "unrecorded_pairs": 0
+        }
+      },
+      "math_500": {
+        "anthropic/claude-opus-5": {
+          "accuracy_over_graded": 1.0,
+          "attempted_provider_calls": 5,
+          "average_response_latency_ms": 4468.408908599986,
+          "correct_responses": 5,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 5,
+          "successfully_graded_pairs": 5,
+          "successfully_graded_responses": 5,
+          "total_recorded_cost_usd": 0.04175,
+          "unrecorded_pairs": 0
+        },
+        "deepseek/deepseek-flash": {
+          "accuracy_over_graded": 1.0,
+          "attempted_provider_calls": 7,
+          "average_response_latency_ms": 4380.586979249955,
+          "correct_responses": 4,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 3,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 1,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 4,
+          "successfully_graded_pairs": 4,
+          "successfully_graded_responses": 4,
+          "total_recorded_cost_usd": 0.0188856,
+          "unrecorded_pairs": 0
+        },
+        "openai/gpt-5.6-sol": {
+          "accuracy_over_graded": 0.4,
+          "attempted_provider_calls": 5,
+          "average_response_latency_ms": 4369.591074999971,
+          "correct_responses": 2,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 5,
+          "successfully_graded_pairs": 5,
+          "successfully_graded_responses": 5,
+          "total_recorded_cost_usd": 0.021452,
+          "unrecorded_pairs": 0
+        },
+        "openrouter/qwen/qwen3.8-2.4t-a95b": {
+          "accuracy_over_graded": 1.0,
+          "attempted_provider_calls": 5,
+          "average_response_latency_ms": 41239.62592724999,
+          "correct_responses": 4,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 1,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 1,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 4,
+          "successfully_graded_pairs": 4,
+          "successfully_graded_responses": 4,
+          "total_recorded_cost_usd": 0.070516,
+          "unrecorded_pairs": 0
+        },
+        "xai/grok-4.6": {
+          "accuracy_over_graded": 1.0,
+          "attempted_provider_calls": 5,
+          "average_response_latency_ms": 64870.26157520004,
+          "correct_responses": 5,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 5,
+          "successfully_graded_pairs": 5,
+          "successfully_graded_responses": 5,
+          "total_recorded_cost_usd": 0.123902,
+          "unrecorded_pairs": 0
+        }
+      },
+      "mmlu_pro": {
+        "anthropic/claude-opus-5": {
+          "accuracy_over_graded": 0.6,
+          "attempted_provider_calls": 5,
+          "average_response_latency_ms": 2409.55474160001,
+          "correct_responses": 3,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 5,
+          "successfully_graded_pairs": 5,
+          "successfully_graded_responses": 5,
+          "total_recorded_cost_usd": 0.035025,
+          "unrecorded_pairs": 0
+        },
+        "deepseek/deepseek-flash": {
+          "accuracy_over_graded": 0.6666666666666666,
+          "attempted_provider_calls": 8,
+          "average_response_latency_ms": 6953.33704166661,
+          "correct_responses": 2,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 5,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 2,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 3,
+          "successfully_graded_pairs": 3,
+          "successfully_graded_responses": 3,
+          "total_recorded_cost_usd": 0.0265749,
+          "unrecorded_pairs": 0
+        },
+        "openai/gpt-5.6-sol": {
+          "accuracy_over_graded": 0.4,
+          "attempted_provider_calls": 5,
+          "average_response_latency_ms": 13682.939608600027,
+          "correct_responses": 2,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 5,
+          "successfully_graded_pairs": 5,
+          "successfully_graded_responses": 5,
+          "total_recorded_cost_usd": 0.06688,
+          "unrecorded_pairs": 0
+        },
+        "openrouter/qwen/qwen3.8-2.4t-a95b": {
+          "accuracy_over_graded": 0.6666666666666666,
+          "attempted_provider_calls": 9,
+          "average_response_latency_ms": 55909.829264000015,
+          "correct_responses": 2,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 6,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 2,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 3,
+          "successfully_graded_pairs": 3,
+          "successfully_graded_responses": 3,
+          "total_recorded_cost_usd": 0.18219,
+          "unrecorded_pairs": 0
+        },
+        "xai/grok-4.6": {
+          "accuracy_over_graded": 0.25,
+          "attempted_provider_calls": 8,
+          "average_response_latency_ms": 81061.29274974998,
+          "correct_responses": 1,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 4,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 1,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 4,
+          "successfully_graded_pairs": 4,
+          "successfully_graded_responses": 4,
+          "total_recorded_cost_usd": 0.226916,
+          "unrecorded_pairs": 0
+        }
+      }
+    },
+    "by_model": {
+      "anthropic/claude-opus-5": {
+        "accuracy_over_graded": 0.8,
+        "attempted_provider_calls": 16,
+        "average_response_latency_ms": 3438.981825099998,
+        "correct_responses": 8,
+        "expected_pairs": 15,
+        "failed_provider_attempts": 6,
+        "grading_failures": 0,
+        "parsing_failures": 0,
+        "provider_failures": 4,
+        "recorded_pairs": 15,
+        "skipped_pairs": 1,
+        "spend_limit_stops": 0,
+        "successful_provider_responses": 10,
+        "successfully_graded_pairs": 10,
+        "successfully_graded_responses": 10,
+        "total_recorded_cost_usd": 0.647285,
+        "unrecorded_pairs": 0
+      },
+      "deepseek/deepseek-flash": {
+        "accuracy_over_graded": 0.8571428571428571,
+        "attempted_provider_calls": 19,
+        "average_response_latency_ms": 5483.194148857093,
+        "correct_responses": 6,
+        "expected_pairs": 15,
+        "failed_provider_attempts": 12,
+        "grading_failures": 0,
+        "parsing_failures": 0,
+        "provider_failures": 7,
+        "recorded_pairs": 15,
+        "skipped_pairs": 1,
+        "spend_limit_stops": 0,
+        "successful_provider_responses": 7,
+        "successfully_graded_pairs": 7,
+        "successfully_graded_responses": 7,
+        "total_recorded_cost_usd": 0.0678333,
+        "unrecorded_pairs": 0
+      },
+      "openai/gpt-5.6-sol": {
+        "accuracy_over_graded": 0.5,
+        "attempted_provider_calls": 16,
+        "average_response_latency_ms": 23859.643017416645,
+        "correct_responses": 6,
+        "expected_pairs": 15,
+        "failed_provider_attempts": 4,
+        "grading_failures": 0,
+        "parsing_failures": 0,
+        "provider_failures": 2,
+        "recorded_pairs": 15,
+        "skipped_pairs": 0,
+        "spend_limit_stops": 1,
+        "successful_provider_responses": 12,
+        "successfully_graded_pairs": 12,
+        "successfully_graded_responses": 12,
+        "total_recorded_cost_usd": 0.487328,
+        "unrecorded_pairs": 0
+      },
+      "openrouter/qwen/qwen3.8-2.4t-a95b": {
+        "accuracy_over_graded": 0.8571428571428571,
+        "attempted_provider_calls": 19,
+        "average_response_latency_ms": 47526.855928714285,
+        "correct_responses": 6,
+        "expected_pairs": 15,
+        "failed_provider_attempts": 12,
+        "grading_failures": 0,
+        "parsing_failures": 0,
+        "provider_failures": 7,
+        "recorded_pairs": 15,
+        "skipped_pairs": 1,
+        "spend_limit_stops": 0,
+        "successful_provider_responses": 7,
+        "successfully_graded_pairs": 7,
+        "successfully_graded_responses": 7,
+        "total_recorded_cost_usd": 0.395898,
+        "unrecorded_pairs": 0
+      },
+      "xai/grok-4.6": {
+        "accuracy_over_graded": 0.6666666666666666,
+        "attempted_provider_calls": 13,
+        "average_response_latency_ms": 72066.27543055557,
+        "correct_responses": 6,
+        "expected_pairs": 15,
+        "failed_provider_attempts": 4,
+        "grading_failures": 0,
+        "parsing_failures": 0,
+        "provider_failures": 1,
+        "recorded_pairs": 15,
+        "skipped_pairs": 5,
+        "spend_limit_stops": 0,
+        "successful_provider_responses": 9,
+        "successfully_graded_pairs": 9,
+        "successfully_graded_responses": 9,
+        "total_recorded_cost_usd": 0.350818,
+        "unrecorded_pairs": 0
+      }
+    },
+    "interpretation": "Descriptive pilot evidence only. Incomplete prompts are excluded from policy comparisons; higher cost does not prove greater capability. Oracle cost covers solved prompts only.",
+    "matrix_completeness": {
+      "description": "45 / 75 prompt-model pairs successfully graded",
+      "expected_pairs": 75,
+      "fraction": 0.6,
+      "fully_graded_prompts": 5,
+      "planned_prompts": 15,
+      "recorded_pairs": 75,
+      "successfully_graded_pairs": 45,
+      "unrecorded_pairs": 0,
+      "valid_complete_comparison": false
+    },
+    "routing_comparison": {
+      "accuracy_denominator": "prompts successfully graded by every planned model",
+      "always_best_single_model": {
+        "accuracy": 1.0,
+        "model": "anthropic/claude-opus-5",
+        "total_response_cost_usd": 0.020495
+      },
+      "always_cheapest_model": {
+        "accuracy": 1.0,
+        "model": "deepseek/deepseek-flash",
+        "total_response_cost_usd": 0.0029718
+      },
+      "cheaper_solved_expensive_missed": [
+        {
+          "benchmark": "math_500",
+          "comparisons": [
+            {
+              "cheaper_correct": "deepseek/deepseek-flash",
+              "more_expensive_incorrect": "openai/gpt-5.6-sol"
+            }
+          ],
+          "prompt_id": "math_500:test/counting_and_probability/870.json"
+        },
+        {
+          "benchmark": "math_500",
+          "comparisons": [
+            {
+              "cheaper_correct": "deepseek/deepseek-flash",
+              "more_expensive_incorrect": "openai/gpt-5.6-sol"
+            }
+          ],
+          "prompt_id": "math_500:test/precalculus/986.json"
+        },
+        {
+          "benchmark": "mmlu_pro",
+          "comparisons": [
+            {
+              "cheaper_correct": "deepseek/deepseek-flash",
+              "more_expensive_incorrect": "xai/grok-4.6"
+            },
+            {
+              "cheaper_correct": "openai/gpt-5.6-sol",
+              "more_expensive_incorrect": "xai/grok-4.6"
+            },
+            {
+              "cheaper_correct": "anthropic/claude-opus-5",
+              "more_expensive_incorrect": "xai/grok-4.6"
+            },
+            {
+              "cheaper_correct": "openrouter/qwen/qwen3.8-2.4t-a95b",
+              "more_expensive_incorrect": "xai/grok-4.6"
+            }
+          ],
+          "prompt_id": "mmlu_pro:1346"
+        }
+      ],
+      "comparison_prompt_count": 5,
+      "comparison_prompt_ids": [
+        "math_500:test/counting_and_probability/870.json",
+        "math_500:test/number_theory/769.json",
+        "math_500:test/precalculus/986.json",
+        "mmlu_pro:10442",
+        "mmlu_pro:1346"
+      ],
+      "cost_order": [
+        "deepseek/deepseek-flash",
+        "openai/gpt-5.6-sol",
+        "anthropic/claude-opus-5",
+        "openrouter/qwen/qwen3.8-2.4t-a95b",
+        "xai/grok-4.6"
+      ],
+      "cost_order_is_strength_proxy": true,
+      "cost_rule": "observed response cost, excluding failed-attempt reserves; ties broken by provider/model ID",
+      "evidence_of_routing_signal": true,
+      "excluded_incomplete_prompt_ids": [
+        "livecodebench:abc400_g",
+        "livecodebench:arc196_a",
+        "livecodebench:arc196_b",
+        "livecodebench:arc196_c",
+        "livecodebench:arc196_d",
+        "math_500:test/geometry/965.json",
+        "math_500:test/intermediate_algebra/960.json",
+        "mmlu_pro:12015",
+        "mmlu_pro:5022",
+        "mmlu_pro:6502"
+      ],
+      "oracle_accuracy": 1.0,
+      "oracle_cheapest_correct_cost_usd": 0.0029718,
+      "oracle_selections": [
+        {
+          "cost_usd": 0.0007521,
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "math_500:test/counting_and_probability/870.json"
+        },
+        {
+          "cost_usd": 0.0003207,
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "math_500:test/number_theory/769.json"
+        },
+        {
+          "cost_usd": 0.0003996,
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "math_500:test/precalculus/986.json"
+        },
+        {
+          "cost_usd": 0.0005955,
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "mmlu_pro:10442"
+        },
+        {
+          "cost_usd": 0.0009039,
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "mmlu_pro:1346"
+        }
+      ],
+      "oracle_unsolved_prompt_ids": [],
+      "prompts_requiring_higher_cost_models": []
+    }
+  },
+  "by_benchmark": {
+    "livecodebench": {
+      "accuracy_over_graded": 1.0,
+      "attempted_provider_calls": 21,
+      "average_response_latency_ms": 98026.53139549989,
+      "correct_responses": 2,
+      "expected_pairs": 25,
+      "failed_provider_attempts": 19,
+      "grading_failures": 0,
+      "parsing_failures": 0,
+      "provider_failures": 14,
+      "recorded_pairs": 25,
+      "skipped_pairs": 8,
+      "spend_limit_stops": 1,
+      "successful_provider_responses": 2,
+      "successfully_graded_pairs": 2,
+      "successfully_graded_responses": 2,
+      "total_recorded_cost_usd": 1.1350708,
+      "unrecorded_pairs": 0
+    },
+    "math_500": {
+      "accuracy_over_graded": 0.8695652173913043,
+      "attempted_provider_calls": 27,
+      "average_response_latency_ms": 23957.485192173903,
+      "correct_responses": 20,
+      "expected_pairs": 25,
+      "failed_provider_attempts": 4,
+      "grading_failures": 0,
+      "parsing_failures": 0,
+      "provider_failures": 2,
+      "recorded_pairs": 25,
+      "skipped_pairs": 0,
+      "spend_limit_stops": 0,
+      "successful_provider_responses": 23,
+      "successfully_graded_pairs": 23,
+      "successfully_graded_responses": 23,
+      "total_recorded_cost_usd": 0.2765056,
+      "unrecorded_pairs": 0
+    },
+    "mmlu_pro": {
+      "accuracy_over_graded": 0.5,
+      "attempted_provider_calls": 35,
+      "average_response_latency_ms": 29664.857083349998,
+      "correct_responses": 10,
+      "expected_pairs": 25,
+      "failed_provider_attempts": 15,
+      "grading_failures": 0,
+      "parsing_failures": 0,
+      "provider_failures": 5,
+      "recorded_pairs": 25,
+      "skipped_pairs": 0,
+      "spend_limit_stops": 0,
+      "successful_provider_responses": 20,
+      "successfully_graded_pairs": 20,
+      "successfully_graded_responses": 20,
+      "total_recorded_cost_usd": 0.5375859,
+      "unrecorded_pairs": 0
+    }
+  },
+  "common_disagreement_count": 3,
+  "common_vectors": [
+    {
+      "benchmark": "math_500",
+      "correctness": {
+        "anthropic/claude-opus-5": true,
+        "deepseek/deepseek-flash": true,
+        "openai/gpt-5.6-sol": false,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": true,
+        "xai/grok-4.6": true
+      },
+      "prompt_id": "math_500:test/counting_and_probability/870.json"
+    },
+    {
+      "benchmark": "math_500",
+      "correctness": {
+        "anthropic/claude-opus-5": true,
+        "deepseek/deepseek-flash": true,
+        "openai/gpt-5.6-sol": true,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": true,
+        "xai/grok-4.6": true
+      },
+      "prompt_id": "math_500:test/number_theory/769.json"
+    },
+    {
+      "benchmark": "math_500",
+      "correctness": {
+        "anthropic/claude-opus-5": true,
+        "deepseek/deepseek-flash": true,
+        "openai/gpt-5.6-sol": false,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": true,
+        "xai/grok-4.6": true
+      },
+      "prompt_id": "math_500:test/precalculus/986.json"
+    },
+    {
+      "benchmark": "mmlu_pro",
+      "correctness": {
+        "anthropic/claude-opus-5": true,
+        "deepseek/deepseek-flash": true,
+        "openai/gpt-5.6-sol": true,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": true,
+        "xai/grok-4.6": true
+      },
+      "prompt_id": "mmlu_pro:10442"
+    },
+    {
+      "benchmark": "mmlu_pro",
+      "correctness": {
+        "anthropic/claude-opus-5": true,
+        "deepseek/deepseek-flash": true,
+        "openai/gpt-5.6-sol": true,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": true,
+        "xai/grok-4.6": false
+      },
+      "prompt_id": "mmlu_pro:1346"
+    }
+  ],
+  "cost_bound_issues": [
+    {
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "output_tokens": 5559,
+      "prompt_id": "mmlu_pro:1346",
+      "reason": "Observed billed output exceeds recorded request ceiling; strict pre-dispatch bound unresolved",
+      "reasoning_tokens": 5555,
+      "requested_max_output_tokens": 4096
+    },
+    {
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "output_tokens": 6298,
+      "prompt_id": "math_500:test/intermediate_algebra/960.json",
+      "reason": "Observed billed output exceeds recorded request ceiling; strict pre-dispatch bound unresolved",
+      "reasoning_tokens": 6290,
+      "requested_max_output_tokens": 4096
+    }
+  ],
+  "decision": {
+    "mixed_budget_results_are_uniform_budget_evaluation": false,
+    "prompt_visible_baseline_meaningfully_evaluable": false,
+    "reason": "Systematic output-budget missingness and only five common prompts; no held-out evaluation.",
+    "recommendation": "8192-token feasibility treatment, conditional on resolving strict spend bounds; no ML training.",
+    "suitable_for_learned_router_training_or_evaluation": false
+  },
+  "disagreement_matrix": {
+    "anthropic/claude-opus-5": {
+      "anthropic/claude-opus-5": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.8,
+        "accuracy_b": 0.8,
+        "b_only_correct": 0,
+        "both_correct": 8,
+        "both_wrong": 2,
+        "disagreement": 0,
+        "disagreement_rate": 0.0,
+        "models": [
+          "anthropic/claude-opus-5",
+          "anthropic/claude-opus-5"
+        ],
+        "n": 10,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:12015",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022",
+          "mmlu_pro:6502"
+        ]
+      },
+      "deepseek/deepseek-flash": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.8571428571428571,
+        "accuracy_b": 0.8571428571428571,
+        "b_only_correct": 0,
+        "both_correct": 6,
+        "both_wrong": 1,
+        "disagreement": 0,
+        "disagreement_rate": 0.0,
+        "models": [
+          "anthropic/claude-opus-5",
+          "deepseek/deepseek-flash"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022"
+        ]
+      },
+      "openai/gpt-5.6-sol": {
+        "a_only_correct": 4,
+        "accuracy_a": 0.8,
+        "accuracy_b": 0.4,
+        "b_only_correct": 0,
+        "both_correct": 4,
+        "both_wrong": 2,
+        "disagreement": 4,
+        "disagreement_rate": 0.4,
+        "models": [
+          "anthropic/claude-opus-5",
+          "openai/gpt-5.6-sol"
+        ],
+        "n": 10,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:12015",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022",
+          "mmlu_pro:6502"
+        ]
+      },
+      "openrouter/qwen/qwen3.8-2.4t-a95b": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.8571428571428571,
+        "accuracy_b": 0.8571428571428571,
+        "b_only_correct": 0,
+        "both_correct": 6,
+        "both_wrong": 1,
+        "disagreement": 0,
+        "disagreement_rate": 0.0,
+        "models": [
+          "anthropic/claude-opus-5",
+          "openrouter/qwen/qwen3.8-2.4t-a95b"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:6502"
+        ]
+      },
+      "xai/grok-4.6": {
+        "a_only_correct": 1,
+        "accuracy_a": 0.7777777777777778,
+        "accuracy_b": 0.6666666666666666,
+        "b_only_correct": 0,
+        "both_correct": 6,
+        "both_wrong": 2,
+        "disagreement": 1,
+        "disagreement_rate": 0.1111111111111111,
+        "models": [
+          "anthropic/claude-opus-5",
+          "xai/grok-4.6"
+        ],
+        "n": 9,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022",
+          "mmlu_pro:6502"
+        ]
+      }
+    },
+    "deepseek/deepseek-flash": {
+      "anthropic/claude-opus-5": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.8571428571428571,
+        "accuracy_b": 0.8571428571428571,
+        "b_only_correct": 0,
+        "both_correct": 6,
+        "both_wrong": 1,
+        "disagreement": 0,
+        "disagreement_rate": 0.0,
+        "models": [
+          "deepseek/deepseek-flash",
+          "anthropic/claude-opus-5"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022"
+        ]
+      },
+      "deepseek/deepseek-flash": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.8571428571428571,
+        "accuracy_b": 0.8571428571428571,
+        "b_only_correct": 0,
+        "both_correct": 6,
+        "both_wrong": 1,
+        "disagreement": 0,
+        "disagreement_rate": 0.0,
+        "models": [
+          "deepseek/deepseek-flash",
+          "deepseek/deepseek-flash"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022"
+        ]
+      },
+      "openai/gpt-5.6-sol": {
+        "a_only_correct": 2,
+        "accuracy_a": 0.8571428571428571,
+        "accuracy_b": 0.5714285714285714,
+        "b_only_correct": 0,
+        "both_correct": 4,
+        "both_wrong": 1,
+        "disagreement": 2,
+        "disagreement_rate": 0.2857142857142857,
+        "models": [
+          "deepseek/deepseek-flash",
+          "openai/gpt-5.6-sol"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022"
+        ]
+      },
+      "openrouter/qwen/qwen3.8-2.4t-a95b": {
+        "a_only_correct": 0,
+        "accuracy_a": 1.0,
+        "accuracy_b": 1.0,
+        "b_only_correct": 0,
+        "both_correct": 5,
+        "both_wrong": 0,
+        "disagreement": 0,
+        "disagreement_rate": 0.0,
+        "models": [
+          "deepseek/deepseek-flash",
+          "openrouter/qwen/qwen3.8-2.4t-a95b"
+        ],
+        "n": 5,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346"
+        ]
+      },
+      "xai/grok-4.6": {
+        "a_only_correct": 1,
+        "accuracy_a": 0.8571428571428571,
+        "accuracy_b": 0.7142857142857143,
+        "b_only_correct": 0,
+        "both_correct": 5,
+        "both_wrong": 1,
+        "disagreement": 1,
+        "disagreement_rate": 0.14285714285714285,
+        "models": [
+          "deepseek/deepseek-flash",
+          "xai/grok-4.6"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022"
+        ]
+      }
+    },
+    "openai/gpt-5.6-sol": {
+      "anthropic/claude-opus-5": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.4,
+        "accuracy_b": 0.8,
+        "b_only_correct": 4,
+        "both_correct": 4,
+        "both_wrong": 2,
+        "disagreement": 4,
+        "disagreement_rate": 0.4,
+        "models": [
+          "openai/gpt-5.6-sol",
+          "anthropic/claude-opus-5"
+        ],
+        "n": 10,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:12015",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022",
+          "mmlu_pro:6502"
+        ]
+      },
+      "deepseek/deepseek-flash": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.5714285714285714,
+        "accuracy_b": 0.8571428571428571,
+        "b_only_correct": 2,
+        "both_correct": 4,
+        "both_wrong": 1,
+        "disagreement": 2,
+        "disagreement_rate": 0.2857142857142857,
+        "models": [
+          "openai/gpt-5.6-sol",
+          "deepseek/deepseek-flash"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022"
+        ]
+      },
+      "openai/gpt-5.6-sol": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.5,
+        "accuracy_b": 0.5,
+        "b_only_correct": 0,
+        "both_correct": 6,
+        "both_wrong": 6,
+        "disagreement": 0,
+        "disagreement_rate": 0.0,
+        "models": [
+          "openai/gpt-5.6-sol",
+          "openai/gpt-5.6-sol"
+        ],
+        "n": 12,
+        "prompt_ids": [
+          "livecodebench:arc196_a",
+          "livecodebench:arc196_b",
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:12015",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022",
+          "mmlu_pro:6502"
+        ]
+      },
+      "openrouter/qwen/qwen3.8-2.4t-a95b": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.42857142857142855,
+        "accuracy_b": 0.8571428571428571,
+        "b_only_correct": 3,
+        "both_correct": 3,
+        "both_wrong": 1,
+        "disagreement": 3,
+        "disagreement_rate": 0.42857142857142855,
+        "models": [
+          "openai/gpt-5.6-sol",
+          "openrouter/qwen/qwen3.8-2.4t-a95b"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:6502"
+        ]
+      },
+      "xai/grok-4.6": {
+        "a_only_correct": 1,
+        "accuracy_a": 0.4444444444444444,
+        "accuracy_b": 0.6666666666666666,
+        "b_only_correct": 3,
+        "both_correct": 3,
+        "both_wrong": 2,
+        "disagreement": 4,
+        "disagreement_rate": 0.4444444444444444,
+        "models": [
+          "openai/gpt-5.6-sol",
+          "xai/grok-4.6"
+        ],
+        "n": 9,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022",
+          "mmlu_pro:6502"
+        ]
+      }
+    },
+    "openrouter/qwen/qwen3.8-2.4t-a95b": {
+      "anthropic/claude-opus-5": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.8571428571428571,
+        "accuracy_b": 0.8571428571428571,
+        "b_only_correct": 0,
+        "both_correct": 6,
+        "both_wrong": 1,
+        "disagreement": 0,
+        "disagreement_rate": 0.0,
+        "models": [
+          "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "anthropic/claude-opus-5"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:6502"
+        ]
+      },
+      "deepseek/deepseek-flash": {
+        "a_only_correct": 0,
+        "accuracy_a": 1.0,
+        "accuracy_b": 1.0,
+        "b_only_correct": 0,
+        "both_correct": 5,
+        "both_wrong": 0,
+        "disagreement": 0,
+        "disagreement_rate": 0.0,
+        "models": [
+          "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "deepseek/deepseek-flash"
+        ],
+        "n": 5,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346"
+        ]
+      },
+      "openai/gpt-5.6-sol": {
+        "a_only_correct": 3,
+        "accuracy_a": 0.8571428571428571,
+        "accuracy_b": 0.42857142857142855,
+        "b_only_correct": 0,
+        "both_correct": 3,
+        "both_wrong": 1,
+        "disagreement": 3,
+        "disagreement_rate": 0.42857142857142855,
+        "models": [
+          "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "openai/gpt-5.6-sol"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:6502"
+        ]
+      },
+      "openrouter/qwen/qwen3.8-2.4t-a95b": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.8571428571428571,
+        "accuracy_b": 0.8571428571428571,
+        "b_only_correct": 0,
+        "both_correct": 6,
+        "both_wrong": 1,
+        "disagreement": 0,
+        "disagreement_rate": 0.0,
+        "models": [
+          "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "openrouter/qwen/qwen3.8-2.4t-a95b"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:6502"
+        ]
+      },
+      "xai/grok-4.6": {
+        "a_only_correct": 1,
+        "accuracy_a": 0.8571428571428571,
+        "accuracy_b": 0.7142857142857143,
+        "b_only_correct": 0,
+        "both_correct": 5,
+        "both_wrong": 1,
+        "disagreement": 1,
+        "disagreement_rate": 0.14285714285714285,
+        "models": [
+          "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "xai/grok-4.6"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:6502"
+        ]
+      }
+    },
+    "xai/grok-4.6": {
+      "anthropic/claude-opus-5": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.6666666666666666,
+        "accuracy_b": 0.7777777777777778,
+        "b_only_correct": 1,
+        "both_correct": 6,
+        "both_wrong": 2,
+        "disagreement": 1,
+        "disagreement_rate": 0.1111111111111111,
+        "models": [
+          "xai/grok-4.6",
+          "anthropic/claude-opus-5"
+        ],
+        "n": 9,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022",
+          "mmlu_pro:6502"
+        ]
+      },
+      "deepseek/deepseek-flash": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.7142857142857143,
+        "accuracy_b": 0.8571428571428571,
+        "b_only_correct": 1,
+        "both_correct": 5,
+        "both_wrong": 1,
+        "disagreement": 1,
+        "disagreement_rate": 0.14285714285714285,
+        "models": [
+          "xai/grok-4.6",
+          "deepseek/deepseek-flash"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022"
+        ]
+      },
+      "openai/gpt-5.6-sol": {
+        "a_only_correct": 3,
+        "accuracy_a": 0.6666666666666666,
+        "accuracy_b": 0.4444444444444444,
+        "b_only_correct": 1,
+        "both_correct": 3,
+        "both_wrong": 2,
+        "disagreement": 4,
+        "disagreement_rate": 0.4444444444444444,
+        "models": [
+          "xai/grok-4.6",
+          "openai/gpt-5.6-sol"
+        ],
+        "n": 9,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022",
+          "mmlu_pro:6502"
+        ]
+      },
+      "openrouter/qwen/qwen3.8-2.4t-a95b": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.7142857142857143,
+        "accuracy_b": 0.8571428571428571,
+        "b_only_correct": 1,
+        "both_correct": 5,
+        "both_wrong": 1,
+        "disagreement": 1,
+        "disagreement_rate": 0.14285714285714285,
+        "models": [
+          "xai/grok-4.6",
+          "openrouter/qwen/qwen3.8-2.4t-a95b"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:6502"
+        ]
+      },
+      "xai/grok-4.6": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.6666666666666666,
+        "accuracy_b": 0.6666666666666666,
+        "b_only_correct": 0,
+        "both_correct": 6,
+        "both_wrong": 3,
+        "disagreement": 0,
+        "disagreement_rate": 0.0,
+        "models": [
+          "xai/grok-4.6",
+          "xai/grok-4.6"
+        ],
+        "n": 9,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022",
+          "mmlu_pro:6502"
+        ]
+      }
+    }
+  },
+  "maximum_completeness_after_all_selected_recover": {
+    "five_model": [
+      "math_500:test/counting_and_probability/870.json",
+      "math_500:test/geometry/965.json",
+      "math_500:test/intermediate_algebra/960.json",
+      "math_500:test/number_theory/769.json",
+      "math_500:test/precalculus/986.json",
+      "mmlu_pro:10442",
+      "mmlu_pro:1346",
+      "mmlu_pro:5022",
+      "mmlu_pro:6502"
+    ],
+    "four_non_xai_models": [
+      "livecodebench:arc196_a",
+      "livecodebench:arc196_b",
+      "livecodebench:arc196_c",
+      "livecodebench:arc196_d",
+      "math_500:test/counting_and_probability/870.json",
+      "math_500:test/geometry/965.json",
+      "math_500:test/intermediate_algebra/960.json",
+      "math_500:test/number_theory/769.json",
+      "math_500:test/precalculus/986.json",
+      "mmlu_pro:10442",
+      "mmlu_pro:12015",
+      "mmlu_pro:1346",
+      "mmlu_pro:5022",
+      "mmlu_pro:6502"
+    ]
+  },
+  "offline_audit": {
+    "blocked_network_attempts": 0,
+    "provider_calls": 0
+  },
+  "output_exhaustion": {
+    "by_benchmark": {
+      "livecodebench": 14,
+      "math_500": 2,
+      "mmlu_pro": 4
+    },
+    "by_model": {
+      "anthropic/claude-opus-5": 4,
+      "deepseek/deepseek-flash": 7,
+      "openai/gpt-5.6-sol": 2,
+      "openrouter/qwen/qwen3.8-2.4t-a95b": 7,
+      "xai/grok-4.6": 0
+    },
+    "by_model_benchmark_task": [
+      {
+        "benchmark": "livecodebench",
+        "count": 4,
+        "model": "anthropic/claude-opus-5",
+        "task_type": "code"
+      },
+      {
+        "benchmark": "livecodebench",
+        "count": 4,
+        "model": "deepseek/deepseek-flash",
+        "task_type": "code"
+      },
+      {
+        "benchmark": "math_500",
+        "count": 1,
+        "model": "deepseek/deepseek-flash",
+        "task_type": "math"
+      },
+      {
+        "benchmark": "mmlu_pro",
+        "count": 2,
+        "model": "deepseek/deepseek-flash",
+        "task_type": "multiple_choice"
+      },
+      {
+        "benchmark": "livecodebench",
+        "count": 2,
+        "model": "openai/gpt-5.6-sol",
+        "task_type": "code"
+      },
+      {
+        "benchmark": "livecodebench",
+        "count": 4,
+        "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+        "task_type": "code"
+      },
+      {
+        "benchmark": "math_500",
+        "count": 1,
+        "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+        "task_type": "math"
+      },
+      {
+        "benchmark": "mmlu_pro",
+        "count": 2,
+        "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+        "task_type": "multiple_choice"
+      }
+    ],
+    "by_task_type": {
+      "code": 14,
+      "math": 2,
+      "multiple_choice": 4
+    },
+    "count": 20,
+    "pairs": [
+      {
+        "benchmark": "livecodebench",
+        "incomplete_reason": null,
+        "model": "anthropic/claude-opus-5",
+        "output_tokens": 4096,
+        "prompt_id": "livecodebench:arc196_a",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "max_tokens",
+        "task_type": "code",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "livecodebench",
+        "incomplete_reason": null,
+        "model": "deepseek/deepseek-flash",
+        "output_tokens": 4096,
+        "prompt_id": "livecodebench:arc196_a",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "length",
+        "task_type": "code",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "livecodebench",
+        "incomplete_reason": null,
+        "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+        "output_tokens": 4096,
+        "prompt_id": "livecodebench:arc196_a",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "length",
+        "task_type": "code",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "livecodebench",
+        "incomplete_reason": null,
+        "model": "anthropic/claude-opus-5",
+        "output_tokens": 4096,
+        "prompt_id": "livecodebench:arc196_b",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "max_tokens",
+        "task_type": "code",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "livecodebench",
+        "incomplete_reason": null,
+        "model": "deepseek/deepseek-flash",
+        "output_tokens": 4096,
+        "prompt_id": "livecodebench:arc196_b",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "length",
+        "task_type": "code",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "livecodebench",
+        "incomplete_reason": null,
+        "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+        "output_tokens": 4096,
+        "prompt_id": "livecodebench:arc196_b",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "length",
+        "task_type": "code",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "livecodebench",
+        "incomplete_reason": null,
+        "model": "anthropic/claude-opus-5",
+        "output_tokens": 4096,
+        "prompt_id": "livecodebench:arc196_c",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "max_tokens",
+        "task_type": "code",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "livecodebench",
+        "incomplete_reason": null,
+        "model": "deepseek/deepseek-flash",
+        "output_tokens": 4096,
+        "prompt_id": "livecodebench:arc196_c",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "length",
+        "task_type": "code",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "livecodebench",
+        "incomplete_reason": "max_output_tokens",
+        "model": "openai/gpt-5.6-sol",
+        "output_tokens": 4096,
+        "prompt_id": "livecodebench:arc196_c",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "incomplete",
+        "task_type": "code",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "livecodebench",
+        "incomplete_reason": null,
+        "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+        "output_tokens": 4096,
+        "prompt_id": "livecodebench:arc196_c",
+        "reasoning_tokens": 3812,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "length",
+        "task_type": "code",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "livecodebench",
+        "incomplete_reason": null,
+        "model": "anthropic/claude-opus-5",
+        "output_tokens": 4096,
+        "prompt_id": "livecodebench:arc196_d",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "max_tokens",
+        "task_type": "code",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "livecodebench",
+        "incomplete_reason": null,
+        "model": "deepseek/deepseek-flash",
+        "output_tokens": 4096,
+        "prompt_id": "livecodebench:arc196_d",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "length",
+        "task_type": "code",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "livecodebench",
+        "incomplete_reason": "max_output_tokens",
+        "model": "openai/gpt-5.6-sol",
+        "output_tokens": 4096,
+        "prompt_id": "livecodebench:arc196_d",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "incomplete",
+        "task_type": "code",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "livecodebench",
+        "incomplete_reason": null,
+        "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+        "output_tokens": 4096,
+        "prompt_id": "livecodebench:arc196_d",
+        "reasoning_tokens": 4116,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "length",
+        "task_type": "code",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "math_500",
+        "incomplete_reason": null,
+        "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+        "output_tokens": 4096,
+        "prompt_id": "math_500:test/geometry/965.json",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "length",
+        "task_type": "math",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "math_500",
+        "incomplete_reason": null,
+        "model": "deepseek/deepseek-flash",
+        "output_tokens": 4096,
+        "prompt_id": "math_500:test/intermediate_algebra/960.json",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "length",
+        "task_type": "math",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "mmlu_pro",
+        "incomplete_reason": null,
+        "model": "deepseek/deepseek-flash",
+        "output_tokens": 4096,
+        "prompt_id": "mmlu_pro:12015",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "length",
+        "task_type": "multiple_choice",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "mmlu_pro",
+        "incomplete_reason": null,
+        "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+        "output_tokens": 4096,
+        "prompt_id": "mmlu_pro:12015",
+        "reasoning_tokens": 2161,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "length",
+        "task_type": "multiple_choice",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "mmlu_pro",
+        "incomplete_reason": null,
+        "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+        "output_tokens": 4096,
+        "prompt_id": "mmlu_pro:5022",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "length",
+        "task_type": "multiple_choice",
+        "visible_text_present": false
+      },
+      {
+        "benchmark": "mmlu_pro",
+        "incomplete_reason": null,
+        "model": "deepseek/deepseek-flash",
+        "output_tokens": 4096,
+        "prompt_id": "mmlu_pro:6502",
+        "reasoning_tokens": 4096,
+        "requested_max_output_tokens": 4096,
+        "stop_reason": "length",
+        "task_type": "multiple_choice",
+        "visible_text_present": false
+      }
+    ]
+  },
+  "overall": {
+    "accuracy_over_graded": 0.7111111111111111,
+    "attempted_provider_calls": 83,
+    "average_response_latency_ms": 29786.05253062221,
+    "correct_responses": 32,
+    "expected_pairs": 75,
+    "failed_provider_attempts": 38,
+    "grading_failures": 0,
+    "parsing_failures": 0,
+    "provider_failures": 21,
+    "recorded_pairs": 75,
+    "skipped_pairs": 8,
+    "spend_limit_stops": 1,
+    "successful_provider_responses": 45,
+    "successfully_graded_pairs": 45,
+    "successfully_graded_responses": 45,
+    "total_recorded_cost_usd": 1.9491623,
+    "unrecorded_pairs": 0
+  },
+  "pairwise": [
+    {
+      "all": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.8571428571428571,
+        "accuracy_b": 0.8571428571428571,
+        "b_only_correct": 0,
+        "both_correct": 6,
+        "both_wrong": 1,
+        "disagreement": 0,
+        "disagreement_rate": 0.0,
+        "models": [
+          "anthropic/claude-opus-5",
+          "deepseek/deepseek-flash"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022"
+        ]
+      },
+      "by_benchmark": {
+        "livecodebench": {
+          "a_only_correct": 0,
+          "accuracy_a": null,
+          "accuracy_b": null,
+          "b_only_correct": 0,
+          "both_correct": 0,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": null,
+          "models": [
+            "anthropic/claude-opus-5",
+            "deepseek/deepseek-flash"
+          ],
+          "n": 0,
+          "prompt_ids": []
+        },
+        "math_500": {
+          "a_only_correct": 0,
+          "accuracy_a": 1.0,
+          "accuracy_b": 1.0,
+          "b_only_correct": 0,
+          "both_correct": 4,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": 0.0,
+          "models": [
+            "anthropic/claude-opus-5",
+            "deepseek/deepseek-flash"
+          ],
+          "n": 4,
+          "prompt_ids": [
+            "math_500:test/counting_and_probability/870.json",
+            "math_500:test/geometry/965.json",
+            "math_500:test/number_theory/769.json",
+            "math_500:test/precalculus/986.json"
+          ]
+        },
+        "mmlu_pro": {
+          "a_only_correct": 0,
+          "accuracy_a": 0.6666666666666666,
+          "accuracy_b": 0.6666666666666666,
+          "b_only_correct": 0,
+          "both_correct": 2,
+          "both_wrong": 1,
+          "disagreement": 0,
+          "disagreement_rate": 0.0,
+          "models": [
+            "anthropic/claude-opus-5",
+            "deepseek/deepseek-flash"
+          ],
+          "n": 3,
+          "prompt_ids": [
+            "mmlu_pro:10442",
+            "mmlu_pro:1346",
+            "mmlu_pro:5022"
+          ]
+        }
+      }
+    },
+    {
+      "all": {
+        "a_only_correct": 4,
+        "accuracy_a": 0.8,
+        "accuracy_b": 0.4,
+        "b_only_correct": 0,
+        "both_correct": 4,
+        "both_wrong": 2,
+        "disagreement": 4,
+        "disagreement_rate": 0.4,
+        "models": [
+          "anthropic/claude-opus-5",
+          "openai/gpt-5.6-sol"
+        ],
+        "n": 10,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:12015",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022",
+          "mmlu_pro:6502"
+        ]
+      },
+      "by_benchmark": {
+        "livecodebench": {
+          "a_only_correct": 0,
+          "accuracy_a": null,
+          "accuracy_b": null,
+          "b_only_correct": 0,
+          "both_correct": 0,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": null,
+          "models": [
+            "anthropic/claude-opus-5",
+            "openai/gpt-5.6-sol"
+          ],
+          "n": 0,
+          "prompt_ids": []
+        },
+        "math_500": {
+          "a_only_correct": 3,
+          "accuracy_a": 1.0,
+          "accuracy_b": 0.4,
+          "b_only_correct": 0,
+          "both_correct": 2,
+          "both_wrong": 0,
+          "disagreement": 3,
+          "disagreement_rate": 0.6,
+          "models": [
+            "anthropic/claude-opus-5",
+            "openai/gpt-5.6-sol"
+          ],
+          "n": 5,
+          "prompt_ids": [
+            "math_500:test/counting_and_probability/870.json",
+            "math_500:test/geometry/965.json",
+            "math_500:test/intermediate_algebra/960.json",
+            "math_500:test/number_theory/769.json",
+            "math_500:test/precalculus/986.json"
+          ]
+        },
+        "mmlu_pro": {
+          "a_only_correct": 1,
+          "accuracy_a": 0.6,
+          "accuracy_b": 0.4,
+          "b_only_correct": 0,
+          "both_correct": 2,
+          "both_wrong": 2,
+          "disagreement": 1,
+          "disagreement_rate": 0.2,
+          "models": [
+            "anthropic/claude-opus-5",
+            "openai/gpt-5.6-sol"
+          ],
+          "n": 5,
+          "prompt_ids": [
+            "mmlu_pro:10442",
+            "mmlu_pro:12015",
+            "mmlu_pro:1346",
+            "mmlu_pro:5022",
+            "mmlu_pro:6502"
+          ]
+        }
+      }
+    },
+    {
+      "all": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.8571428571428571,
+        "accuracy_b": 0.8571428571428571,
+        "b_only_correct": 0,
+        "both_correct": 6,
+        "both_wrong": 1,
+        "disagreement": 0,
+        "disagreement_rate": 0.0,
+        "models": [
+          "anthropic/claude-opus-5",
+          "openrouter/qwen/qwen3.8-2.4t-a95b"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:6502"
+        ]
+      },
+      "by_benchmark": {
+        "livecodebench": {
+          "a_only_correct": 0,
+          "accuracy_a": null,
+          "accuracy_b": null,
+          "b_only_correct": 0,
+          "both_correct": 0,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": null,
+          "models": [
+            "anthropic/claude-opus-5",
+            "openrouter/qwen/qwen3.8-2.4t-a95b"
+          ],
+          "n": 0,
+          "prompt_ids": []
+        },
+        "math_500": {
+          "a_only_correct": 0,
+          "accuracy_a": 1.0,
+          "accuracy_b": 1.0,
+          "b_only_correct": 0,
+          "both_correct": 4,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": 0.0,
+          "models": [
+            "anthropic/claude-opus-5",
+            "openrouter/qwen/qwen3.8-2.4t-a95b"
+          ],
+          "n": 4,
+          "prompt_ids": [
+            "math_500:test/counting_and_probability/870.json",
+            "math_500:test/intermediate_algebra/960.json",
+            "math_500:test/number_theory/769.json",
+            "math_500:test/precalculus/986.json"
+          ]
+        },
+        "mmlu_pro": {
+          "a_only_correct": 0,
+          "accuracy_a": 0.6666666666666666,
+          "accuracy_b": 0.6666666666666666,
+          "b_only_correct": 0,
+          "both_correct": 2,
+          "both_wrong": 1,
+          "disagreement": 0,
+          "disagreement_rate": 0.0,
+          "models": [
+            "anthropic/claude-opus-5",
+            "openrouter/qwen/qwen3.8-2.4t-a95b"
+          ],
+          "n": 3,
+          "prompt_ids": [
+            "mmlu_pro:10442",
+            "mmlu_pro:1346",
+            "mmlu_pro:6502"
+          ]
+        }
+      }
+    },
+    {
+      "all": {
+        "a_only_correct": 1,
+        "accuracy_a": 0.7777777777777778,
+        "accuracy_b": 0.6666666666666666,
+        "b_only_correct": 0,
+        "both_correct": 6,
+        "both_wrong": 2,
+        "disagreement": 1,
+        "disagreement_rate": 0.1111111111111111,
+        "models": [
+          "anthropic/claude-opus-5",
+          "xai/grok-4.6"
+        ],
+        "n": 9,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022",
+          "mmlu_pro:6502"
+        ]
+      },
+      "by_benchmark": {
+        "livecodebench": {
+          "a_only_correct": 0,
+          "accuracy_a": null,
+          "accuracy_b": null,
+          "b_only_correct": 0,
+          "both_correct": 0,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": null,
+          "models": [
+            "anthropic/claude-opus-5",
+            "xai/grok-4.6"
+          ],
+          "n": 0,
+          "prompt_ids": []
+        },
+        "math_500": {
+          "a_only_correct": 0,
+          "accuracy_a": 1.0,
+          "accuracy_b": 1.0,
+          "b_only_correct": 0,
+          "both_correct": 5,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": 0.0,
+          "models": [
+            "anthropic/claude-opus-5",
+            "xai/grok-4.6"
+          ],
+          "n": 5,
+          "prompt_ids": [
+            "math_500:test/counting_and_probability/870.json",
+            "math_500:test/geometry/965.json",
+            "math_500:test/intermediate_algebra/960.json",
+            "math_500:test/number_theory/769.json",
+            "math_500:test/precalculus/986.json"
+          ]
+        },
+        "mmlu_pro": {
+          "a_only_correct": 1,
+          "accuracy_a": 0.5,
+          "accuracy_b": 0.25,
+          "b_only_correct": 0,
+          "both_correct": 1,
+          "both_wrong": 2,
+          "disagreement": 1,
+          "disagreement_rate": 0.25,
+          "models": [
+            "anthropic/claude-opus-5",
+            "xai/grok-4.6"
+          ],
+          "n": 4,
+          "prompt_ids": [
+            "mmlu_pro:10442",
+            "mmlu_pro:1346",
+            "mmlu_pro:5022",
+            "mmlu_pro:6502"
+          ]
+        }
+      }
+    },
+    {
+      "all": {
+        "a_only_correct": 2,
+        "accuracy_a": 0.8571428571428571,
+        "accuracy_b": 0.5714285714285714,
+        "b_only_correct": 0,
+        "both_correct": 4,
+        "both_wrong": 1,
+        "disagreement": 2,
+        "disagreement_rate": 0.2857142857142857,
+        "models": [
+          "deepseek/deepseek-flash",
+          "openai/gpt-5.6-sol"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022"
+        ]
+      },
+      "by_benchmark": {
+        "livecodebench": {
+          "a_only_correct": 0,
+          "accuracy_a": null,
+          "accuracy_b": null,
+          "b_only_correct": 0,
+          "both_correct": 0,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": null,
+          "models": [
+            "deepseek/deepseek-flash",
+            "openai/gpt-5.6-sol"
+          ],
+          "n": 0,
+          "prompt_ids": []
+        },
+        "math_500": {
+          "a_only_correct": 2,
+          "accuracy_a": 1.0,
+          "accuracy_b": 0.5,
+          "b_only_correct": 0,
+          "both_correct": 2,
+          "both_wrong": 0,
+          "disagreement": 2,
+          "disagreement_rate": 0.5,
+          "models": [
+            "deepseek/deepseek-flash",
+            "openai/gpt-5.6-sol"
+          ],
+          "n": 4,
+          "prompt_ids": [
+            "math_500:test/counting_and_probability/870.json",
+            "math_500:test/geometry/965.json",
+            "math_500:test/number_theory/769.json",
+            "math_500:test/precalculus/986.json"
+          ]
+        },
+        "mmlu_pro": {
+          "a_only_correct": 0,
+          "accuracy_a": 0.6666666666666666,
+          "accuracy_b": 0.6666666666666666,
+          "b_only_correct": 0,
+          "both_correct": 2,
+          "both_wrong": 1,
+          "disagreement": 0,
+          "disagreement_rate": 0.0,
+          "models": [
+            "deepseek/deepseek-flash",
+            "openai/gpt-5.6-sol"
+          ],
+          "n": 3,
+          "prompt_ids": [
+            "mmlu_pro:10442",
+            "mmlu_pro:1346",
+            "mmlu_pro:5022"
+          ]
+        }
+      }
+    },
+    {
+      "all": {
+        "a_only_correct": 0,
+        "accuracy_a": 1.0,
+        "accuracy_b": 1.0,
+        "b_only_correct": 0,
+        "both_correct": 5,
+        "both_wrong": 0,
+        "disagreement": 0,
+        "disagreement_rate": 0.0,
+        "models": [
+          "deepseek/deepseek-flash",
+          "openrouter/qwen/qwen3.8-2.4t-a95b"
+        ],
+        "n": 5,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346"
+        ]
+      },
+      "by_benchmark": {
+        "livecodebench": {
+          "a_only_correct": 0,
+          "accuracy_a": null,
+          "accuracy_b": null,
+          "b_only_correct": 0,
+          "both_correct": 0,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": null,
+          "models": [
+            "deepseek/deepseek-flash",
+            "openrouter/qwen/qwen3.8-2.4t-a95b"
+          ],
+          "n": 0,
+          "prompt_ids": []
+        },
+        "math_500": {
+          "a_only_correct": 0,
+          "accuracy_a": 1.0,
+          "accuracy_b": 1.0,
+          "b_only_correct": 0,
+          "both_correct": 3,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": 0.0,
+          "models": [
+            "deepseek/deepseek-flash",
+            "openrouter/qwen/qwen3.8-2.4t-a95b"
+          ],
+          "n": 3,
+          "prompt_ids": [
+            "math_500:test/counting_and_probability/870.json",
+            "math_500:test/number_theory/769.json",
+            "math_500:test/precalculus/986.json"
+          ]
+        },
+        "mmlu_pro": {
+          "a_only_correct": 0,
+          "accuracy_a": 1.0,
+          "accuracy_b": 1.0,
+          "b_only_correct": 0,
+          "both_correct": 2,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": 0.0,
+          "models": [
+            "deepseek/deepseek-flash",
+            "openrouter/qwen/qwen3.8-2.4t-a95b"
+          ],
+          "n": 2,
+          "prompt_ids": [
+            "mmlu_pro:10442",
+            "mmlu_pro:1346"
+          ]
+        }
+      }
+    },
+    {
+      "all": {
+        "a_only_correct": 1,
+        "accuracy_a": 0.8571428571428571,
+        "accuracy_b": 0.7142857142857143,
+        "b_only_correct": 0,
+        "both_correct": 5,
+        "both_wrong": 1,
+        "disagreement": 1,
+        "disagreement_rate": 0.14285714285714285,
+        "models": [
+          "deepseek/deepseek-flash",
+          "xai/grok-4.6"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022"
+        ]
+      },
+      "by_benchmark": {
+        "livecodebench": {
+          "a_only_correct": 0,
+          "accuracy_a": null,
+          "accuracy_b": null,
+          "b_only_correct": 0,
+          "both_correct": 0,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": null,
+          "models": [
+            "deepseek/deepseek-flash",
+            "xai/grok-4.6"
+          ],
+          "n": 0,
+          "prompt_ids": []
+        },
+        "math_500": {
+          "a_only_correct": 0,
+          "accuracy_a": 1.0,
+          "accuracy_b": 1.0,
+          "b_only_correct": 0,
+          "both_correct": 4,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": 0.0,
+          "models": [
+            "deepseek/deepseek-flash",
+            "xai/grok-4.6"
+          ],
+          "n": 4,
+          "prompt_ids": [
+            "math_500:test/counting_and_probability/870.json",
+            "math_500:test/geometry/965.json",
+            "math_500:test/number_theory/769.json",
+            "math_500:test/precalculus/986.json"
+          ]
+        },
+        "mmlu_pro": {
+          "a_only_correct": 1,
+          "accuracy_a": 0.6666666666666666,
+          "accuracy_b": 0.3333333333333333,
+          "b_only_correct": 0,
+          "both_correct": 1,
+          "both_wrong": 1,
+          "disagreement": 1,
+          "disagreement_rate": 0.3333333333333333,
+          "models": [
+            "deepseek/deepseek-flash",
+            "xai/grok-4.6"
+          ],
+          "n": 3,
+          "prompt_ids": [
+            "mmlu_pro:10442",
+            "mmlu_pro:1346",
+            "mmlu_pro:5022"
+          ]
+        }
+      }
+    },
+    {
+      "all": {
+        "a_only_correct": 0,
+        "accuracy_a": 0.42857142857142855,
+        "accuracy_b": 0.8571428571428571,
+        "b_only_correct": 3,
+        "both_correct": 3,
+        "both_wrong": 1,
+        "disagreement": 3,
+        "disagreement_rate": 0.42857142857142855,
+        "models": [
+          "openai/gpt-5.6-sol",
+          "openrouter/qwen/qwen3.8-2.4t-a95b"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:6502"
+        ]
+      },
+      "by_benchmark": {
+        "livecodebench": {
+          "a_only_correct": 0,
+          "accuracy_a": null,
+          "accuracy_b": null,
+          "b_only_correct": 0,
+          "both_correct": 0,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": null,
+          "models": [
+            "openai/gpt-5.6-sol",
+            "openrouter/qwen/qwen3.8-2.4t-a95b"
+          ],
+          "n": 0,
+          "prompt_ids": []
+        },
+        "math_500": {
+          "a_only_correct": 0,
+          "accuracy_a": 0.25,
+          "accuracy_b": 1.0,
+          "b_only_correct": 3,
+          "both_correct": 1,
+          "both_wrong": 0,
+          "disagreement": 3,
+          "disagreement_rate": 0.75,
+          "models": [
+            "openai/gpt-5.6-sol",
+            "openrouter/qwen/qwen3.8-2.4t-a95b"
+          ],
+          "n": 4,
+          "prompt_ids": [
+            "math_500:test/counting_and_probability/870.json",
+            "math_500:test/intermediate_algebra/960.json",
+            "math_500:test/number_theory/769.json",
+            "math_500:test/precalculus/986.json"
+          ]
+        },
+        "mmlu_pro": {
+          "a_only_correct": 0,
+          "accuracy_a": 0.6666666666666666,
+          "accuracy_b": 0.6666666666666666,
+          "b_only_correct": 0,
+          "both_correct": 2,
+          "both_wrong": 1,
+          "disagreement": 0,
+          "disagreement_rate": 0.0,
+          "models": [
+            "openai/gpt-5.6-sol",
+            "openrouter/qwen/qwen3.8-2.4t-a95b"
+          ],
+          "n": 3,
+          "prompt_ids": [
+            "mmlu_pro:10442",
+            "mmlu_pro:1346",
+            "mmlu_pro:6502"
+          ]
+        }
+      }
+    },
+    {
+      "all": {
+        "a_only_correct": 1,
+        "accuracy_a": 0.4444444444444444,
+        "accuracy_b": 0.6666666666666666,
+        "b_only_correct": 3,
+        "both_correct": 3,
+        "both_wrong": 2,
+        "disagreement": 4,
+        "disagreement_rate": 0.4444444444444444,
+        "models": [
+          "openai/gpt-5.6-sol",
+          "xai/grok-4.6"
+        ],
+        "n": 9,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/geometry/965.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:5022",
+          "mmlu_pro:6502"
+        ]
+      },
+      "by_benchmark": {
+        "livecodebench": {
+          "a_only_correct": 0,
+          "accuracy_a": null,
+          "accuracy_b": null,
+          "b_only_correct": 0,
+          "both_correct": 0,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": null,
+          "models": [
+            "openai/gpt-5.6-sol",
+            "xai/grok-4.6"
+          ],
+          "n": 0,
+          "prompt_ids": []
+        },
+        "math_500": {
+          "a_only_correct": 0,
+          "accuracy_a": 0.4,
+          "accuracy_b": 1.0,
+          "b_only_correct": 3,
+          "both_correct": 2,
+          "both_wrong": 0,
+          "disagreement": 3,
+          "disagreement_rate": 0.6,
+          "models": [
+            "openai/gpt-5.6-sol",
+            "xai/grok-4.6"
+          ],
+          "n": 5,
+          "prompt_ids": [
+            "math_500:test/counting_and_probability/870.json",
+            "math_500:test/geometry/965.json",
+            "math_500:test/intermediate_algebra/960.json",
+            "math_500:test/number_theory/769.json",
+            "math_500:test/precalculus/986.json"
+          ]
+        },
+        "mmlu_pro": {
+          "a_only_correct": 1,
+          "accuracy_a": 0.5,
+          "accuracy_b": 0.25,
+          "b_only_correct": 0,
+          "both_correct": 1,
+          "both_wrong": 2,
+          "disagreement": 1,
+          "disagreement_rate": 0.25,
+          "models": [
+            "openai/gpt-5.6-sol",
+            "xai/grok-4.6"
+          ],
+          "n": 4,
+          "prompt_ids": [
+            "mmlu_pro:10442",
+            "mmlu_pro:1346",
+            "mmlu_pro:5022",
+            "mmlu_pro:6502"
+          ]
+        }
+      }
+    },
+    {
+      "all": {
+        "a_only_correct": 1,
+        "accuracy_a": 0.8571428571428571,
+        "accuracy_b": 0.7142857142857143,
+        "b_only_correct": 0,
+        "both_correct": 5,
+        "both_wrong": 1,
+        "disagreement": 1,
+        "disagreement_rate": 0.14285714285714285,
+        "models": [
+          "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "xai/grok-4.6"
+        ],
+        "n": 7,
+        "prompt_ids": [
+          "math_500:test/counting_and_probability/870.json",
+          "math_500:test/intermediate_algebra/960.json",
+          "math_500:test/number_theory/769.json",
+          "math_500:test/precalculus/986.json",
+          "mmlu_pro:10442",
+          "mmlu_pro:1346",
+          "mmlu_pro:6502"
+        ]
+      },
+      "by_benchmark": {
+        "livecodebench": {
+          "a_only_correct": 0,
+          "accuracy_a": null,
+          "accuracy_b": null,
+          "b_only_correct": 0,
+          "both_correct": 0,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": null,
+          "models": [
+            "openrouter/qwen/qwen3.8-2.4t-a95b",
+            "xai/grok-4.6"
+          ],
+          "n": 0,
+          "prompt_ids": []
+        },
+        "math_500": {
+          "a_only_correct": 0,
+          "accuracy_a": 1.0,
+          "accuracy_b": 1.0,
+          "b_only_correct": 0,
+          "both_correct": 4,
+          "both_wrong": 0,
+          "disagreement": 0,
+          "disagreement_rate": 0.0,
+          "models": [
+            "openrouter/qwen/qwen3.8-2.4t-a95b",
+            "xai/grok-4.6"
+          ],
+          "n": 4,
+          "prompt_ids": [
+            "math_500:test/counting_and_probability/870.json",
+            "math_500:test/intermediate_algebra/960.json",
+            "math_500:test/number_theory/769.json",
+            "math_500:test/precalculus/986.json"
+          ]
+        },
+        "mmlu_pro": {
+          "a_only_correct": 1,
+          "accuracy_a": 0.6666666666666666,
+          "accuracy_b": 0.3333333333333333,
+          "b_only_correct": 0,
+          "both_correct": 1,
+          "both_wrong": 1,
+          "disagreement": 1,
+          "disagreement_rate": 0.3333333333333333,
+          "models": [
+            "openrouter/qwen/qwen3.8-2.4t-a95b",
+            "xai/grok-4.6"
+          ],
+          "n": 3,
+          "prompt_ids": [
+            "mmlu_pro:10442",
+            "mmlu_pro:1346",
+            "mmlu_pro:6502"
+          ]
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "configuration_file_sha256": {
+      "benchmark_loaders.py": "dc0cd481d59f66cb7ef00e06716134bb26a5594672d41993e2f299d466d6e666",
+      "benchmarks/hard_pilot.json": "4abffb2fcae899d6dcebcdc891601198a400aa89d7273bbda57e558c83020cb4",
+      "benchmarks/manifest.json": "742e0c6af01ca9dd02b824e1ae58dceef3e25f2e9f0410ce4620c15cecb133d7",
+      "benchmarks/samples/livecodebench.jsonl": "27ef0710bfb7bf40d8e39c52c21ae539aaa7ac20112c2d487350507e3939b303",
+      "benchmarks/samples/math_500.jsonl": "f355c0fe6c106747cc288fa72a6bfff58f93659d798da7f2a0e0b2540ae06669",
+      "benchmarks/samples/mmlu_pro.jsonl": "b632843e811c32fa2c703276e1bdd15bfc260ea00432954bbb7186f0a7f8baf8",
+      "generate_dataset.py": "73226f3f12a3888c7c90dc10a8cf98a87df0a860d5587ee98f7553bedaa7ad85",
+      "graders.py": "2f2271723af8d5c64c419beca81d21050bffd1fc790fbfaf539e0377e8e971ec",
+      "model_registry.py": "0bb070cb3c6f8dfc199343e9178540703ffad5bb216bf91a2e526e0be2367a16",
+      "provider_clients/anthropic.py": "f5af3b5d8c4d5ea5c52c0fa1a5913116c3d40997a176c0f69a41159d125fb9aa",
+      "provider_clients/base.py": "f9bd4f078ebb530788caee881f3fc2400a6287b2b8e2d407f86ad1c11c8ea0f4",
+      "provider_clients/deepseek.py": "05e4c3a38391a374a533267e4e5a692e91308be011399f364ba8ba948eb9247b",
+      "provider_clients/normalization.py": "6069383e2c636c5455360775e5f9bcd69188a9db3cc166ef2119e5d9a9366556",
+      "provider_clients/openai.py": "65df723c307cc6818333831428f76ac8df1d7bc840fb467bc127f3fd0195e38d",
+      "provider_clients/openrouter.py": "e8ccf0293a64278be215815bbe98e29b41f3c948e1cb681b1b5926b6aad41710",
+      "providers.py": "2bcfbc4dc3f14425cf5eaa671393e98e9cf028a31868d3e0cab197dd419f0fc1"
+    },
+    "experiment": "hard_pilot_4096_final",
+    "frozen_sha256": "f80c25a369eae3ef7ebb25713729c3327c20d6de5d6c4375a2912e86d04b94e7",
+    "generation_configuration": [
+      {
+        "api_model_identifier": "gpt-5.6-sol",
+        "canonical_model_name": "GPT-5.6 Sol",
+        "creator": "OpenAI",
+        "enabled": true,
+        "generation": {
+          "max_output_tokens": 4096,
+          "reasoning_setting": "reasoning_effort=medium",
+          "temperature": null
+        },
+        "inference_provider": "openai",
+        "input_price_per_million_usd": 4.0,
+        "key": "openai_gpt_5_6_sol",
+        "model_type": "closed",
+        "output_price_per_million_usd": 20.0,
+        "resolution_note": "Verified in official OpenAI model documentation."
+      },
+      {
+        "api_model_identifier": "claude-opus-5",
+        "canonical_model_name": "Claude Opus 5",
+        "creator": "Anthropic",
+        "enabled": true,
+        "generation": {
+          "max_output_tokens": 4096,
+          "reasoning_setting": "adaptive_thinking;effort=high",
+          "temperature": null
+        },
+        "inference_provider": "anthropic",
+        "input_price_per_million_usd": 5.0,
+        "key": "anthropic_claude_opus_5",
+        "model_type": "closed",
+        "output_price_per_million_usd": 25.0,
+        "resolution_note": "Verified for the first-party Claude API."
+      },
+      {
+        "api_model_identifier": "grok-4.6",
+        "canonical_model_name": "Grok 4.6",
+        "creator": "xAI",
+        "enabled": true,
+        "generation": {
+          "max_output_tokens": 4096,
+          "reasoning_setting": "reasoning_effort=high",
+          "temperature": null
+        },
+        "inference_provider": "xai",
+        "input_price_per_million_usd": 2.0,
+        "key": "xai_grok_4_6",
+        "model_type": "closed",
+        "output_price_per_million_usd": 6.0,
+        "resolution_note": "Standard prices apply below 200K input tokens."
+      },
+      {
+        "api_model_identifier": "deepseek-flash",
+        "canonical_model_name": "DeepSeek V4.1 Flash",
+        "creator": "DeepSeek",
+        "enabled": true,
+        "generation": {
+          "max_output_tokens": 4096,
+          "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+          "temperature": null
+        },
+        "inference_provider": "deepseek",
+        "input_price_per_million_usd": 0.3,
+        "key": "deepseek_v4_1_flash",
+        "model_type": "open_weight",
+        "output_price_per_million_usd": 1.2,
+        "resolution_note": "Official V4.1 alias verified. Peak uncached prices apply; off-peak rates are 50% lower."
+      },
+      {
+        "api_model_identifier": "qwen/qwen3.8-2.4t-a95b",
+        "canonical_model_name": "Qwen3.8 2.4T-A95B",
+        "creator": "Qwen / Alibaba",
+        "enabled": true,
+        "generation": {
+          "max_output_tokens": 4096,
+          "reasoning_setting": "thinking_only",
+          "temperature": null
+        },
+        "inference_provider": "openrouter",
+        "input_price_per_million_usd": 2.0,
+        "key": "qwen_3_8_2_4t_a95b",
+        "model_type": "open_weight",
+        "output_price_per_million_usd": 6.0,
+        "resolution_note": "OpenRouter listed pricing: $2/M input and $6/M output."
+      }
+    ],
+    "git_commit": "1b7622000cf703708a15ffa0e155a018397646c1",
+    "history": "Completed working CSV includes earlier attempts/resumes; no new calls, offline regrade, sanitization, or field changes during freezing.",
+    "http_200_exhausted_responses": 20,
+    "immutability": "Exclusive creation; SHA verified on every read; tracked artifact, never a resume/merge destination.",
+    "metrics": {
+      "accuracy_over_graded": 0.7111111111111111,
+      "attempted_provider_calls": 83,
+      "average_response_latency_ms": 29786.05253062221,
+      "correct_responses": 32,
+      "expected_pairs": 75,
+      "failed_provider_attempts": 38,
+      "grading_failures": 0,
+      "parsing_failures": 0,
+      "provider_failures": 21,
+      "recorded_pairs": 75,
+      "skipped_pairs": 8,
+      "spend_limit_stops": 1,
+      "successful_provider_responses": 45,
+      "successfully_graded_pairs": 45,
+      "successfully_graded_responses": 45,
+      "total_recorded_cost_usd": 1.9491623,
+      "unrecorded_pairs": 0
+    },
+    "no_provider_calls_while_freezing": true,
+    "observed_generation_configuration": [
+      {
+        "max_output_tokens": 4096,
+        "model_id": "claude-opus-5",
+        "provider": "anthropic",
+        "reasoning_setting": "adaptive_thinking;effort=high",
+        "temperature": "provider_default"
+      },
+      {
+        "max_output_tokens": 4096,
+        "model_id": "deepseek-flash",
+        "provider": "deepseek",
+        "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+        "temperature": "provider_default"
+      },
+      {
+        "max_output_tokens": 4096,
+        "model_id": "gpt-5.6-sol",
+        "provider": "openai",
+        "reasoning_setting": "reasoning_effort=medium",
+        "temperature": "provider_default"
+      },
+      {
+        "max_output_tokens": 4096,
+        "model_id": "qwen/qwen3.8-2.4t-a95b",
+        "provider": "openrouter",
+        "reasoning_setting": "thinking_only",
+        "temperature": "provider_default"
+      },
+      {
+        "max_output_tokens": 4096,
+        "model_id": "grok-4.6",
+        "provider": "xai",
+        "reasoning_setting": "reasoning_effort=high",
+        "temperature": "provider_default"
+      }
+    ],
+    "offline_audit": {
+      "blocked_network_attempts": 0,
+      "provider_calls": 0
+    },
+    "output_limit_exhausted_count": 20,
+    "recorded_spend_usd": "1.9491623",
+    "response_count_definition": "Successful normalized provider responses as recorded/inferred by the existing ledger; HTTP-200 exhausted responses are separate.",
+    "row_count": 75,
+    "size_bytes": 188957,
+    "snapshot_path": "reports/snapshots/hard_pilot_4096_final.csv",
+    "source_path": "data/results/hard_pilot_results.csv",
+    "source_sha256": "f80c25a369eae3ef7ebb25713729c3327c20d6de5d6c4375a2912e86d04b94e7",
+    "source_unchanged": true,
+    "timestamp_utc": "2026-09-14T17:31:34.782432+00:00"
+  },
+  "recorded_spend_usd": "1.9491623",
+  "static_baselines": {
+    "anthropic/claude-opus-5": {
+      "accuracy": 1.0,
+      "correct": 5,
+      "n": 5,
+      "total_response_cost_usd": "0.020495"
+    },
+    "deepseek/deepseek-flash": {
+      "accuracy": 1.0,
+      "correct": 5,
+      "n": 5,
+      "total_response_cost_usd": "0.0029718"
+    },
+    "openai/gpt-5.6-sol": {
+      "accuracy": 0.6,
+      "correct": 3,
+      "n": 5,
+      "total_response_cost_usd": "0.010580"
+    },
+    "openrouter/qwen/qwen3.8-2.4t-a95b": {
+      "accuracy": 1.0,
+      "correct": 5,
+      "n": 5,
+      "total_response_cost_usd": "0.045974"
+    },
+    "xai/grok-4.6": {
+      "accuracy": 0.8,
+      "correct": 4,
+      "n": 5,
+      "total_response_cost_usd": "0.108568"
+    }
+  },
+  "treatments": {
+    "16384": {
+      "by_model": {
+        "anthropic/claude-opus-5": {
+          "calls": 4,
+          "registry_contract_maximum_usd": "1.683600"
+        },
+        "deepseek/deepseek-flash": {
+          "calls": 7,
+          "registry_contract_maximum_usd": "0.1416009"
+        },
+        "openai/gpt-5.6-sol": {
+          "calls": 2,
+          "registry_contract_maximum_usd": "0.674148"
+        },
+        "openrouter/qwen/qwen3.8-2.4t-a95b": {
+          "calls": 7,
+          "registry_contract_maximum_usd": "0.716756"
+        }
+      },
+      "cost_bound_issues": [
+        {
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "output_tokens": 5559,
+          "prompt_id": "mmlu_pro:1346",
+          "reason": "Observed billed output exceeds recorded request ceiling; strict pre-dispatch bound unresolved",
+          "reasoning_tokens": 5555,
+          "requested_max_output_tokens": 4096
+        },
+        {
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "output_tokens": 6298,
+          "prompt_id": "math_500:test/intermediate_algebra/960.json",
+          "reason": "Observed billed output exceeds recorded request ceiling; strict pre-dispatch bound unresolved",
+          "reasoning_tokens": 6290,
+          "requested_max_output_tokens": 4096
+        }
+      ],
+      "executed": false,
+      "experiment": "hard_pilot_exhaustion_16384",
+      "max_output_tokens": 16384,
+      "max_retries": 0,
+      "maximum_attempts_per_pair": 1,
+      "maximum_provider_attempts": 20,
+      "pairs": [
+        {
+          "benchmark": "livecodebench",
+          "model": "anthropic/claude-opus-5",
+          "prompt_id": "livecodebench:arc196_a",
+          "prompt_sha256": "d6ceffaacec9bf516b0289c64d9ebabae84977b555a5334d8ef169c55cc6fcc1",
+          "reasoning_setting": "adaptive_thinking;effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "livecodebench:arc196_a",
+          "prompt_sha256": "d6ceffaacec9bf516b0289c64d9ebabae84977b555a5334d8ef169c55cc6fcc1",
+          "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "prompt_id": "livecodebench:arc196_a",
+          "prompt_sha256": "d6ceffaacec9bf516b0289c64d9ebabae84977b555a5334d8ef169c55cc6fcc1",
+          "reasoning_setting": "thinking_only",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "anthropic/claude-opus-5",
+          "prompt_id": "livecodebench:arc196_b",
+          "prompt_sha256": "7590bd8472357ee4fc0bb0ee06da3b4276d6ea54c6494e70453d0f92c5a06c3f",
+          "reasoning_setting": "adaptive_thinking;effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "livecodebench:arc196_b",
+          "prompt_sha256": "7590bd8472357ee4fc0bb0ee06da3b4276d6ea54c6494e70453d0f92c5a06c3f",
+          "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "prompt_id": "livecodebench:arc196_b",
+          "prompt_sha256": "7590bd8472357ee4fc0bb0ee06da3b4276d6ea54c6494e70453d0f92c5a06c3f",
+          "reasoning_setting": "thinking_only",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "anthropic/claude-opus-5",
+          "prompt_id": "livecodebench:arc196_c",
+          "prompt_sha256": "032244e892c458e568a297b630f8e4c6507afa63c92dcc36b5d7b2c231750e5e",
+          "reasoning_setting": "adaptive_thinking;effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "livecodebench:arc196_c",
+          "prompt_sha256": "032244e892c458e568a297b630f8e4c6507afa63c92dcc36b5d7b2c231750e5e",
+          "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "openai/gpt-5.6-sol",
+          "prompt_id": "livecodebench:arc196_c",
+          "prompt_sha256": "032244e892c458e568a297b630f8e4c6507afa63c92dcc36b5d7b2c231750e5e",
+          "reasoning_setting": "reasoning_effort=medium",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "prompt_id": "livecodebench:arc196_c",
+          "prompt_sha256": "032244e892c458e568a297b630f8e4c6507afa63c92dcc36b5d7b2c231750e5e",
+          "reasoning_setting": "thinking_only",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "anthropic/claude-opus-5",
+          "prompt_id": "livecodebench:arc196_d",
+          "prompt_sha256": "c02ec443c51c96e725ffcd3ad6b04c3894ae8b23dd43137846ae26c5d30dfebc",
+          "reasoning_setting": "adaptive_thinking;effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "livecodebench:arc196_d",
+          "prompt_sha256": "c02ec443c51c96e725ffcd3ad6b04c3894ae8b23dd43137846ae26c5d30dfebc",
+          "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "openai/gpt-5.6-sol",
+          "prompt_id": "livecodebench:arc196_d",
+          "prompt_sha256": "c02ec443c51c96e725ffcd3ad6b04c3894ae8b23dd43137846ae26c5d30dfebc",
+          "reasoning_setting": "reasoning_effort=medium",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "prompt_id": "livecodebench:arc196_d",
+          "prompt_sha256": "c02ec443c51c96e725ffcd3ad6b04c3894ae8b23dd43137846ae26c5d30dfebc",
+          "reasoning_setting": "thinking_only",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "math_500",
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "prompt_id": "math_500:test/geometry/965.json",
+          "prompt_sha256": "92838ba9b3c0453dcb1d0f640eaec3cc265544e913c9691f432c62265ea687ac",
+          "reasoning_setting": "thinking_only",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "math",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "math_500",
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "math_500:test/intermediate_algebra/960.json",
+          "prompt_sha256": "3098bc981c0b19795e323cd07d971b993954f045f24d9fbef31c1df4667ff44d",
+          "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "math",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "mmlu_pro",
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "mmlu_pro:12015",
+          "prompt_sha256": "76244a3335a238da5054e8f9596638a87ae4741b16bfb25069a279a98ff3492c",
+          "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "multiple_choice",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "mmlu_pro",
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "prompt_id": "mmlu_pro:12015",
+          "prompt_sha256": "76244a3335a238da5054e8f9596638a87ae4741b16bfb25069a279a98ff3492c",
+          "reasoning_setting": "thinking_only",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "multiple_choice",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "mmlu_pro",
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "prompt_id": "mmlu_pro:5022",
+          "prompt_sha256": "226e270daacc1ffd0c924fae2c046cb4ed7213083f3e68890257f436ef864bfd",
+          "reasoning_setting": "thinking_only",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "multiple_choice",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "mmlu_pro",
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "mmlu_pro:6502",
+          "prompt_sha256": "a592bff00f3825218fbbb477dceb1b69ecde9f2578fedc88e196986434f4ff5d",
+          "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "multiple_choice",
+          "temperature": "provider_default"
+        }
+      ],
+      "parent_snapshot": "reports/snapshots/hard_pilot_4096_final.csv",
+      "planned_calls": 20,
+      "registry_contract_maximum_usd": "3.216105",
+      "spend_cap_usd": "3.22",
+      "strict_preflight_passed": false,
+      "verified_worst_case_spend_usd": null,
+      "within_cap": true
+    },
+    "8192": {
+      "by_model": {
+        "anthropic/claude-opus-5": {
+          "calls": 4,
+          "registry_contract_maximum_usd": "0.864400"
+        },
+        "deepseek/deepseek-flash": {
+          "calls": 7,
+          "registry_contract_maximum_usd": "0.0727881"
+        },
+        "openai/gpt-5.6-sol": {
+          "calls": 2,
+          "registry_contract_maximum_usd": "0.346468"
+        },
+        "openrouter/qwen/qwen3.8-2.4t-a95b": {
+          "calls": 7,
+          "registry_contract_maximum_usd": "0.372692"
+        }
+      },
+      "cost_bound_issues": [
+        {
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "output_tokens": 5559,
+          "prompt_id": "mmlu_pro:1346",
+          "reason": "Observed billed output exceeds recorded request ceiling; strict pre-dispatch bound unresolved",
+          "reasoning_tokens": 5555,
+          "requested_max_output_tokens": 4096
+        },
+        {
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "output_tokens": 6298,
+          "prompt_id": "math_500:test/intermediate_algebra/960.json",
+          "reason": "Observed billed output exceeds recorded request ceiling; strict pre-dispatch bound unresolved",
+          "reasoning_tokens": 6290,
+          "requested_max_output_tokens": 4096
+        }
+      ],
+      "executed": false,
+      "experiment": "hard_pilot_exhaustion_8192",
+      "max_output_tokens": 8192,
+      "max_retries": 0,
+      "maximum_attempts_per_pair": 1,
+      "maximum_provider_attempts": 20,
+      "pairs": [
+        {
+          "benchmark": "livecodebench",
+          "model": "anthropic/claude-opus-5",
+          "prompt_id": "livecodebench:arc196_a",
+          "prompt_sha256": "d6ceffaacec9bf516b0289c64d9ebabae84977b555a5334d8ef169c55cc6fcc1",
+          "reasoning_setting": "adaptive_thinking;effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "livecodebench:arc196_a",
+          "prompt_sha256": "d6ceffaacec9bf516b0289c64d9ebabae84977b555a5334d8ef169c55cc6fcc1",
+          "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "prompt_id": "livecodebench:arc196_a",
+          "prompt_sha256": "d6ceffaacec9bf516b0289c64d9ebabae84977b555a5334d8ef169c55cc6fcc1",
+          "reasoning_setting": "thinking_only",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "anthropic/claude-opus-5",
+          "prompt_id": "livecodebench:arc196_b",
+          "prompt_sha256": "7590bd8472357ee4fc0bb0ee06da3b4276d6ea54c6494e70453d0f92c5a06c3f",
+          "reasoning_setting": "adaptive_thinking;effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "livecodebench:arc196_b",
+          "prompt_sha256": "7590bd8472357ee4fc0bb0ee06da3b4276d6ea54c6494e70453d0f92c5a06c3f",
+          "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "prompt_id": "livecodebench:arc196_b",
+          "prompt_sha256": "7590bd8472357ee4fc0bb0ee06da3b4276d6ea54c6494e70453d0f92c5a06c3f",
+          "reasoning_setting": "thinking_only",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "anthropic/claude-opus-5",
+          "prompt_id": "livecodebench:arc196_c",
+          "prompt_sha256": "032244e892c458e568a297b630f8e4c6507afa63c92dcc36b5d7b2c231750e5e",
+          "reasoning_setting": "adaptive_thinking;effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "livecodebench:arc196_c",
+          "prompt_sha256": "032244e892c458e568a297b630f8e4c6507afa63c92dcc36b5d7b2c231750e5e",
+          "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "openai/gpt-5.6-sol",
+          "prompt_id": "livecodebench:arc196_c",
+          "prompt_sha256": "032244e892c458e568a297b630f8e4c6507afa63c92dcc36b5d7b2c231750e5e",
+          "reasoning_setting": "reasoning_effort=medium",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "prompt_id": "livecodebench:arc196_c",
+          "prompt_sha256": "032244e892c458e568a297b630f8e4c6507afa63c92dcc36b5d7b2c231750e5e",
+          "reasoning_setting": "thinking_only",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "anthropic/claude-opus-5",
+          "prompt_id": "livecodebench:arc196_d",
+          "prompt_sha256": "c02ec443c51c96e725ffcd3ad6b04c3894ae8b23dd43137846ae26c5d30dfebc",
+          "reasoning_setting": "adaptive_thinking;effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "livecodebench:arc196_d",
+          "prompt_sha256": "c02ec443c51c96e725ffcd3ad6b04c3894ae8b23dd43137846ae26c5d30dfebc",
+          "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "openai/gpt-5.6-sol",
+          "prompt_id": "livecodebench:arc196_d",
+          "prompt_sha256": "c02ec443c51c96e725ffcd3ad6b04c3894ae8b23dd43137846ae26c5d30dfebc",
+          "reasoning_setting": "reasoning_effort=medium",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "livecodebench",
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "prompt_id": "livecodebench:arc196_d",
+          "prompt_sha256": "c02ec443c51c96e725ffcd3ad6b04c3894ae8b23dd43137846ae26c5d30dfebc",
+          "reasoning_setting": "thinking_only",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "code",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "math_500",
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "prompt_id": "math_500:test/geometry/965.json",
+          "prompt_sha256": "92838ba9b3c0453dcb1d0f640eaec3cc265544e913c9691f432c62265ea687ac",
+          "reasoning_setting": "thinking_only",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "math",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "math_500",
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "math_500:test/intermediate_algebra/960.json",
+          "prompt_sha256": "3098bc981c0b19795e323cd07d971b993954f045f24d9fbef31c1df4667ff44d",
+          "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "math",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "mmlu_pro",
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "mmlu_pro:12015",
+          "prompt_sha256": "76244a3335a238da5054e8f9596638a87ae4741b16bfb25069a279a98ff3492c",
+          "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "multiple_choice",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "mmlu_pro",
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "prompt_id": "mmlu_pro:12015",
+          "prompt_sha256": "76244a3335a238da5054e8f9596638a87ae4741b16bfb25069a279a98ff3492c",
+          "reasoning_setting": "thinking_only",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "multiple_choice",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "mmlu_pro",
+          "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+          "prompt_id": "mmlu_pro:5022",
+          "prompt_sha256": "226e270daacc1ffd0c924fae2c046cb4ed7213083f3e68890257f436ef864bfd",
+          "reasoning_setting": "thinking_only",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "multiple_choice",
+          "temperature": "provider_default"
+        },
+        {
+          "benchmark": "mmlu_pro",
+          "model": "deepseek/deepseek-flash",
+          "prompt_id": "mmlu_pro:6502",
+          "prompt_sha256": "a592bff00f3825218fbbb477dceb1b69ecde9f2578fedc88e196986434f4ff5d",
+          "reasoning_setting": "thinking=enabled;reasoning_effort=high",
+          "source_final_state": "output_limit_exhausted",
+          "task_type": "multiple_choice",
+          "temperature": "provider_default"
+        }
+      ],
+      "parent_snapshot": "reports/snapshots/hard_pilot_4096_final.csv",
+      "planned_calls": 20,
+      "registry_contract_maximum_usd": "1.656349",
+      "spend_cap_usd": "1.66",
+      "strict_preflight_passed": false,
+      "verified_worst_case_spend_usd": null,
+      "within_cap": true
+    }
+  }
+}

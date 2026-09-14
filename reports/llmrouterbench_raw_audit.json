@@ -1,0 +1,561 @@
+{
+  "count_disagreements": 0,
+  "dataset_inventory": [
+    {
+      "dataset": "aime",
+      "models": 38,
+      "null_scores": 0,
+      "outcomes": 2280,
+      "prompt_texts": 60,
+      "source_indices": 60,
+      "source_split": "hybrid",
+      "zero_costs": 552
+    },
+    {
+      "dataset": "arc-agi",
+      "models": 17,
+      "null_scores": 0,
+      "outcomes": 6800,
+      "prompt_texts": 400,
+      "source_indices": 400,
+      "source_split": "v1",
+      "zero_costs": 296
+    },
+    {
+      "dataset": "arcc",
+      "models": 20,
+      "null_scores": 0,
+      "outcomes": 23440,
+      "prompt_texts": 1172,
+      "source_indices": 1172,
+      "source_split": "test",
+      "zero_costs": 10548
+    },
+    {
+      "dataset": "arenahard",
+      "models": 35,
+      "null_scores": 0,
+      "outcomes": 26250,
+      "prompt_texts": 751,
+      "source_indices": 750,
+      "source_split": "test",
+      "zero_costs": 15093
+    },
+    {
+      "dataset": "arenahard_coding",
+      "models": 33,
+      "null_scores": 0,
+      "outcomes": 8349,
+      "prompt_texts": 253,
+      "source_indices": 253,
+      "source_split": "test",
+      "zero_costs": 5095
+    },
+    {
+      "dataset": "arenahard_creative_writing",
+      "models": 33,
+      "null_scores": 0,
+      "outcomes": 8250,
+      "prompt_texts": 250,
+      "source_indices": 250,
+      "source_split": "test",
+      "zero_costs": 5006
+    },
+    {
+      "dataset": "arenahard_math",
+      "models": 33,
+      "null_scores": 0,
+      "outcomes": 8151,
+      "prompt_texts": 247,
+      "source_indices": 247,
+      "source_split": "test",
+      "zero_costs": 4987
+    },
+    {
+      "dataset": "bbh",
+      "models": 20,
+      "null_scores": 0,
+      "outcomes": 21600,
+      "prompt_texts": 1080,
+      "source_indices": 1080,
+      "source_split": "test",
+      "zero_costs": 9720
+    },
+    {
+      "dataset": "emorynlp",
+      "models": 20,
+      "null_scores": 0,
+      "outcomes": 13940,
+      "prompt_texts": 696,
+      "source_indices": 697,
+      "source_split": "test",
+      "zero_costs": 6273
+    },
+    {
+      "dataset": "finqa",
+      "models": 20,
+      "null_scores": 0,
+      "outcomes": 22940,
+      "prompt_texts": 1138,
+      "source_indices": 1147,
+      "source_split": "test",
+      "zero_costs": 10323
+    },
+    {
+      "dataset": "gpqa",
+      "models": 38,
+      "null_scores": 0,
+      "outcomes": 7524,
+      "prompt_texts": 198,
+      "source_indices": 198,
+      "source_split": "test",
+      "zero_costs": 1782
+    },
+    {
+      "dataset": "hle",
+      "models": 15,
+      "null_scores": 0,
+      "outcomes": 7500,
+      "prompt_texts": 500,
+      "source_indices": 500,
+      "source_split": "subset_500",
+      "zero_costs": 93
+    },
+    {
+      "dataset": "hle",
+      "models": 15,
+      "null_scores": 0,
+      "outcomes": 32370,
+      "prompt_texts": 2159,
+      "source_indices": 2158,
+      "source_split": "test",
+      "zero_costs": 1495
+    },
+    {
+      "dataset": "humaneval",
+      "models": 22,
+      "null_scores": 0,
+      "outcomes": 3608,
+      "prompt_texts": 164,
+      "source_indices": 164,
+      "source_split": "test",
+      "zero_costs": 1476
+    },
+    {
+      "dataset": "kandk",
+      "models": 20,
+      "null_scores": 0,
+      "outcomes": 14000,
+      "prompt_texts": 700,
+      "source_indices": 700,
+      "source_split": "test",
+      "zero_costs": 6300
+    },
+    {
+      "dataset": "korbench",
+      "models": 20,
+      "null_scores": 0,
+      "outcomes": 25000,
+      "prompt_texts": 1248,
+      "source_indices": 1250,
+      "source_split": "test",
+      "zero_costs": 11250
+    },
+    {
+      "dataset": "livecodebench",
+      "models": 38,
+      "null_scores": 0,
+      "outcomes": 40090,
+      "prompt_texts": 1055,
+      "source_indices": 1055,
+      "source_split": "test",
+      "zero_costs": 9850
+    },
+    {
+      "dataset": "livemathbench",
+      "models": 35,
+      "null_scores": 0,
+      "outcomes": 4235,
+      "prompt_texts": 121,
+      "source_indices": 121,
+      "source_split": "test",
+      "zero_costs": 1131
+    },
+    {
+      "dataset": "math500",
+      "models": 20,
+      "null_scores": 0,
+      "outcomes": 10000,
+      "prompt_texts": 500,
+      "source_indices": 500,
+      "source_split": "test",
+      "zero_costs": 4500
+    },
+    {
+      "dataset": "mathbench",
+      "models": 20,
+      "null_scores": 0,
+      "outcomes": 3000,
+      "prompt_texts": 150,
+      "source_indices": 150,
+      "source_split": "test",
+      "zero_costs": 1350
+    },
+    {
+      "dataset": "mbpp",
+      "models": 20,
+      "null_scores": 1,
+      "outcomes": 19480,
+      "prompt_texts": 974,
+      "source_indices": 974,
+      "source_split": "test",
+      "zero_costs": 8766
+    },
+    {
+      "dataset": "medqa",
+      "models": 20,
+      "null_scores": 0,
+      "outcomes": 25460,
+      "prompt_texts": 1273,
+      "source_indices": 1273,
+      "source_split": "test",
+      "zero_costs": 11457
+    },
+    {
+      "dataset": "meld",
+      "models": 20,
+      "null_scores": 0,
+      "outcomes": 24640,
+      "prompt_texts": 1231,
+      "source_indices": 1232,
+      "source_split": "test",
+      "zero_costs": 11088
+    },
+    {
+      "dataset": "mmlupro",
+      "models": 36,
+      "null_scores": 0,
+      "outcomes": 36036,
+      "prompt_texts": 1000,
+      "source_indices": 1001,
+      "source_split": "test_1000",
+      "zero_costs": 9071
+    },
+    {
+      "dataset": "mmlupro",
+      "models": 15,
+      "null_scores": 0,
+      "outcomes": 45000,
+      "prompt_texts": 3000,
+      "source_indices": 3000,
+      "source_split": "test_3000",
+      "zero_costs": 242
+    },
+    {
+      "dataset": "simpleqa",
+      "models": 15,
+      "null_scores": 0,
+      "outcomes": 7050,
+      "prompt_texts": 500,
+      "source_indices": 500,
+      "source_split": "subset_500",
+      "zero_costs": 0
+    },
+    {
+      "dataset": "simpleqa",
+      "models": 15,
+      "null_scores": 4326,
+      "outcomes": 64890,
+      "prompt_texts": 4326,
+      "source_indices": 4326,
+      "source_split": "test",
+      "zero_costs": 4380
+    },
+    {
+      "dataset": "swe-bench",
+      "models": 15,
+      "null_scores": 0,
+      "outcomes": 7500,
+      "prompt_texts": 500,
+      "source_indices": 500,
+      "source_split": "verified",
+      "zero_costs": 101
+    },
+    {
+      "dataset": "tau2",
+      "models": 12,
+      "null_scores": 0,
+      "outcomes": 3336,
+      "prompt_texts": 278,
+      "source_indices": 278,
+      "source_split": "test",
+      "zero_costs": 0
+    },
+    {
+      "dataset": "winogrande",
+      "models": 20,
+      "null_scores": 0,
+      "outcomes": 25340,
+      "prompt_texts": 1267,
+      "source_indices": 1267,
+      "source_split": "valid",
+      "zero_costs": 11403
+    }
+  ],
+  "dataset_prompt_keys": 25193,
+  "datasets": [
+    "aime",
+    "arc-agi",
+    "arcc",
+    "arenahard",
+    "arenahard_coding",
+    "arenahard_creative_writing",
+    "arenahard_math",
+    "bbh",
+    "emorynlp",
+    "finqa",
+    "gpqa",
+    "hle",
+    "humaneval",
+    "kandk",
+    "korbench",
+    "livecodebench",
+    "livemathbench",
+    "math500",
+    "mathbench",
+    "mbpp",
+    "medqa",
+    "meld",
+    "mmlupro",
+    "simpleqa",
+    "swe-bench",
+    "tau2",
+    "winogrande"
+  ],
+  "demo_files": 1,
+  "demo_records": 50,
+  "duplicate_dataset_prompt_outcomes": 25820,
+  "duplicate_source_outcomes": 0,
+  "empty_output_records": 3083,
+  "extra_fields": {
+    "actual_model": 11666
+  },
+  "files": 700,
+  "fractional_input_tokens": 0,
+  "fractional_output_tokens": 0,
+  "generation_failure_records": 6416,
+  "header_cost_disagreements": 39,
+  "header_fields": {
+    "completion_tokens": 700,
+    "cost": 700,
+    "counts": 700,
+    "data_fingerprint": 488,
+    "dataset_name": 700,
+    "demo": 635,
+    "model_name": 700,
+    "performance": 700,
+    "prompt_tokens": 700,
+    "records": 700,
+    "split": 700,
+    "time_taken": 700
+  },
+  "json_payload_bytes": 6987596078,
+  "missing_input_tokens": 0,
+  "missing_output_tokens": 0,
+  "models": [
+    "DeepHermes-3-Llama-3-8B-Preview",
+    "DeepSeek-R1-0528-Qwen3-8B",
+    "DeepSeek-R1-Distill-Qwen-7B",
+    "Fin-R1",
+    "GLM-Z1-9B-0414",
+    "Intern-S1-mini",
+    "Llama-3.1-8B-Instruct",
+    "Llama-3.1-8B-UltraMedical",
+    "Llama-3.1-Nemotron-Nano-8B-v1",
+    "MiMo-7B-RL-0530",
+    "MiniCPM4.1-8B",
+    "NVIDIA-Nemotron-Nano-9B-v2",
+    "OpenThinker3-7B",
+    "Qwen2.5-Coder-7B-Instruct",
+    "Qwen3-8B",
+    "claude-opus-4.1",
+    "claude-sonnet-4",
+    "cogito-v1-preview-llama-8B",
+    "deepseek-r1-0528",
+    "deepseek-v3-0324",
+    "deepseek-v3.1-terminus",
+    "gemini-2.5-flash",
+    "gemini-2.5-pro",
+    "gemma-2-9b-it",
+    "glm-4-9b-chat",
+    "glm-4.6",
+    "glm-4.6-3888",
+    "gpt-4.1",
+    "gpt-5",
+    "gpt-5-chat",
+    "granite-3.3-8b-instruct",
+    "intern-s1",
+    "intern-s1-new",
+    "internlm3-8b-instruct",
+    "kimi-k2-0905",
+    "openrouter",
+    "qwen3-235b-a22b-2507",
+    "qwen3-235b-a22b-no-thinking",
+    "qwen3-235b-a22b-thinking",
+    "qwen3-235b-a22b-thinking-2507"
+  ],
+  "negative_cost_records": 0,
+  "negative_input_tokens": 0,
+  "negative_output_tokens": 13,
+  "null_cost_records": 0,
+  "null_scores": 4327,
+  "outcome_records": 548059,
+  "path_identity_exceptions": 1,
+  "record_fields": {
+    "completion_tokens": 548059,
+    "cost": 548059,
+    "extra_fields": 11668,
+    "ground_truth": 548059,
+    "index": 548059,
+    "instance_id": 7500,
+    "origin_query": 548059,
+    "prediction": 548059,
+    "prompt": 548059,
+    "prompt_tokens": 548059,
+    "raw_output": 548059,
+    "score": 548059
+  },
+  "score_histograms": {
+    "aime": {
+      "0.0": 1222,
+      "1.0": 1058
+    },
+    "arc-agi": {
+      "0.0": 5475,
+      "1.0": 1325
+    },
+    "arcc": {
+      "0.0": 3277,
+      "1.0": 20163
+    },
+    "arenahard": {
+      "0.0": 15444,
+      "0.5": 3596,
+      "1.0": 7210
+    },
+    "arenahard_coding": {
+      "0.0": 5252,
+      "0.5": 1103,
+      "1.0": 1994
+    },
+    "arenahard_creative_writing": {
+      "0.0": 4410,
+      "0.5": 1054,
+      "1.0": 2786
+    },
+    "arenahard_math": {
+      "0.0": 5398,
+      "0.5": 1157,
+      "1.0": 1596
+    },
+    "bbh": {
+      "0.0": 8446,
+      "1.0": 13154
+    },
+    "emorynlp": {
+      "0.0": 9082,
+      "1.0": 4858
+    },
+    "finqa": {
+      "0.0": 9262,
+      "1.0": 13678
+    },
+    "gpqa": {
+      "0.0": 3568,
+      "1.0": 3956
+    },
+    "hle": {
+      "0.0": 35556,
+      "1.0": 4314
+    },
+    "humaneval": {
+      "0.0": 1544,
+      "1.0": 2064
+    },
+    "kandk": {
+      "0.0": 9301,
+      "1.0": 4699
+    },
+    "korbench": {
+      "0.0": 15700,
+      "1.0": 9300
+    },
+    "livecodebench": {
+      "0.0": 20533,
+      "1.0": 19557
+    },
+    "livemathbench": {
+      "0.0": 2000,
+      "1.0": 2235
+    },
+    "math500": {
+      "0.0": 2990,
+      "1.0": 7010
+    },
+    "mathbench": {
+      "0.0": 1093,
+      "1.0": 1907
+    },
+    "mbpp": {
+      "0.0": 9307,
+      "1.0": 10172,
+      "nan": 1
+    },
+    "medqa": {
+      "0.0": 9872,
+      "1.0": 15588
+    },
+    "meld": {
+      "0.0": 12924,
+      "1.0": 11716
+    },
+    "mmlupro": {
+      "0.0": 20858,
+      "1.0": 60178
+    },
+    "simpleqa": {
+      "0.0": 44685,
+      "1.0": 22929,
+      "nan": 4326
+    },
+    "swe-bench": {
+      "0.0": 5831,
+      "1.0": 1669
+    },
+    "tau2": {
+      "0.0": 1901,
+      "1.0": 1435
+    },
+    "winogrande": {
+      "0.0": 7910,
+      "1.0": 17430
+    }
+  },
+  "source_index_text_conflicts": [
+    {
+      "dataset": "arenahard",
+      "distinct_texts": 2,
+      "source_index": 103,
+      "source_split": "test"
+    },
+    {
+      "dataset": "hle",
+      "distinct_texts": 2,
+      "source_index": 1494,
+      "source_split": "test"
+    }
+  ],
+  "source_prompt_keys": 27203,
+  "unique_prompt_texts": 24443,
+  "zero_cost_records": 163628
+}

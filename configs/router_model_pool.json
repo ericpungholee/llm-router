@@ -1,0 +1,121 @@
+{
+  "coverage_denominator": 8760,
+  "excluded_cost_pool_candidates": {
+    "deepseek-v3.1-terminus": "High coverage but redundant with two already selected DeepSeek variants under eight-model cap.",
+    "gemini-2.5-pro": "95/1055 code prompts have missing resources; GPT-5 supplies strong-model anchor with full code coverage.",
+    "glm-4.6": "Additional family but more resource gaps; defer under eight-model cap.",
+    "kimi-k2-0905": "High coverage; defer additional general model under eight-model cap.",
+    "openrouter": "Already a router with response-derived actual_model, not a fixed candidate.",
+    "other_identifiers": "Experimental aliases/versions or performance-only models; do not merge identities or assume free pricing.",
+    "qwen3-235b-a22b-thinking-2507": "117/1055 code gaps and 37/121 LiveMathBench gaps; large completeness penalty."
+  },
+  "models": [
+    {
+      "access": "open_weights",
+      "coverage": 0.996689497716895,
+      "family": "Qwen",
+      "mean_cost": 0.00041903108120490206,
+      "mean_score": 0.6552511415525114,
+      "mean_success": 0.6574275569808727,
+      "model_id": "qwen3-235b-a22b-2507",
+      "outcome_coverage": 1.0,
+      "reason_selected": "Lowest observed mean cost in the chosen tasks, high coverage, and a distinct open-weight family.",
+      "specialization": "general",
+      "valid_outcomes": 8731
+    },
+    {
+      "access": "open_weights",
+      "coverage": 1.0,
+      "family": "Intern",
+      "mean_cost": 0.0020827023904109593,
+      "mean_score": 0.44052511415525114,
+      "mean_success": 0.44052511415525114,
+      "model_id": "intern-s1",
+      "outcome_coverage": 1.0,
+      "reason_selected": "Complete resource coverage; scientific model family adds a weaker aggregate candidate and possible specialization.",
+      "specialization": "scientific",
+      "valid_outcomes": 8760
+    },
+    {
+      "access": "open_weights",
+      "coverage": 1.0,
+      "family": "DeepSeek",
+      "mean_cost": 0.0004865915821917808,
+      "mean_score": 0.5094748858447489,
+      "mean_success": 0.5094748858447489,
+      "model_id": "deepseek-v3-0324",
+      "outcome_coverage": 1.0,
+      "reason_selected": "Complete coverage and inexpensive general model; contrast with reasoning sibling.",
+      "specialization": "general",
+      "valid_outcomes": 8760
+    },
+    {
+      "access": "open_weights",
+      "coverage": 1.0,
+      "family": "DeepSeek",
+      "mean_cost": 0.007911501175799087,
+      "mean_score": 0.5534246575342465,
+      "mean_success": 0.5534246575342465,
+      "model_id": "deepseek-r1-0528",
+      "outcome_coverage": 1.0,
+      "reason_selected": "Complete coverage; explicit reasoning model with substantially higher generation cost than V3.",
+      "specialization": "reasoning",
+      "valid_outcomes": 8760
+    },
+    {
+      "access": "closed",
+      "coverage": 0.9990867579908675,
+      "family": "Google",
+      "mean_cost": 0.0028045921046617917,
+      "mean_score": 0.5261415525114155,
+      "mean_success": 0.5261415525114155,
+      "model_id": "gemini-2.5-flash",
+      "outcome_coverage": 1.0,
+      "reason_selected": "99.9% resource coverage and a distinct closed family; fewer code gaps than Gemini Pro.",
+      "specialization": "general",
+      "valid_outcomes": 8752
+    },
+    {
+      "access": "closed",
+      "coverage": 1.0,
+      "family": "OpenAI",
+      "mean_cost": 0.002663349514840183,
+      "mean_score": 0.5832191780821918,
+      "mean_success": 0.5832191780821918,
+      "model_id": "gpt-5-chat",
+      "outcome_coverage": 1.0,
+      "reason_selected": "Complete coverage; cheaper chat behavior compared with GPT-5 reasoning configuration.",
+      "specialization": "chat",
+      "valid_outcomes": 8760
+    },
+    {
+      "access": "closed",
+      "coverage": 0.9981735159817352,
+      "family": "OpenAI",
+      "mean_cost": 0.01886218043801464,
+      "mean_score": 0.6760273972602739,
+      "mean_success": 0.6772644098810613,
+      "model_id": "gpt-5",
+      "outcome_coverage": 1.0,
+      "reason_selected": "99.8% resource coverage on chosen tasks; strong reasoning anchor, expensive generation.",
+      "specialization": "reasoning_medium",
+      "valid_outcomes": 8744
+    },
+    {
+      "access": "closed",
+      "coverage": 0.9998858447488584,
+      "family": "Anthropic",
+      "mean_cost": 0.005793192145222057,
+      "mean_score": 0.4560502283105023,
+      "mean_success": 0.4560502283105023,
+      "model_id": "claude-sonnet-4",
+      "outcome_coverage": 1.0,
+      "reason_selected": "99.99% coverage and a distinct closed model family with different per-task behavior.",
+      "specialization": "general",
+      "valid_outcomes": 8759
+    }
+  ],
+  "schema_version": 1,
+  "selection_basis": "Coverage and family/behavior/cost diversity after raw audit. Pool frozen before training; descriptive full-subset means are not used to select best-single.",
+  "statistics_scope": "Selected source splits before complete-case filtering. mean_score preserves raw benchmark scores, including request failures scored zero upstream; mean_success averages available success labels; mean_cost averages only positive observed costs (unavailable costs excluded). coverage requires valid label, cost and tokens."
+}
