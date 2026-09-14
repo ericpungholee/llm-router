@@ -167,6 +167,31 @@ def configuration_fingerprint(model: ModelConfig, output_limit: int) -> str:
     return hashlib.sha256(json.dumps(settings).encode()).hexdigest()
 
 
+def saved_pair_blocks(rows, models, output_limit=None):
+    """Budget exhaustion is terminal only for this pair and configuration."""
+    configurations = {
+        (m.inference_provider, m.api_model_identifier): configuration_fingerprint(
+            m, output_limit or m.generation.max_output_tokens
+        ) for m in models
+    }
+    return {
+        result_key(row) for row in rows
+        if row.get("status") == "provider_error"
+        and row.get("error_type") == "output_limit_exhausted"
+        and row.get("configuration_fingerprint") == configurations.get(
+            (row.get("inference_provider"), row.get("api_model_identifier"))
+        )
+    }
+
+
+def record_diagnostics(row, diagnostics, outcome):
+    """Append safe metadata so a retry/resume cannot erase earlier evidence."""
+    history = json.loads(row.get("provider_diagnostics") or "[]")
+    history.append({**diagnostics, "provider_attempt": row["provider_attempts"],
+                    "outcome": outcome})
+    row["provider_diagnostics"] = json.dumps(history, sort_keys=True)
+
+
 def saved_model_blocks(rows, models, output_limit=None):
     """Persist invalid/configuration blocks only; auth/billing is rechecked per run.
 
@@ -277,6 +302,7 @@ def _base_result(
         "failure_retryable": None,
         "failure_scope": "",
         "configuration_fingerprint": configuration_fingerprint(model, max_output_tokens),
+        "provider_diagnostics": "[]",
     }
 
 
@@ -310,6 +336,8 @@ def generate_results(
     completed_keys = {
         result_key(row) for row in results if is_completed_result(row)
     }
+    if not dry_run:
+        completed_keys |= saved_pair_blocks(results, selected_models, max_output_tokens)
     if initial_spend_usd is None:
         initial_spend_usd = sum((Decimal(str(r["estimated_cost_usd"])) for r in results), Decimal(0))
     tracker = (
@@ -334,6 +362,7 @@ def generate_results(
             output_limit = max_output_tokens or model.generation.max_output_tokens
             row = _base_result(record, prompt, model, output_limit)
             prior_row = next((r for r in results if result_key(r) == key), {})
+            row["provider_diagnostics"] = prior_row.get("provider_diagnostics") or "[]"
             row["provider_attempts"] = historical_attempts(prior_row) if prior_row else 0
             row["provider_response_count"] = historical_responses(prior_row) if prior_row else 0
             prior_recorded_cost = next(
@@ -388,8 +417,17 @@ def generate_results(
             def failed_attempt(attempt_error: ProviderError) -> None:
                 # Connection failures and malformed responses may have billed
                 # inference. Auth/model/parameter rejections do not run inference.
-                if tracker and (attempt_error.retryable or attempt_error.error_type == "invalid_provider_response"):
+                if tracker and attempt_error.may_have_been_billed:
                     tracker.record_failed_attempt(model, prompt, output_limit)
+                diagnostics = attempt_error.diagnostics
+                record_diagnostics(row, diagnostics, attempt_error.error_type)
+                row.update(
+                    input_tokens=diagnostics.get("input_tokens") or 0,
+                    output_tokens=diagnostics.get("output_tokens") or 0,
+                    stop_reason=diagnostics.get("stop_reason") or "",
+                    provider_request_id=diagnostics.get("response_id") or diagnostics.get("request_id") or "",
+                    response_model_identifier=diagnostics.get("response_model_identifier") or "",
+                )
                 # Checkpoint attempts and reserved cost before a possible retry.
                 row.update(
                     status="provider_error", error_type=attempt_error.error_type,
@@ -444,6 +482,7 @@ def generate_results(
                     ),
                 )
                 row.update(failure_retryable=None, failure_scope="", error_code="", http_status=None)
+                record_diagnostics(row, response.diagnostics, "success")
             except ProviderError as error:
                 row.update(
                     status="provider_error",
@@ -794,6 +833,7 @@ def main() -> None:
     completed_keys = {
         result_key(row) for row in existing_results if is_completed_result(row)
     }
+    completed_keys |= saved_pair_blocks(existing_results, models, output_limit)
     persistent_blocks = saved_model_blocks(existing_results, models, output_limit)
     remaining = [
         call

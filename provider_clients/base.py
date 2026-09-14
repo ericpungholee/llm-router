@@ -4,7 +4,8 @@ import json
 import socket
 import urllib.error
 import urllib.request
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from time import perf_counter
 from typing import Dict, Mapping, Optional
 
 
@@ -21,6 +22,7 @@ class ProviderResponse:
     response_model_identifier: str = ""
     stop_reason: str = ""
     provider_reported_cost_usd: Optional[float] = None
+    diagnostics: dict = field(default_factory=dict)
 
 
 class ProviderError(RuntimeError):
@@ -38,6 +40,7 @@ class ProviderError(RuntimeError):
         retryable: bool = False,
         invalid_model: bool = False,
         failure_scope: Optional[str] = None,
+        diagnostics: Optional[dict] = None,
     ) -> None:
         super().__init__(message)
         self.provider = provider
@@ -47,6 +50,12 @@ class ProviderError(RuntimeError):
         self.error_code = error_code
         self.retryable = retryable
         self.invalid_model = invalid_model
+        self.diagnostics = diagnostics or {}
+        self.may_have_been_billed = retryable or error_type in {
+            "invalid_provider_response", "interrupted_inflight", "output_limit_exhausted",
+            "empty_completion", "reasoning_without_answer", "refusal", "incomplete_response",
+            "failed_provider_response",
+        }
         # Scope belongs to the normalized provider error, not benchmark logic.
         # Unknown rejections (including prompt-specific bad parameters) stay local.
         self.failure_scope = "pair" if retryable else (failure_scope or {
@@ -98,6 +107,7 @@ def _classify_http_error(status: int, code: str, kind: str, message: str) -> tup
     if status == 402 or any(marker in searchable for marker in (
         "insufficient_quota", "insufficient_credits", "credit balance is too low",
         "insufficient balance",
+        "this request requires more credits", "fewer max_tokens",
     )) or (
         "quota exceeded" in searchable
         and any(marker in searchable for marker in ("limit: 0", "billing", "current quota"))
@@ -142,9 +152,17 @@ def post_json(
         headers=request_headers,
         method="POST",
     )
+    started = perf_counter()
+    transport = {"timeout_seconds": timeout_seconds, "transport_phase": "dispatch"}
     try:
         with urllib.request.urlopen(request, timeout=timeout_seconds) as response:
+            transport.update(http_status=response.status, transport_phase="read",
+                             request_id=response.headers.get("x-request-id") or response.headers.get("request-id") or "")
             body = response.read().decode("utf-8", errors="replace")
+    except KeyboardInterrupt as error:
+        # Keep Ctrl+C semantics while passing safe transport metadata upstream.
+        error.diagnostics = {**transport, "elapsed_ms": (perf_counter() - started) * 1000}
+        raise
     except urllib.error.HTTPError as error:
         body = error.read().decode("utf-8", errors="replace")
         code, provider_type, exact_message = _error_details(body)
@@ -164,14 +182,21 @@ def post_json(
                 _quota_scope(error.code, code, provider_type, exact_message)
                 if error_type == "quota_or_billing_error" else None
             ),
+            diagnostics={**transport, "http_status": error.code,
+                         "request_id": error.headers.get("x-request-id") or error.headers.get("request-id") or "",
+                         "elapsed_ms": (perf_counter() - started) * 1000},
         ) from error
-    except (urllib.error.URLError, TimeoutError, socket.timeout) as error:
+    except (urllib.error.URLError, OSError) as error:
+        cause = getattr(error, "reason", error)
         raise ProviderError(
             provider,
             model_identifier,
             str(error),
             error_type="network_error",
             retryable=True,
+            diagnostics={**transport, "elapsed_ms": (perf_counter() - started) * 1000,
+                         "exception_type": type(cause).__name__,
+                         "timeout": isinstance(cause, (TimeoutError, socket.timeout))},
         ) from error
 
     try:
@@ -180,8 +205,9 @@ def post_json(
         raise ProviderError(
             provider,
             model_identifier,
-            f"Provider returned invalid JSON: {body[:1000]}",
+            "Provider returned invalid JSON",
             error_type="invalid_provider_response",
+            diagnostics=transport,
         ) from error
     if not isinstance(parsed, dict):
         raise ProviderError(
@@ -189,7 +215,9 @@ def post_json(
             model_identifier,
             "Provider returned a non-object JSON response",
             error_type="invalid_provider_response",
+            diagnostics=transport,
         )
+    parsed["_transport_diagnostics"] = transport
     return parsed
 
 

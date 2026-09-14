@@ -291,7 +291,8 @@ class ExecutionSafetyTests(unittest.TestCase):
         rows, _ = self.run_mocked([self.error(), self.response], max_retries=0)
         third = replace(self.records[0], prompt_id="smoke_test:third")
         skipped = dict(rows[0], prompt_id=third.prompt_id, status="skipped_model", error_type="model_disabled_after_provider_failure")
-        legacy = [{k: v for k, v in r.items() if k in RESULT_FIELDS[:-6]} for r in rows + [skipped]]
+        from dataset_schema import LEGACY_RESULT_FIELDS
+        legacy = [{k: v for k, v in r.items() if k in LEGACY_RESULT_FIELDS} for r in rows + [skipped]]
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "legacy.csv"
             write_results(legacy, path)

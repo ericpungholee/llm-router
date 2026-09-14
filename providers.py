@@ -190,6 +190,18 @@ def call_model_with_retries(
                 ),
                 retries,
             )
+        except KeyboardInterrupt as interrupt:
+            # The call has started and may have dispatched/billed. Do not retry
+            # here; checkpoint through the same reservation path as a timeout.
+            error = ProviderError(
+                model.inference_provider, model.api_model_identifier or "",
+                "Interrupted during provider call; maximum possible cost reserved.",
+                error_type="interrupted_inflight", retryable=True,
+                diagnostics=getattr(interrupt, "diagnostics", {}),
+            )
+            if on_failed_attempt is not None:
+                on_failed_attempt(error)
+            raise
         except ProviderError as error:
             if on_failed_attempt is not None:
                 on_failed_attempt(error)
