@@ -4,6 +4,8 @@ Never copy response bodies, thinking, reasoning summaries, or refusal text into
 diagnostics. Token counts describe usage, not inferred reasoning contents.
 """
 
+from decimal import Decimal
+
 from provider_clients.base import ProviderError, ProviderResponse, require_int
 
 
@@ -29,6 +31,26 @@ def normalize_response(data, provider, model_id, latency_ms, max_tokens, api):
         "reasoning_tokens": token_count(details.get("reasoning_tokens", details.get("thinking_tokens"))),
         "requested_max_output_tokens": max_tokens,
     }
+    cost = None
+    if provider == "xai":
+        # xAI reports the actual charge after discounts, in integer USD ticks.
+        # Keep the original integer for auditability; convert to float only at
+        # the ProviderResponse boundary. Never infer this value from tokens.
+        raw_ticks = usage.get("cost_in_usd_ticks")
+        ticks = token_count(raw_ticks)
+        diagnostics.update(
+            cost_in_usd_ticks=ticks,
+            provider_reported_cost_status=(
+                "available" if ticks is not None else
+                "missing" if raw_ticks is None else "invalid"
+            ),
+            response_max_output_tokens=token_count(data.get("max_output_tokens")),
+            total_tokens=token_count(usage.get("total_tokens")),
+            context_output_tokens=token_count(mapping(usage.get("context_details")).get("output_tokens")),
+            num_server_side_tools_used=token_count(usage.get("num_server_side_tools_used")),
+        )
+        if ticks is not None:
+            cost = float(Decimal(ticks) / Decimal(10_000_000_000))
     texts = []
     malformed = False
     refusal = False
@@ -136,7 +158,8 @@ def normalize_response(data, provider, model_id, latency_ms, max_tokens, api):
         raise ProviderError(provider, model_id,
                             f"Provider response outcome: {error_type} (stop={stop or 'missing'})",
                             error_type=error_type, diagnostics=diagnostics)
-    cost = usage.get("cost") if provider == "openrouter" else None
+    if provider == "openrouter":
+        cost = usage.get("cost")
     if not isinstance(cost, (int, float)) or isinstance(cost, bool):
         cost = None
     return ProviderResponse(

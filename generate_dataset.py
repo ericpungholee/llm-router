@@ -45,7 +45,8 @@ from providers import (
     provider_display_name,
     validate_provider_registry,
 )
-from spend_control import RunPlan, SpendCapExceeded, SpendLimitError, SpendTracker, build_run_plan
+from spend_control import (RunPlan, SpendCapExceeded, SpendLimitError, SpendTracker,
+                           build_run_plan, run_spend_cap_usd)
 
 
 SMOKE_MAX_OUTPUT_TOKENS = 128
@@ -330,6 +331,7 @@ def generate_results(
     max_retries: int = 2,
     max_api_attempts: Optional[int] = None,
     print_before_call: bool = False,
+    exclude_xai: bool = False,
 ) -> List[Dict[str, object]]:
     selected_models = tuple(models) if models is not None else enabled_models()
     results = list(completed_results or [])
@@ -355,6 +357,10 @@ def generate_results(
             break
         prompt = render_prompt(record)
         for model in selected_models:
+            # Exclusion affects dispatch only. Preserve the full experiment
+            # matrix, paid outputs, pending telemetry, and historical reserves.
+            if exclude_xai and model.inference_provider == "xai":
+                continue
             model_id = model.api_model_identifier or "UNRESOLVED"
             key = (record.prompt_id, model.inference_provider, model_id)
             if key in completed_keys:
@@ -755,6 +761,10 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Document that an existing output should be resumed (live modes resume automatically).",
     )
+    parser.add_argument(
+        "--exclude-xai", action="store_true",
+        help="Exclude xAI from dispatch while retaining its rows and cumulative recorded spend.",
+    )
     parser.add_argument("--manifest", type=Path, default=Path("benchmarks/manifest.json"))
     parser.add_argument("--output", type=Path, default=None)
     return parser.parse_args()
@@ -841,6 +851,7 @@ def main() -> None:
         for call in planned_calls((record,), models, max_output_tokens=output_limit)
         if (record.prompt_id, call[0].inference_provider, call[0].api_model_identifier or "UNRESOLVED") not in completed_keys
         and (call[0].inference_provider, call[0].api_model_identifier) not in persistent_blocks
+        and not (args.exclude_xai and call[0].inference_provider == "xai")
     ]
     if args.smoke_test and len(remaining) > SMOKE_MAX_API_CALLS:
         raise SystemExit("Smoke test safety invariant failed: more than 5 calls selected")
@@ -852,10 +863,19 @@ def main() -> None:
     run_plan = None
     if live_mode:
         try:
+            if args.pilot and run_spend_cap_usd(spend_cap) > HARD_PILOT_MAX_SPEND_USD:
+                raise SystemExit("Hard pilot cap cannot exceed $2.00.")
             run_plan = build_run_plan(remaining, spend_cap=spend_cap, max_retries=max_retries)
         except SpendLimitError as error:
             raise SystemExit(str(error)) from error
         print(run_plan.confirmation_text())
+        if args.exclude_xai:
+            deferred_xai_pairs = sum(
+                (record.prompt_id, model.inference_provider, model.api_model_identifier) not in completed_keys
+                for record in benchmark for model in models if model.inference_provider == "xai"
+            )
+            print(f"xAI dispatch excluded: {deferred_xai_pairs} pending pairs deferred; "
+                  "all xAI rows and historical recorded spend remain in the pilot ledger.")
         recorded_spend = sum(Decimal(str(r["estimated_cost_usd"])) for r in existing_results)
         print(f"Previously recorded spend: ${recorded_spend:.6f}")
         maximum_total = recorded_spend + run_plan.estimated_max_cost_usd
@@ -866,8 +886,6 @@ def main() -> None:
         print(f"Retry policy: {max_retries} retries; attempt ceiling: {max_attempts or 'uncapped'}")
         if args.pilot:
             print(f"Hard pilot selection: {len(benchmark)} prompts x {len(models)} models = 75 pairs")
-            if run_plan.configured_spend_cap_usd > HARD_PILOT_MAX_SPEND_USD:
-                raise SystemExit("Hard pilot cap cannot exceed $2.00.")
         if (args.live or args.pilot) and not args.confirm:
             raise SystemExit("Live run not started: pass --confirm after reviewing the plan.")
 
@@ -887,6 +905,7 @@ def main() -> None:
         max_retries=max_retries,
         max_api_attempts=max_attempts,
         print_before_call=live_mode,
+        exclude_xai=args.exclude_xai,
     )
     write_results(results, output)
 

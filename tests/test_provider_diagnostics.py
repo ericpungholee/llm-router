@@ -140,7 +140,9 @@ class DiagnosticTests(unittest.TestCase):
         self.assertEqual(caught.exception.failure_scope, "model")
 
     def test_interrupt_is_checkpointed_reserved_and_resumable(self):
-        model = model_for("xai")
+        # Grok is now blocked before dispatch because its reservation is unknown.
+        # Exercise the shared interruption path with a provider that has a bound.
+        model = model_for("openai")
         record = smoke_test_prompt()
         bound = max_call_cost_usd(model, render_prompt(record), 128)
         plan = build_run_plan(planned_calls([record], [model], max_output_tokens=128), spend_cap=bound * Decimal("1.5"))
@@ -150,7 +152,7 @@ class DiagnosticTests(unittest.TestCase):
         response.read.side_effect = KeyboardInterrupt
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "checkpoint.csv"
-            with patch.dict("os.environ", {"XAI_API_KEY": "dummy"}):
+            with patch.dict("os.environ", {"OPENAI_API_KEY": "dummy"}):
                 with patch("provider_clients.base.urllib.request.urlopen", return_value=response) as http:
                     with self.assertRaises(KeyboardInterrupt):
                         generate_results([record], dry_run=False, models=[model], run_plan=plan,
@@ -268,7 +270,51 @@ class DiagnosticTests(unittest.TestCase):
         fixture["usage"]["output_tokens"] = 10015
         response = self.call_fixture("xai", fixture)
         self.assertEqual(response.text, "B")
+        self.assertEqual(response.stop_reason, "completed")
+        self.assertEqual(response.output_tokens, 10015)
         self.assertTrue(response.diagnostics["output_tokens_exceed_requested_limit"])
+
+    def test_xai_cost_ticks_convert_exactly_before_float_boundary(self):
+        for ticks, expected in ((1, Decimal("0.0000000001")),
+                                (37_756_000, Decimal("0.0037756")),
+                                (10_000_000_000, Decimal("1")),
+                                (0, Decimal("0"))):
+            fixture = copy.deepcopy(FIXTURES["openai_completed"])
+            fixture["usage"]["cost_in_usd_ticks"] = ticks
+            with self.subTest(ticks=ticks):
+                response = self.call_fixture("xai", fixture)
+                self.assertEqual(Decimal(str(response.provider_reported_cost_usd)), expected)
+                self.assertEqual(response.diagnostics["cost_in_usd_ticks"], ticks)
+
+    def test_xai_cost_diagnostics_keep_ticks_and_telemetry_without_reasoning_content(self):
+        fixture = copy.deepcopy(FIXTURES["openai_completed"])
+        fixture.update(model="grok-4.6", max_output_tokens=4096)
+        fixture["output"][0].update(
+            encrypted_content="SYNTHETIC_PRIVATE_ENCRYPTED_REASONING",
+            summary=[{"type": "summary_text", "text": "SYNTHETIC_PRIVATE_REASONING"}],
+        )
+        fixture["usage"].update(cost_in_usd_ticks=37_756_000, total_tokens=93,
+                                context_details={"output_tokens": 80}, num_server_side_tools_used=0)
+        response = self.call_fixture("xai", fixture)
+        self.assertEqual(response.diagnostics["provider_reported_cost_status"], "available")
+        for name, expected in (("cost_in_usd_ticks", 37_756_000),
+                               ("reasoning_tokens", 79), ("response_max_output_tokens", 4096),
+                               ("context_output_tokens", 80), ("total_tokens", 93)):
+            self.assertEqual(response.diagnostics[name], expected)
+        self.assertNotIn("SYNTHETIC_PRIVATE", str(response))
+        self.assertNotIn("encrypted_content", json.dumps(response.diagnostics))
+
+    def test_xai_missing_or_invalid_ticks_do_not_fabricate_reported_cost(self):
+        for ticks in (None, True, -1, 1.5, "37756000", {"reasoning": "SYNTHETIC_PRIVATE"}):
+            fixture = copy.deepcopy(FIXTURES["openai_completed"])
+            fixture["usage"]["cost_in_usd_ticks"] = ticks
+            with self.subTest(ticks=ticks):
+                response = self.call_fixture("xai", fixture)
+                self.assertIsNone(response.provider_reported_cost_usd)
+                self.assertIsNone(response.diagnostics["cost_in_usd_ticks"])
+                self.assertEqual(response.diagnostics["provider_reported_cost_status"],
+                                 "missing" if ticks is None else "invalid")
+                self.assertNotIn("SYNTHETIC_PRIVATE", str(response))
 
 
 if __name__ == "__main__":
