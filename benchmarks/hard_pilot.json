@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "selection_policy": {
+    "mmlu_pro": "five longest selected questions from distinct categories",
+    "math_500": "one level-5 exact-gradeable problem from each of five subjects",
+    "livecodebench": "five newest hard stdin problems from release_v6/test6",
+    "model_results_used": false
+  },
+  "prompts": {
+    "mmlu_pro": [
+      "mmlu_pro:1346",
+      "mmlu_pro:5022",
+      "mmlu_pro:12015",
+      "mmlu_pro:6502",
+      "mmlu_pro:10442"
+    ],
+    "math_500": [
+      "math_500:test/intermediate_algebra/960.json",
+      "math_500:test/number_theory/769.json",
+      "math_500:test/counting_and_probability/870.json",
+      "math_500:test/geometry/965.json",
+      "math_500:test/precalculus/986.json"
+    ],
+    "livecodebench": [
+      "livecodebench:arc196_d",
+      "livecodebench:arc196_c",
+      "livecodebench:arc196_b",
+      "livecodebench:arc196_a",
+      "livecodebench:abc400_g"
+    ]
+  }
+}

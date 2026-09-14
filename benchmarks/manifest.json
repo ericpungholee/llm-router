@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "benchmarks": [
+    {
+      "name": "mmlu_pro",
+      "task_type": "multiple_choice",
+      "loader": "mmlu_pro",
+      "source": "TIGER-Lab/MMLU-Pro",
+      "source_revision": "b189ec765aa7ed75c8acfea42df31fdae71f97be",
+      "source_split": "test",
+      "selection": "50 domain-balanced long-form questions selected without model outcomes",
+      "sample_file": "samples/mmlu_pro.jsonl",
+      "enabled": true
+    },
+    {
+      "name": "math_500",
+      "task_type": "math",
+      "loader": "math_500",
+      "source": "HuggingFaceH4/MATH-500",
+      "source_revision": "6e4ed1a2a79af7d8630a6b768ec859cb5af4d3be",
+      "source_split": "test",
+      "selection": "50 official level-5 problems with exact-gradeable answer forms",
+      "sample_file": "samples/math_500.jsonl",
+      "enabled": true
+    },
+    {
+      "name": "livecodebench",
+      "task_type": "code",
+      "loader": "livecodebench",
+      "source": "livecodebench/code_generation_lite",
+      "source_revision": "0fe84c3912ea0c4d4a78037083943e8f0c4dd505",
+      "source_split": "test",
+      "selection": "50 newest medium/hard stdin problems from release_v6/test6",
+      "sample_file": "samples/livecodebench.jsonl",
+      "enabled": true
+    }
+  ]
+}
