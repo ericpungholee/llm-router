@@ -133,6 +133,13 @@ class ParsingTests(unittest.TestCase):
         self.assertEqual(parse_multiple_choice("Final answer: (b).", ["A", "B"]), "B")
         self.assertEqual(parse_math_answer("Work\nTherefore the final answer is: \\frac{3}{2}"), "\\frac{3}{2}")
 
+    def test_parses_standalone_bold_option_without_guessing(self):
+        self.assertEqual(parse_multiple_choice("**F**", ["A", "F"]), "F")
+        self.assertEqual(parse_multiple_choice(" **a** ", ["A", "F"]), "A")
+        for output in ("**Z**", "**A** or **F**", "**AF**", "**F*", "I considered **F**"):
+            with self.subTest(output=output), self.assertRaises(MalformedModelOutput):
+                parse_multiple_choice(output, ["A", "F"])
+
     def test_ambiguous_or_unmarked_output_is_a_parsing_failure(self):
         with self.assertRaises(MalformedModelOutput):
             parse_multiple_choice("It might be A or B", ["A", "B"])

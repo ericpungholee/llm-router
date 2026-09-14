@@ -42,6 +42,8 @@ def parse_multiple_choice(output: object, valid_options: Sequence[str]) -> str:
     text = _require_output(output)
     valid = {option.upper() for option in valid_options}
     direct = re.fullmatch(r"\s*[\(\[]?([A-Za-z])[\)\].]?\s*", text)
+    if direct is None:
+        direct = re.fullmatch(r"\*\*([A-Za-z])\*\*", text)
     if direct and direct.group(1).upper() in valid:
         return direct.group(1).upper()
 

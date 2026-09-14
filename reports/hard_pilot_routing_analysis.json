@@ -1,0 +1,1062 @@
+{
+  "source": "data/results/hard_pilot_results.csv",
+  "snapshot": "data/results/hard_pilot_analysis_snapshot.csv",
+  "snapshot_sha256": "a58e79eb58519bb4a170142a4c1b60bbbc799fb671d40eb512488bfb52becf85",
+  "snapshot_before_regrade_sha256": "a807bea092612d340cda0ac6415d19a55588a88341141c5c1ed10a2ef3bf8359",
+  "offline_regrade_changes": [
+    {
+      "prompt_id": "mmlu_pro:12015",
+      "model": "Claude Opus 5",
+      "changes": {
+        "parsed_answer": [
+          "",
+          "F"
+        ],
+        "score": [
+          "",
+          "1.0"
+        ],
+        "correct": [
+          "",
+          "True"
+        ],
+        "status": [
+          "parsing_failure",
+          "success"
+        ],
+        "error_type": [
+          "parsing_failure",
+          ""
+        ],
+        "error_message": [
+          "Could not extract one unambiguous multiple-choice option",
+          ""
+        ]
+      }
+    }
+  ],
+  "overall": {
+    "expected_pairs": 75,
+    "recorded_pairs": 75,
+    "successfully_graded_pairs": 24,
+    "attempted_provider_calls": 31,
+    "successful_provider_responses": 24,
+    "failed_provider_attempts": 7,
+    "successfully_graded_responses": 24,
+    "correct_responses": 13,
+    "accuracy_over_graded": 0.5416666666666666,
+    "provider_failures": 6,
+    "parsing_failures": 0,
+    "grading_failures": 0,
+    "skipped_pairs": 45,
+    "unrecorded_pairs": 0,
+    "spend_limit_stops": 0,
+    "total_recorded_cost_usd": 0.3449374,
+    "average_response_latency_ms": 16409.038107708333
+  },
+  "by_model": {
+    "GPT": {
+      "expected_pairs": 15,
+      "recorded_pairs": 15,
+      "successfully_graded_pairs": 10,
+      "attempted_provider_calls": 11,
+      "successful_provider_responses": 10,
+      "failed_provider_attempts": 1,
+      "successfully_graded_responses": 10,
+      "correct_responses": 4,
+      "accuracy_over_graded": 0.4,
+      "provider_failures": 1,
+      "parsing_failures": 0,
+      "grading_failures": 0,
+      "skipped_pairs": 4,
+      "unrecorded_pairs": 0,
+      "spend_limit_stops": 0,
+      "total_recorded_cost_usd": 0.088332,
+      "average_response_latency_ms": 9026.265341799999
+    },
+    "Claude": {
+      "expected_pairs": 15,
+      "recorded_pairs": 15,
+      "successfully_graded_pairs": 10,
+      "attempted_provider_calls": 11,
+      "successful_provider_responses": 10,
+      "failed_provider_attempts": 1,
+      "successfully_graded_responses": 10,
+      "correct_responses": 8,
+      "accuracy_over_graded": 0.8,
+      "provider_failures": 1,
+      "parsing_failures": 0,
+      "grading_failures": 0,
+      "skipped_pairs": 4,
+      "unrecorded_pairs": 0,
+      "spend_limit_stops": 0,
+      "total_recorded_cost_usd": 0.076775,
+      "average_response_latency_ms": 3438.981825099998
+    },
+    "Grok": {
+      "expected_pairs": 15,
+      "recorded_pairs": 15,
+      "successfully_graded_pairs": 2,
+      "attempted_provider_calls": 3,
+      "successful_provider_responses": 2,
+      "failed_provider_attempts": 1,
+      "successfully_graded_responses": 2,
+      "correct_responses": 0,
+      "accuracy_over_graded": 0.0,
+      "provider_failures": 1,
+      "parsing_failures": 0,
+      "grading_failures": 0,
+      "skipped_pairs": 12,
+      "unrecorded_pairs": 0,
+      "spend_limit_stops": 0,
+      "total_recorded_cost_usd": 0.113504,
+      "average_response_latency_ms": 125699.02612449999
+    },
+    "DeepSeek": {
+      "expected_pairs": 15,
+      "recorded_pairs": 15,
+      "successfully_graded_pairs": 2,
+      "attempted_provider_calls": 3,
+      "successful_provider_responses": 2,
+      "failed_provider_attempts": 1,
+      "successfully_graded_responses": 2,
+      "correct_responses": 1,
+      "accuracy_over_graded": 0.5,
+      "provider_failures": 1,
+      "parsing_failures": 0,
+      "grading_failures": 0,
+      "skipped_pairs": 12,
+      "unrecorded_pairs": 0,
+      "spend_limit_stops": 0,
+      "total_recorded_cost_usd": 0.0039204,
+      "average_response_latency_ms": 8883.195333500013
+    },
+    "Qwen": {
+      "expected_pairs": 15,
+      "recorded_pairs": 15,
+      "successfully_graded_pairs": 0,
+      "attempted_provider_calls": 3,
+      "successful_provider_responses": 0,
+      "failed_provider_attempts": 3,
+      "successfully_graded_responses": 0,
+      "correct_responses": 0,
+      "accuracy_over_graded": null,
+      "provider_failures": 2,
+      "parsing_failures": 0,
+      "grading_failures": 0,
+      "skipped_pairs": 13,
+      "unrecorded_pairs": 0,
+      "spend_limit_stops": 0,
+      "total_recorded_cost_usd": 0.062406,
+      "average_response_latency_ms": null
+    }
+  },
+  "by_benchmark": {
+    "mmlu_pro": {
+      "expected_pairs": 25,
+      "recorded_pairs": 25,
+      "successfully_graded_pairs": 14,
+      "attempted_provider_calls": 19,
+      "successful_provider_responses": 14,
+      "failed_provider_attempts": 5,
+      "successfully_graded_responses": 14,
+      "correct_responses": 6,
+      "accuracy_over_graded": 0.42857142857142855,
+      "provider_failures": 4,
+      "parsing_failures": 0,
+      "grading_failures": 0,
+      "skipped_pairs": 7,
+      "unrecorded_pairs": 0,
+      "spend_limit_stops": 0,
+      "total_recorded_cost_usd": 0.2817354,
+      "average_response_latency_ms": 24973.35104764287
+    },
+    "math_500": {
+      "expected_pairs": 25,
+      "recorded_pairs": 25,
+      "successfully_graded_pairs": 10,
+      "attempted_provider_calls": 10,
+      "successful_provider_responses": 10,
+      "failed_provider_attempts": 0,
+      "successfully_graded_responses": 10,
+      "correct_responses": 7,
+      "accuracy_over_graded": 0.7,
+      "provider_failures": 0,
+      "parsing_failures": 0,
+      "grading_failures": 0,
+      "skipped_pairs": 15,
+      "unrecorded_pairs": 0,
+      "spend_limit_stops": 0,
+      "total_recorded_cost_usd": 0.063202,
+      "average_response_latency_ms": 4418.9999917999785
+    },
+    "livecodebench": {
+      "expected_pairs": 25,
+      "recorded_pairs": 25,
+      "successfully_graded_pairs": 0,
+      "attempted_provider_calls": 2,
+      "successful_provider_responses": 0,
+      "failed_provider_attempts": 2,
+      "successfully_graded_responses": 0,
+      "correct_responses": 0,
+      "accuracy_over_graded": null,
+      "provider_failures": 2,
+      "parsing_failures": 0,
+      "grading_failures": 0,
+      "skipped_pairs": 23,
+      "unrecorded_pairs": 0,
+      "spend_limit_stops": 0,
+      "total_recorded_cost_usd": 0.0,
+      "average_response_latency_ms": null
+    }
+  },
+  "vectors": [
+    {
+      "prompt_id": "mmlu_pro:1346",
+      "benchmark": "mmlu_pro",
+      "correctness": {
+        "GPT": true,
+        "Claude": true,
+        "Grok": false,
+        "DeepSeek": true,
+        "Qwen": null
+      },
+      "statuses": {
+        "GPT": "success",
+        "Claude": "success",
+        "Grok": "success",
+        "DeepSeek": "success",
+        "Qwen": "provider_error"
+      },
+      "confirmed_disagreement": true
+    },
+    {
+      "prompt_id": "mmlu_pro:5022",
+      "benchmark": "mmlu_pro",
+      "correctness": {
+        "GPT": false,
+        "Claude": false,
+        "Grok": false,
+        "DeepSeek": false,
+        "Qwen": null
+      },
+      "statuses": {
+        "GPT": "success",
+        "Claude": "success",
+        "Grok": "success",
+        "DeepSeek": "success",
+        "Qwen": "provider_error"
+      },
+      "confirmed_disagreement": false
+    },
+    {
+      "prompt_id": "mmlu_pro:12015",
+      "benchmark": "mmlu_pro",
+      "correctness": {
+        "GPT": false,
+        "Claude": true,
+        "Grok": null,
+        "DeepSeek": null,
+        "Qwen": null
+      },
+      "statuses": {
+        "GPT": "success",
+        "Claude": "success",
+        "Grok": "provider_error",
+        "DeepSeek": "provider_error",
+        "Qwen": "skipped_model"
+      },
+      "confirmed_disagreement": true
+    },
+    {
+      "prompt_id": "mmlu_pro:6502",
+      "benchmark": "mmlu_pro",
+      "correctness": {
+        "GPT": false,
+        "Claude": false,
+        "Grok": null,
+        "DeepSeek": null,
+        "Qwen": null
+      },
+      "statuses": {
+        "GPT": "success",
+        "Claude": "success",
+        "Grok": "skipped_model",
+        "DeepSeek": "skipped_model",
+        "Qwen": "skipped_model"
+      },
+      "confirmed_disagreement": false
+    },
+    {
+      "prompt_id": "mmlu_pro:10442",
+      "benchmark": "mmlu_pro",
+      "correctness": {
+        "GPT": true,
+        "Claude": true,
+        "Grok": null,
+        "DeepSeek": null,
+        "Qwen": null
+      },
+      "statuses": {
+        "GPT": "success",
+        "Claude": "success",
+        "Grok": "skipped_model",
+        "DeepSeek": "skipped_model",
+        "Qwen": "skipped_model"
+      },
+      "confirmed_disagreement": false
+    },
+    {
+      "prompt_id": "math_500:test/intermediate_algebra/960.json",
+      "benchmark": "math_500",
+      "correctness": {
+        "GPT": false,
+        "Claude": true,
+        "Grok": null,
+        "DeepSeek": null,
+        "Qwen": null
+      },
+      "statuses": {
+        "GPT": "success",
+        "Claude": "success",
+        "Grok": "skipped_model",
+        "DeepSeek": "skipped_model",
+        "Qwen": "skipped_model"
+      },
+      "confirmed_disagreement": true
+    },
+    {
+      "prompt_id": "math_500:test/number_theory/769.json",
+      "benchmark": "math_500",
+      "correctness": {
+        "GPT": true,
+        "Claude": true,
+        "Grok": null,
+        "DeepSeek": null,
+        "Qwen": null
+      },
+      "statuses": {
+        "GPT": "success",
+        "Claude": "success",
+        "Grok": "skipped_model",
+        "DeepSeek": "skipped_model",
+        "Qwen": "skipped_model"
+      },
+      "confirmed_disagreement": false
+    },
+    {
+      "prompt_id": "math_500:test/counting_and_probability/870.json",
+      "benchmark": "math_500",
+      "correctness": {
+        "GPT": false,
+        "Claude": true,
+        "Grok": null,
+        "DeepSeek": null,
+        "Qwen": null
+      },
+      "statuses": {
+        "GPT": "success",
+        "Claude": "success",
+        "Grok": "skipped_model",
+        "DeepSeek": "skipped_model",
+        "Qwen": "skipped_model"
+      },
+      "confirmed_disagreement": true
+    },
+    {
+      "prompt_id": "math_500:test/geometry/965.json",
+      "benchmark": "math_500",
+      "correctness": {
+        "GPT": true,
+        "Claude": true,
+        "Grok": null,
+        "DeepSeek": null,
+        "Qwen": null
+      },
+      "statuses": {
+        "GPT": "success",
+        "Claude": "success",
+        "Grok": "skipped_model",
+        "DeepSeek": "skipped_model",
+        "Qwen": "skipped_model"
+      },
+      "confirmed_disagreement": false
+    },
+    {
+      "prompt_id": "math_500:test/precalculus/986.json",
+      "benchmark": "math_500",
+      "correctness": {
+        "GPT": false,
+        "Claude": true,
+        "Grok": null,
+        "DeepSeek": null,
+        "Qwen": null
+      },
+      "statuses": {
+        "GPT": "success",
+        "Claude": "success",
+        "Grok": "skipped_model",
+        "DeepSeek": "skipped_model",
+        "Qwen": "skipped_model"
+      },
+      "confirmed_disagreement": true
+    },
+    {
+      "prompt_id": "livecodebench:arc196_d",
+      "benchmark": "livecodebench",
+      "correctness": {
+        "GPT": null,
+        "Claude": null,
+        "Grok": null,
+        "DeepSeek": null,
+        "Qwen": null
+      },
+      "statuses": {
+        "GPT": "provider_error",
+        "Claude": "provider_error",
+        "Grok": "skipped_model",
+        "DeepSeek": "skipped_model",
+        "Qwen": "skipped_model"
+      },
+      "confirmed_disagreement": false
+    },
+    {
+      "prompt_id": "livecodebench:arc196_c",
+      "benchmark": "livecodebench",
+      "correctness": {
+        "GPT": null,
+        "Claude": null,
+        "Grok": null,
+        "DeepSeek": null,
+        "Qwen": null
+      },
+      "statuses": {
+        "GPT": "skipped_model",
+        "Claude": "skipped_model",
+        "Grok": "skipped_model",
+        "DeepSeek": "skipped_model",
+        "Qwen": "skipped_model"
+      },
+      "confirmed_disagreement": false
+    },
+    {
+      "prompt_id": "livecodebench:arc196_b",
+      "benchmark": "livecodebench",
+      "correctness": {
+        "GPT": null,
+        "Claude": null,
+        "Grok": null,
+        "DeepSeek": null,
+        "Qwen": null
+      },
+      "statuses": {
+        "GPT": "skipped_model",
+        "Claude": "skipped_model",
+        "Grok": "skipped_model",
+        "DeepSeek": "skipped_model",
+        "Qwen": "skipped_model"
+      },
+      "confirmed_disagreement": false
+    },
+    {
+      "prompt_id": "livecodebench:arc196_a",
+      "benchmark": "livecodebench",
+      "correctness": {
+        "GPT": null,
+        "Claude": null,
+        "Grok": null,
+        "DeepSeek": null,
+        "Qwen": null
+      },
+      "statuses": {
+        "GPT": "skipped_model",
+        "Claude": "skipped_model",
+        "Grok": "skipped_model",
+        "DeepSeek": "skipped_model",
+        "Qwen": "skipped_model"
+      },
+      "confirmed_disagreement": false
+    },
+    {
+      "prompt_id": "livecodebench:abc400_g",
+      "benchmark": "livecodebench",
+      "correctness": {
+        "GPT": null,
+        "Claude": null,
+        "Grok": null,
+        "DeepSeek": null,
+        "Qwen": null
+      },
+      "statuses": {
+        "GPT": "skipped_model",
+        "Claude": "skipped_model",
+        "Grok": "skipped_model",
+        "DeepSeek": "skipped_model",
+        "Qwen": "skipped_model"
+      },
+      "confirmed_disagreement": false
+    }
+  ],
+  "pairwise_disagreement_on_pair_specific_overlap": [
+    {
+      "models": [
+        "GPT",
+        "Claude"
+      ],
+      "by_benchmark": {
+        "all": {
+          "n": 10,
+          "disagreements": 4,
+          "rate": 0.4
+        },
+        "mmlu_pro": {
+          "n": 5,
+          "disagreements": 1,
+          "rate": 0.2
+        },
+        "math_500": {
+          "n": 5,
+          "disagreements": 3,
+          "rate": 0.6
+        },
+        "livecodebench": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        }
+      }
+    },
+    {
+      "models": [
+        "GPT",
+        "Grok"
+      ],
+      "by_benchmark": {
+        "all": {
+          "n": 2,
+          "disagreements": 1,
+          "rate": 0.5
+        },
+        "mmlu_pro": {
+          "n": 2,
+          "disagreements": 1,
+          "rate": 0.5
+        },
+        "math_500": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "livecodebench": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        }
+      }
+    },
+    {
+      "models": [
+        "GPT",
+        "DeepSeek"
+      ],
+      "by_benchmark": {
+        "all": {
+          "n": 2,
+          "disagreements": 0,
+          "rate": 0.0
+        },
+        "mmlu_pro": {
+          "n": 2,
+          "disagreements": 0,
+          "rate": 0.0
+        },
+        "math_500": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "livecodebench": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        }
+      }
+    },
+    {
+      "models": [
+        "GPT",
+        "Qwen"
+      ],
+      "by_benchmark": {
+        "all": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "mmlu_pro": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "math_500": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "livecodebench": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        }
+      }
+    },
+    {
+      "models": [
+        "Claude",
+        "Grok"
+      ],
+      "by_benchmark": {
+        "all": {
+          "n": 2,
+          "disagreements": 1,
+          "rate": 0.5
+        },
+        "mmlu_pro": {
+          "n": 2,
+          "disagreements": 1,
+          "rate": 0.5
+        },
+        "math_500": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "livecodebench": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        }
+      }
+    },
+    {
+      "models": [
+        "Claude",
+        "DeepSeek"
+      ],
+      "by_benchmark": {
+        "all": {
+          "n": 2,
+          "disagreements": 0,
+          "rate": 0.0
+        },
+        "mmlu_pro": {
+          "n": 2,
+          "disagreements": 0,
+          "rate": 0.0
+        },
+        "math_500": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "livecodebench": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        }
+      }
+    },
+    {
+      "models": [
+        "Claude",
+        "Qwen"
+      ],
+      "by_benchmark": {
+        "all": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "mmlu_pro": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "math_500": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "livecodebench": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        }
+      }
+    },
+    {
+      "models": [
+        "Grok",
+        "DeepSeek"
+      ],
+      "by_benchmark": {
+        "all": {
+          "n": 2,
+          "disagreements": 1,
+          "rate": 0.5
+        },
+        "mmlu_pro": {
+          "n": 2,
+          "disagreements": 1,
+          "rate": 0.5
+        },
+        "math_500": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "livecodebench": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        }
+      }
+    },
+    {
+      "models": [
+        "Grok",
+        "Qwen"
+      ],
+      "by_benchmark": {
+        "all": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "mmlu_pro": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "math_500": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "livecodebench": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        }
+      }
+    },
+    {
+      "models": [
+        "DeepSeek",
+        "Qwen"
+      ],
+      "by_benchmark": {
+        "all": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "mmlu_pro": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "math_500": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        },
+        "livecodebench": {
+          "n": 0,
+          "disagreements": 0,
+          "rate": null
+        }
+      }
+    }
+  ],
+  "five_model_common_prompt_count": 0,
+  "five_model_disagreement_and_policy_metrics": null,
+  "five_model_unavailable_reason": "No prompt is successfully graded by all five models; missing outcomes are unknown, never incorrect.",
+  "confirmed_disagreement_lower_bound": 0.3333333333333333,
+  "two_model_diagnostic": {
+    "prompt_ids": [
+      "mmlu_pro:1346",
+      "mmlu_pro:5022",
+      "mmlu_pro:12015",
+      "mmlu_pro:6502",
+      "mmlu_pro:10442",
+      "math_500:test/intermediate_algebra/960.json",
+      "math_500:test/number_theory/769.json",
+      "math_500:test/counting_and_probability/870.json",
+      "math_500:test/geometry/965.json",
+      "math_500:test/precalculus/986.json"
+    ],
+    "static": {
+      "GPT": {
+        "n": 10,
+        "correct": 4,
+        "accuracy": 0.4,
+        "average_cost_usd": 0.0088332,
+        "total_cost_usd": 0.088332,
+        "average_latency_ms": 9026.265341799999,
+        "selections": [
+          {
+            "prompt_id": "mmlu_pro:1346",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "mmlu_pro:5022",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "mmlu_pro:12015",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "mmlu_pro:6502",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "mmlu_pro:10442",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "math_500:test/intermediate_algebra/960.json",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "math_500:test/number_theory/769.json",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "math_500:test/counting_and_probability/870.json",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "math_500:test/geometry/965.json",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "math_500:test/precalculus/986.json",
+            "model": "GPT"
+          }
+        ]
+      },
+      "Claude": {
+        "n": 10,
+        "correct": 8,
+        "accuracy": 0.8,
+        "average_cost_usd": 0.0076775,
+        "total_cost_usd": 0.076775,
+        "average_latency_ms": 3438.981825099998,
+        "selections": [
+          {
+            "prompt_id": "mmlu_pro:1346",
+            "model": "Claude"
+          },
+          {
+            "prompt_id": "mmlu_pro:5022",
+            "model": "Claude"
+          },
+          {
+            "prompt_id": "mmlu_pro:12015",
+            "model": "Claude"
+          },
+          {
+            "prompt_id": "mmlu_pro:6502",
+            "model": "Claude"
+          },
+          {
+            "prompt_id": "mmlu_pro:10442",
+            "model": "Claude"
+          },
+          {
+            "prompt_id": "math_500:test/intermediate_algebra/960.json",
+            "model": "Claude"
+          },
+          {
+            "prompt_id": "math_500:test/number_theory/769.json",
+            "model": "Claude"
+          },
+          {
+            "prompt_id": "math_500:test/counting_and_probability/870.json",
+            "model": "Claude"
+          },
+          {
+            "prompt_id": "math_500:test/geometry/965.json",
+            "model": "Claude"
+          },
+          {
+            "prompt_id": "math_500:test/precalculus/986.json",
+            "model": "Claude"
+          }
+        ]
+      }
+    },
+    "heuristics": {
+      "Math \u2192 Claude; otherwise GPT": {
+        "n": 10,
+        "correct": 7,
+        "accuracy": 0.7,
+        "average_cost_usd": 0.010863,
+        "total_cost_usd": 0.10863,
+        "average_latency_ms": 9075.674258600007,
+        "selections": [
+          {
+            "prompt_id": "mmlu_pro:1346",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "mmlu_pro:5022",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "mmlu_pro:12015",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "mmlu_pro:6502",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "mmlu_pro:10442",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "math_500:test/intermediate_algebra/960.json",
+            "model": "Claude"
+          },
+          {
+            "prompt_id": "math_500:test/number_theory/769.json",
+            "model": "Claude"
+          },
+          {
+            "prompt_id": "math_500:test/counting_and_probability/870.json",
+            "model": "Claude"
+          },
+          {
+            "prompt_id": "math_500:test/geometry/965.json",
+            "model": "Claude"
+          },
+          {
+            "prompt_id": "math_500:test/precalculus/986.json",
+            "model": "Claude"
+          }
+        ]
+      },
+      "Prompt > 2,000 characters \u2192 Claude; otherwise GPT": {
+        "n": 10,
+        "correct": 5,
+        "accuracy": 0.5,
+        "average_cost_usd": 0.0048566,
+        "total_cost_usd": 0.048566,
+        "average_latency_ms": 3228.203366699998,
+        "selections": [
+          {
+            "prompt_id": "mmlu_pro:1346",
+            "model": "Claude"
+          },
+          {
+            "prompt_id": "mmlu_pro:5022",
+            "model": "Claude"
+          },
+          {
+            "prompt_id": "mmlu_pro:12015",
+            "model": "Claude"
+          },
+          {
+            "prompt_id": "mmlu_pro:6502",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "mmlu_pro:10442",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "math_500:test/intermediate_algebra/960.json",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "math_500:test/number_theory/769.json",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "math_500:test/counting_and_probability/870.json",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "math_500:test/geometry/965.json",
+            "model": "GPT"
+          },
+          {
+            "prompt_id": "math_500:test/precalculus/986.json",
+            "model": "GPT"
+          }
+        ]
+      }
+    },
+    "oracle_accuracy": 0.8,
+    "oracle_accuracy_lift": 0,
+    "oracle_solved_only_cost_usd": 0.054599,
+    "oracle_unsolved_prompts": [
+      "mmlu_pro:5022",
+      "mmlu_pro:6502"
+    ],
+    "oracle_with_claude_fallback": {
+      "n": 10,
+      "correct": 8,
+      "accuracy": 0.8,
+      "average_cost_usd": 0.0064999,
+      "total_cost_usd": 0.064999,
+      "average_latency_ms": 3652.9238460000015,
+      "selections": [
+        {
+          "prompt_id": "mmlu_pro:1346",
+          "model": "GPT"
+        },
+        {
+          "prompt_id": "mmlu_pro:12015",
+          "model": "Claude"
+        },
+        {
+          "prompt_id": "mmlu_pro:10442",
+          "model": "GPT"
+        },
+        {
+          "prompt_id": "math_500:test/intermediate_algebra/960.json",
+          "model": "Claude"
+        },
+        {
+          "prompt_id": "math_500:test/number_theory/769.json",
+          "model": "GPT"
+        },
+        {
+          "prompt_id": "math_500:test/counting_and_probability/870.json",
+          "model": "Claude"
+        },
+        {
+          "prompt_id": "math_500:test/geometry/965.json",
+          "model": "GPT"
+        },
+        {
+          "prompt_id": "math_500:test/precalculus/986.json",
+          "model": "Claude"
+        },
+        {
+          "prompt_id": "mmlu_pro:5022",
+          "model": "Claude"
+        },
+        {
+          "prompt_id": "mmlu_pro:6502",
+          "model": "Claude"
+        }
+      ]
+    },
+    "oracle_full_cost_relative_to_best_and_cheapest": 0.8466167372191469
+  }
+}
