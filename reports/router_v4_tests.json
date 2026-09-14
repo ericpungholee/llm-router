@@ -1,0 +1,11 @@
+{
+  "command": ".venv/bin/python tests/run_offline_suite.py",
+  "elapsed_seconds": 27.493,
+  "errors": 0,
+  "failures": 0,
+  "network_access_blocked": true,
+  "passed": true,
+  "skipped": 0,
+  "tests_run": 237,
+  "unexpected_network_attempts": 0
+}

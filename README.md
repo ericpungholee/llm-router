@@ -1,13 +1,35 @@
 # Multi-provider ML-powered LLM Router
 
 This repository trains and evaluates an offline learned LLM router from frozen
-benchmark outcomes. The [router v2 experiment](reports/router_v2_results.md)
-uses conservative validation selection: its standard primary achieves **73.10%
-success versus GPT-5's 69.12%, at 22.07% lower recorded cost**. Both micro and macro
-quality intervals are positive. A stricter dataset guard still fails by one code
-success; OOD preserves quality within the stated margin but saves only 1.13%.
-These are exploratory results on previously inspected tests, not fresh external
-confirmation. Frozen local embedding controls did not beat TF-IDF.
+benchmark outcomes. The latest [fixed-reference experiment](reports/router_v4_results.md)
+achieves **72.57% standard success versus GPT-5's 69.12%, at 12.57% lower recorded
+cost**. It fixes GPT-5 as the quality reference and selects a comparative TF-IDF
+routing margin using ordinary validation plus source domains excluded from
+auxiliary training. All four declared standard criteria pass, including the
+dataset quality guard. C=1; the standard margin is 0.10.
+
+OOD quality is **86.35% versus GPT-5's 86.45%**, within the stated 0.5-point
+noninferiority margin, with only **1.13% savings**. Useful cost-saving transfer to
+code remains unproven. Standard savings are concentrated in SimpleQA; excluding
+it leaves 0.28% savings. All results remain exploratory on previously inspected
+tests, not fresh external confirmation. No provider calls or new data are used.
+
+Reproduce v4 locally using the existing processed artifacts:
+
+```bash
+router_run_dir=$(mktemp -d /tmp/router-v4-replay.XXXXXX)
+.venv/bin/python experiments/fixed_reference_router.py --output-dir "$router_run_dir" --reports-dir "$router_run_dir/reports"
+.venv/bin/python tests/run_offline_suite.py
+```
+
+The [v4 protocol](reports/router_v4_experiment_spec.md) was fixed before fitting.
+Models, predictions, source-domain memberships, validation bounds and bootstrap
+samples are retained under the ignored `artifacts/router_v4/` directory.
+
+The earlier [v2 experiment](reports/router_v2_results.md) achieved 73.10% standard
+success with 22.07% savings, but its stricter dataset guard failed by one code
+success. Its frozen embedding controls did not beat TF-IDF. V4 adds a stricter
+source-domain validation requirement; all earlier reports remain unchanged.
 
 The subsequent [fixed TF-IDF robustness check](reports/router_v3_results.md)
 uses five grouped folds to evaluate every prompt once. Standard quality is
@@ -33,7 +55,7 @@ and bootstrap samples are kept under the ignored `artifacts/router_v3/`.
 Route new prompt text locally, without calling a provider:
 
 ```bash
-.venv/bin/python experiments/route_local.py --prompt 'What is the capital of France?'
+.venv/bin/python experiments/route_local.py --artifact-dir artifacts/router_v4/standard --prompt 'What is the capital of France?'
 ```
 
 Reproduce the v2 campaign from a fresh artifact directory:

@@ -21,7 +21,8 @@ class LocalRouter:
         self.frozen = json.loads((self.directory / "frozen_selection.json").read_text())
         self.candidate = Candidate(**self.frozen["primary"])
         self.costs = np.asarray([self.frozen["mean_training_cost_usd"][m] for m in MODEL_IDS])
-        self.baseline_index = MODEL_IDS.index(self.frozen["best_single"]["model_id"])
+        reference = self.frozen["reference"] if "reference" in self.frozen else self.frozen["best_single"]
+        self.baseline_index = MODEL_IDS.index(reference["model_id"])
         self.model = self.gate = None
         if self.candidate.family != "static":
             name = self.candidate.family + "/models.joblib"
