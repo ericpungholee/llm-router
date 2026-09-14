@@ -1,1062 +1,2368 @@
 {
-  "source": "data/results/hard_pilot_results.csv",
-  "snapshot": "data/results/hard_pilot_analysis_snapshot.csv",
-  "snapshot_sha256": "a58e79eb58519bb4a170142a4c1b60bbbc799fb671d40eb512488bfb52becf85",
-  "snapshot_before_regrade_sha256": "a807bea092612d340cda0ac6415d19a55588a88341141c5c1ed10a2ef3bf8359",
-  "offline_regrade_changes": [
-    {
-      "prompt_id": "mmlu_pro:12015",
-      "model": "Claude Opus 5",
-      "changes": {
-        "parsed_answer": [
-          "",
-          "F"
-        ],
-        "score": [
-          "",
-          "1.0"
-        ],
-        "correct": [
-          "",
-          "True"
-        ],
-        "status": [
-          "parsing_failure",
-          "success"
-        ],
-        "error_type": [
-          "parsing_failure",
-          ""
-        ],
-        "error_message": [
-          "Could not extract one unambiguous multiple-choice option",
-          ""
-        ]
+  "best_static_accuracy_cost_model": null,
+  "by_benchmark": {
+    "livecodebench": {
+      "accuracy_over_graded": null,
+      "attempted_provider_calls": 2,
+      "average_response_latency_ms": null,
+      "correct_responses": 0,
+      "expected_pairs": 25,
+      "failed_provider_attempts": 2,
+      "grading_failures": 0,
+      "parsing_failures": 0,
+      "provider_failures": 2,
+      "recorded_pairs": 25,
+      "skipped_pairs": 23,
+      "spend_limit_stops": 0,
+      "successful_provider_responses": 0,
+      "successfully_graded_pairs": 0,
+      "successfully_graded_responses": 0,
+      "total_recorded_cost_usd": 0.0,
+      "unrecorded_pairs": 0
+    },
+    "math_500": {
+      "accuracy_over_graded": 0.7,
+      "attempted_provider_calls": 10,
+      "average_response_latency_ms": 4418.9999917999785,
+      "correct_responses": 7,
+      "expected_pairs": 25,
+      "failed_provider_attempts": 0,
+      "grading_failures": 0,
+      "parsing_failures": 0,
+      "provider_failures": 0,
+      "recorded_pairs": 25,
+      "skipped_pairs": 15,
+      "spend_limit_stops": 0,
+      "successful_provider_responses": 10,
+      "successfully_graded_pairs": 10,
+      "successfully_graded_responses": 10,
+      "total_recorded_cost_usd": 0.063202,
+      "unrecorded_pairs": 0
+    },
+    "mmlu_pro": {
+      "accuracy_over_graded": 0.42857142857142855,
+      "attempted_provider_calls": 19,
+      "average_response_latency_ms": 24973.35104764287,
+      "correct_responses": 6,
+      "expected_pairs": 25,
+      "failed_provider_attempts": 5,
+      "grading_failures": 0,
+      "parsing_failures": 0,
+      "provider_failures": 4,
+      "recorded_pairs": 25,
+      "skipped_pairs": 7,
+      "spend_limit_stops": 0,
+      "successful_provider_responses": 14,
+      "successfully_graded_pairs": 14,
+      "successfully_graded_responses": 14,
+      "total_recorded_cost_usd": 0.2817354,
+      "unrecorded_pairs": 0
+    }
+  },
+  "by_benchmark_disagreement": {
+    "livecodebench": {
+      "all_agree": 0,
+      "all_correct": 0,
+      "all_wrong": 0,
+      "disagree": 0,
+      "n": 0,
+      "rate": null
+    },
+    "math_500": {
+      "all_agree": 0,
+      "all_correct": 0,
+      "all_wrong": 0,
+      "disagree": 0,
+      "n": 0,
+      "rate": null
+    },
+    "mmlu_pro": {
+      "all_agree": 0,
+      "all_correct": 0,
+      "all_wrong": 0,
+      "disagree": 0,
+      "n": 0,
+      "rate": null
+    }
+  },
+  "confirmed_disagreement_lower_bound": {
+    "count": 5,
+    "denominator": 15
+  },
+  "decision": {
+    "learned_generalization": "Not established. A 15-prompt pilot cannot establish generalization.",
+    "ml": "defer",
+    "reason": "24/75 grades, no five-model common subset, zero GPT/Claude oracle accuracy lift.",
+    "routing_could_help": "Five-model complementarity unmeasurable. GPT/Claude accuracy shows static Claude dominance; a cost oracle suggests limited potential savings only."
+  },
+  "existing_analysis": {
+    "by_benchmark_and_model": {
+      "livecodebench": {
+        "anthropic/claude-opus-5": {
+          "accuracy_over_graded": null,
+          "attempted_provider_calls": 1,
+          "average_response_latency_ms": null,
+          "correct_responses": 0,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 1,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 1,
+          "recorded_pairs": 5,
+          "skipped_pairs": 4,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 0,
+          "successfully_graded_pairs": 0,
+          "successfully_graded_responses": 0,
+          "total_recorded_cost_usd": 0.0,
+          "unrecorded_pairs": 0
+        },
+        "deepseek/deepseek-flash": {
+          "accuracy_over_graded": null,
+          "attempted_provider_calls": 0,
+          "average_response_latency_ms": null,
+          "correct_responses": 0,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 5,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 0,
+          "successfully_graded_pairs": 0,
+          "successfully_graded_responses": 0,
+          "total_recorded_cost_usd": 0.0,
+          "unrecorded_pairs": 0
+        },
+        "openai/gpt-5.6-sol": {
+          "accuracy_over_graded": null,
+          "attempted_provider_calls": 1,
+          "average_response_latency_ms": null,
+          "correct_responses": 0,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 1,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 1,
+          "recorded_pairs": 5,
+          "skipped_pairs": 4,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 0,
+          "successfully_graded_pairs": 0,
+          "successfully_graded_responses": 0,
+          "total_recorded_cost_usd": 0.0,
+          "unrecorded_pairs": 0
+        },
+        "openrouter/qwen/qwen3.8-2.4t-a95b": {
+          "accuracy_over_graded": null,
+          "attempted_provider_calls": 0,
+          "average_response_latency_ms": null,
+          "correct_responses": 0,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 5,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 0,
+          "successfully_graded_pairs": 0,
+          "successfully_graded_responses": 0,
+          "total_recorded_cost_usd": 0.0,
+          "unrecorded_pairs": 0
+        },
+        "xai/grok-4.6": {
+          "accuracy_over_graded": null,
+          "attempted_provider_calls": 0,
+          "average_response_latency_ms": null,
+          "correct_responses": 0,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 5,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 0,
+          "successfully_graded_pairs": 0,
+          "successfully_graded_responses": 0,
+          "total_recorded_cost_usd": 0.0,
+          "unrecorded_pairs": 0
+        }
+      },
+      "math_500": {
+        "anthropic/claude-opus-5": {
+          "accuracy_over_graded": 1.0,
+          "attempted_provider_calls": 5,
+          "average_response_latency_ms": 4468.408908599986,
+          "correct_responses": 5,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 5,
+          "successfully_graded_pairs": 5,
+          "successfully_graded_responses": 5,
+          "total_recorded_cost_usd": 0.04175,
+          "unrecorded_pairs": 0
+        },
+        "deepseek/deepseek-flash": {
+          "accuracy_over_graded": null,
+          "attempted_provider_calls": 0,
+          "average_response_latency_ms": null,
+          "correct_responses": 0,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 5,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 0,
+          "successfully_graded_pairs": 0,
+          "successfully_graded_responses": 0,
+          "total_recorded_cost_usd": 0.0,
+          "unrecorded_pairs": 0
+        },
+        "openai/gpt-5.6-sol": {
+          "accuracy_over_graded": 0.4,
+          "attempted_provider_calls": 5,
+          "average_response_latency_ms": 4369.591074999971,
+          "correct_responses": 2,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 5,
+          "successfully_graded_pairs": 5,
+          "successfully_graded_responses": 5,
+          "total_recorded_cost_usd": 0.021452,
+          "unrecorded_pairs": 0
+        },
+        "openrouter/qwen/qwen3.8-2.4t-a95b": {
+          "accuracy_over_graded": null,
+          "attempted_provider_calls": 0,
+          "average_response_latency_ms": null,
+          "correct_responses": 0,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 5,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 0,
+          "successfully_graded_pairs": 0,
+          "successfully_graded_responses": 0,
+          "total_recorded_cost_usd": 0.0,
+          "unrecorded_pairs": 0
+        },
+        "xai/grok-4.6": {
+          "accuracy_over_graded": null,
+          "attempted_provider_calls": 0,
+          "average_response_latency_ms": null,
+          "correct_responses": 0,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 5,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 0,
+          "successfully_graded_pairs": 0,
+          "successfully_graded_responses": 0,
+          "total_recorded_cost_usd": 0.0,
+          "unrecorded_pairs": 0
+        }
+      },
+      "mmlu_pro": {
+        "anthropic/claude-opus-5": {
+          "accuracy_over_graded": 0.6,
+          "attempted_provider_calls": 5,
+          "average_response_latency_ms": 2409.55474160001,
+          "correct_responses": 3,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 5,
+          "successfully_graded_pairs": 5,
+          "successfully_graded_responses": 5,
+          "total_recorded_cost_usd": 0.035025,
+          "unrecorded_pairs": 0
+        },
+        "deepseek/deepseek-flash": {
+          "accuracy_over_graded": 0.5,
+          "attempted_provider_calls": 3,
+          "average_response_latency_ms": 8883.195333500013,
+          "correct_responses": 1,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 1,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 1,
+          "recorded_pairs": 5,
+          "skipped_pairs": 2,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 2,
+          "successfully_graded_pairs": 2,
+          "successfully_graded_responses": 2,
+          "total_recorded_cost_usd": 0.0039204,
+          "unrecorded_pairs": 0
+        },
+        "openai/gpt-5.6-sol": {
+          "accuracy_over_graded": 0.4,
+          "attempted_provider_calls": 5,
+          "average_response_latency_ms": 13682.939608600027,
+          "correct_responses": 2,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 5,
+          "successfully_graded_pairs": 5,
+          "successfully_graded_responses": 5,
+          "total_recorded_cost_usd": 0.06688,
+          "unrecorded_pairs": 0
+        },
+        "openrouter/qwen/qwen3.8-2.4t-a95b": {
+          "accuracy_over_graded": null,
+          "attempted_provider_calls": 3,
+          "average_response_latency_ms": null,
+          "correct_responses": 0,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 3,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 2,
+          "recorded_pairs": 5,
+          "skipped_pairs": 3,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 0,
+          "successfully_graded_pairs": 0,
+          "successfully_graded_responses": 0,
+          "total_recorded_cost_usd": 0.062406,
+          "unrecorded_pairs": 0
+        },
+        "xai/grok-4.6": {
+          "accuracy_over_graded": 0.0,
+          "attempted_provider_calls": 3,
+          "average_response_latency_ms": 125699.02612449999,
+          "correct_responses": 0,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 1,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 1,
+          "recorded_pairs": 5,
+          "skipped_pairs": 2,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 2,
+          "successfully_graded_pairs": 2,
+          "successfully_graded_responses": 2,
+          "total_recorded_cost_usd": 0.113504,
+          "unrecorded_pairs": 0
+        }
       }
+    },
+    "by_model": {
+      "anthropic/claude-opus-5": {
+        "accuracy_over_graded": 0.8,
+        "attempted_provider_calls": 11,
+        "average_response_latency_ms": 3438.981825099998,
+        "correct_responses": 8,
+        "expected_pairs": 15,
+        "failed_provider_attempts": 1,
+        "grading_failures": 0,
+        "parsing_failures": 0,
+        "provider_failures": 1,
+        "recorded_pairs": 15,
+        "skipped_pairs": 4,
+        "spend_limit_stops": 0,
+        "successful_provider_responses": 10,
+        "successfully_graded_pairs": 10,
+        "successfully_graded_responses": 10,
+        "total_recorded_cost_usd": 0.076775,
+        "unrecorded_pairs": 0
+      },
+      "deepseek/deepseek-flash": {
+        "accuracy_over_graded": 0.5,
+        "attempted_provider_calls": 3,
+        "average_response_latency_ms": 8883.195333500013,
+        "correct_responses": 1,
+        "expected_pairs": 15,
+        "failed_provider_attempts": 1,
+        "grading_failures": 0,
+        "parsing_failures": 0,
+        "provider_failures": 1,
+        "recorded_pairs": 15,
+        "skipped_pairs": 12,
+        "spend_limit_stops": 0,
+        "successful_provider_responses": 2,
+        "successfully_graded_pairs": 2,
+        "successfully_graded_responses": 2,
+        "total_recorded_cost_usd": 0.0039204,
+        "unrecorded_pairs": 0
+      },
+      "openai/gpt-5.6-sol": {
+        "accuracy_over_graded": 0.4,
+        "attempted_provider_calls": 11,
+        "average_response_latency_ms": 9026.265341799999,
+        "correct_responses": 4,
+        "expected_pairs": 15,
+        "failed_provider_attempts": 1,
+        "grading_failures": 0,
+        "parsing_failures": 0,
+        "provider_failures": 1,
+        "recorded_pairs": 15,
+        "skipped_pairs": 4,
+        "spend_limit_stops": 0,
+        "successful_provider_responses": 10,
+        "successfully_graded_pairs": 10,
+        "successfully_graded_responses": 10,
+        "total_recorded_cost_usd": 0.088332,
+        "unrecorded_pairs": 0
+      },
+      "openrouter/qwen/qwen3.8-2.4t-a95b": {
+        "accuracy_over_graded": null,
+        "attempted_provider_calls": 3,
+        "average_response_latency_ms": null,
+        "correct_responses": 0,
+        "expected_pairs": 15,
+        "failed_provider_attempts": 3,
+        "grading_failures": 0,
+        "parsing_failures": 0,
+        "provider_failures": 2,
+        "recorded_pairs": 15,
+        "skipped_pairs": 13,
+        "spend_limit_stops": 0,
+        "successful_provider_responses": 0,
+        "successfully_graded_pairs": 0,
+        "successfully_graded_responses": 0,
+        "total_recorded_cost_usd": 0.062406,
+        "unrecorded_pairs": 0
+      },
+      "xai/grok-4.6": {
+        "accuracy_over_graded": 0.0,
+        "attempted_provider_calls": 3,
+        "average_response_latency_ms": 125699.02612449999,
+        "correct_responses": 0,
+        "expected_pairs": 15,
+        "failed_provider_attempts": 1,
+        "grading_failures": 0,
+        "parsing_failures": 0,
+        "provider_failures": 1,
+        "recorded_pairs": 15,
+        "skipped_pairs": 12,
+        "spend_limit_stops": 0,
+        "successful_provider_responses": 2,
+        "successfully_graded_pairs": 2,
+        "successfully_graded_responses": 2,
+        "total_recorded_cost_usd": 0.113504,
+        "unrecorded_pairs": 0
+      }
+    },
+    "interpretation": "Descriptive pilot evidence only. Incomplete prompts are excluded from policy comparisons; higher cost does not prove greater capability. Oracle cost covers solved prompts only.",
+    "matrix_completeness": {
+      "description": "24 / 75 prompt-model pairs successfully graded",
+      "expected_pairs": 75,
+      "fraction": 0.32,
+      "fully_graded_prompts": 0,
+      "planned_prompts": 15,
+      "recorded_pairs": 75,
+      "successfully_graded_pairs": 24,
+      "unrecorded_pairs": 0,
+      "valid_complete_comparison": false
+    },
+    "routing_comparison": {
+      "accuracy_denominator": "prompts successfully graded by every planned model",
+      "always_best_single_model": null,
+      "always_cheapest_model": null,
+      "cheaper_solved_expensive_missed": [],
+      "comparison_prompt_count": 0,
+      "comparison_prompt_ids": [],
+      "cost_order_is_strength_proxy": true,
+      "cost_rule": "observed response cost, excluding failed-attempt reserves; ties broken by provider/model ID",
+      "evidence_of_routing_signal": null,
+      "excluded_incomplete_prompt_ids": [
+        "livecodebench:abc400_g",
+        "livecodebench:arc196_a",
+        "livecodebench:arc196_b",
+        "livecodebench:arc196_c",
+        "livecodebench:arc196_d",
+        "math_500:test/counting_and_probability/870.json",
+        "math_500:test/geometry/965.json",
+        "math_500:test/intermediate_algebra/960.json",
+        "math_500:test/number_theory/769.json",
+        "math_500:test/precalculus/986.json",
+        "mmlu_pro:10442",
+        "mmlu_pro:12015",
+        "mmlu_pro:1346",
+        "mmlu_pro:5022",
+        "mmlu_pro:6502"
+      ],
+      "oracle_accuracy": null,
+      "oracle_cheapest_correct_cost_usd": null,
+      "oracle_unsolved_prompt_ids": [],
+      "prompts_requiring_higher_cost_models": []
+    }
+  },
+  "five_model_disagreement": {
+    "all_agree": 0,
+    "all_correct": 0,
+    "all_wrong": 0,
+    "disagree": 0,
+    "n": 0,
+    "rate": null
+  },
+  "five_model_oracle": {
+    "accuracy": null,
+    "cheapest_correct_cost_usd": null,
+    "cost_relative_to_best_static": null,
+    "lift_over_best_single": null,
+    "reason": "No fully graded five-model prompts"
+  },
+  "incomplete_classifications": {
+    "other": 5,
+    "skipped historical row": 45,
+    "transient provider failure": 1
+  },
+  "incomplete_pairs": [
+    {
+      "classification": "other",
+      "error_type": "invalid_provider_response",
+      "has_saved_raw_response": false,
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "prompt_id": "mmlu_pro:1346",
+      "reason": "Provider response did not contain non-empty text output",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "provider_error"
+    },
+    {
+      "classification": "other",
+      "error_type": "invalid_provider_response",
+      "has_saved_raw_response": false,
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "prompt_id": "mmlu_pro:5022",
+      "reason": "Provider response did not contain non-empty text output",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "provider_error"
+    },
+    {
+      "classification": "transient provider failure",
+      "error_type": "network_error",
+      "has_saved_raw_response": false,
+      "model": "xai/grok-4.6",
+      "prompt_id": "mmlu_pro:12015",
+      "reason": "The read operation timed out",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "provider_error"
+    },
+    {
+      "classification": "other",
+      "error_type": "invalid_provider_response",
+      "has_saved_raw_response": false,
+      "model": "deepseek/deepseek-flash",
+      "prompt_id": "mmlu_pro:12015",
+      "reason": "Provider response did not contain non-empty text output",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "provider_error"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "prompt_id": "mmlu_pro:12015",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "xai/grok-4.6",
+      "prompt_id": "mmlu_pro:6502",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "deepseek/deepseek-flash",
+      "prompt_id": "mmlu_pro:6502",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "prompt_id": "mmlu_pro:6502",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "xai/grok-4.6",
+      "prompt_id": "mmlu_pro:10442",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "deepseek/deepseek-flash",
+      "prompt_id": "mmlu_pro:10442",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "prompt_id": "mmlu_pro:10442",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "xai/grok-4.6",
+      "prompt_id": "math_500:test/intermediate_algebra/960.json",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "deepseek/deepseek-flash",
+      "prompt_id": "math_500:test/intermediate_algebra/960.json",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "prompt_id": "math_500:test/intermediate_algebra/960.json",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "xai/grok-4.6",
+      "prompt_id": "math_500:test/number_theory/769.json",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "deepseek/deepseek-flash",
+      "prompt_id": "math_500:test/number_theory/769.json",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "prompt_id": "math_500:test/number_theory/769.json",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "xai/grok-4.6",
+      "prompt_id": "math_500:test/counting_and_probability/870.json",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "deepseek/deepseek-flash",
+      "prompt_id": "math_500:test/counting_and_probability/870.json",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "prompt_id": "math_500:test/counting_and_probability/870.json",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "xai/grok-4.6",
+      "prompt_id": "math_500:test/geometry/965.json",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "deepseek/deepseek-flash",
+      "prompt_id": "math_500:test/geometry/965.json",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "prompt_id": "math_500:test/geometry/965.json",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "xai/grok-4.6",
+      "prompt_id": "math_500:test/precalculus/986.json",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "deepseek/deepseek-flash",
+      "prompt_id": "math_500:test/precalculus/986.json",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "prompt_id": "math_500:test/precalculus/986.json",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "other",
+      "error_type": "invalid_provider_response",
+      "has_saved_raw_response": false,
+      "model": "openai/gpt-5.6-sol",
+      "prompt_id": "livecodebench:arc196_d",
+      "reason": "Provider response did not contain non-empty text output",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "provider_error"
+    },
+    {
+      "classification": "other",
+      "error_type": "invalid_provider_response",
+      "has_saved_raw_response": false,
+      "model": "anthropic/claude-opus-5",
+      "prompt_id": "livecodebench:arc196_d",
+      "reason": "Provider response did not contain non-empty text output",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "provider_error"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "xai/grok-4.6",
+      "prompt_id": "livecodebench:arc196_d",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "deepseek/deepseek-flash",
+      "prompt_id": "livecodebench:arc196_d",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "prompt_id": "livecodebench:arc196_d",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openai/gpt-5.6-sol",
+      "prompt_id": "livecodebench:arc196_c",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "anthropic/claude-opus-5",
+      "prompt_id": "livecodebench:arc196_c",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "xai/grok-4.6",
+      "prompt_id": "livecodebench:arc196_c",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "deepseek/deepseek-flash",
+      "prompt_id": "livecodebench:arc196_c",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "prompt_id": "livecodebench:arc196_c",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openai/gpt-5.6-sol",
+      "prompt_id": "livecodebench:arc196_b",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "anthropic/claude-opus-5",
+      "prompt_id": "livecodebench:arc196_b",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "xai/grok-4.6",
+      "prompt_id": "livecodebench:arc196_b",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "deepseek/deepseek-flash",
+      "prompt_id": "livecodebench:arc196_b",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "prompt_id": "livecodebench:arc196_b",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openai/gpt-5.6-sol",
+      "prompt_id": "livecodebench:arc196_a",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "anthropic/claude-opus-5",
+      "prompt_id": "livecodebench:arc196_a",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "xai/grok-4.6",
+      "prompt_id": "livecodebench:arc196_a",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "deepseek/deepseek-flash",
+      "prompt_id": "livecodebench:arc196_a",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "prompt_id": "livecodebench:arc196_a",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openai/gpt-5.6-sol",
+      "prompt_id": "livecodebench:abc400_g",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "anthropic/claude-opus-5",
+      "prompt_id": "livecodebench:abc400_g",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "xai/grok-4.6",
+      "prompt_id": "livecodebench:abc400_g",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "deepseek/deepseek-flash",
+      "prompt_id": "livecodebench:abc400_g",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
+    },
+    {
+      "classification": "skipped historical row",
+      "error_type": "model_disabled_after_provider_failure",
+      "has_saved_raw_response": false,
+      "model": "openrouter/qwen/qwen3.8-2.4t-a95b",
+      "prompt_id": "livecodebench:abc400_g",
+      "reason": "No call made after an earlier provider/model failure in this run.",
+      "recoverable_offline": false,
+      "requires_provider_call": true,
+      "status": "skipped_model"
     }
   ],
   "overall": {
-    "expected_pairs": 75,
-    "recorded_pairs": 75,
-    "successfully_graded_pairs": 24,
-    "attempted_provider_calls": 31,
-    "successful_provider_responses": 24,
-    "failed_provider_attempts": 7,
-    "successfully_graded_responses": 24,
-    "correct_responses": 13,
     "accuracy_over_graded": 0.5416666666666666,
-    "provider_failures": 6,
-    "parsing_failures": 0,
+    "attempted_provider_calls": 31,
+    "average_response_latency_ms": 16409.038107708333,
+    "correct_responses": 13,
+    "expected_pairs": 75,
+    "failed_provider_attempts": 7,
     "grading_failures": 0,
+    "parsing_failures": 0,
+    "provider_failures": 6,
+    "recorded_pairs": 75,
     "skipped_pairs": 45,
-    "unrecorded_pairs": 0,
     "spend_limit_stops": 0,
+    "successful_provider_responses": 24,
+    "successfully_graded_pairs": 24,
+    "successfully_graded_responses": 24,
     "total_recorded_cost_usd": 0.3449374,
-    "average_response_latency_ms": 16409.038107708333
+    "unrecorded_pairs": 0
   },
-  "by_model": {
-    "GPT": {
-      "expected_pairs": 15,
-      "recorded_pairs": 15,
-      "successfully_graded_pairs": 10,
-      "attempted_provider_calls": 11,
-      "successful_provider_responses": 10,
-      "failed_provider_attempts": 1,
-      "successfully_graded_responses": 10,
-      "correct_responses": 4,
-      "accuracy_over_graded": 0.4,
-      "provider_failures": 1,
-      "parsing_failures": 0,
-      "grading_failures": 0,
-      "skipped_pairs": 4,
-      "unrecorded_pairs": 0,
-      "spend_limit_stops": 0,
-      "total_recorded_cost_usd": 0.088332,
-      "average_response_latency_ms": 9026.265341799999
+  "pairwise_disagreement": [
+    {
+      "models": [
+        "openai/gpt-5.6-sol",
+        "anthropic/claude-opus-5"
+      ],
+      "subsets": {
+        "all": {
+          "all_agree": 6,
+          "all_correct": 4,
+          "all_wrong": 2,
+          "disagree": 4,
+          "n": 10,
+          "rate": 0.4
+        },
+        "livecodebench": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "math_500": {
+          "all_agree": 2,
+          "all_correct": 2,
+          "all_wrong": 0,
+          "disagree": 3,
+          "n": 5,
+          "rate": 0.6
+        },
+        "mmlu_pro": {
+          "all_agree": 4,
+          "all_correct": 2,
+          "all_wrong": 2,
+          "disagree": 1,
+          "n": 5,
+          "rate": 0.2
+        }
+      }
     },
-    "Claude": {
-      "expected_pairs": 15,
-      "recorded_pairs": 15,
-      "successfully_graded_pairs": 10,
-      "attempted_provider_calls": 11,
-      "successful_provider_responses": 10,
-      "failed_provider_attempts": 1,
-      "successfully_graded_responses": 10,
-      "correct_responses": 8,
-      "accuracy_over_graded": 0.8,
-      "provider_failures": 1,
-      "parsing_failures": 0,
-      "grading_failures": 0,
-      "skipped_pairs": 4,
-      "unrecorded_pairs": 0,
-      "spend_limit_stops": 0,
-      "total_recorded_cost_usd": 0.076775,
-      "average_response_latency_ms": 3438.981825099998
+    {
+      "models": [
+        "openai/gpt-5.6-sol",
+        "xai/grok-4.6"
+      ],
+      "subsets": {
+        "all": {
+          "all_agree": 1,
+          "all_correct": 0,
+          "all_wrong": 1,
+          "disagree": 1,
+          "n": 2,
+          "rate": 0.5
+        },
+        "livecodebench": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "math_500": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "mmlu_pro": {
+          "all_agree": 1,
+          "all_correct": 0,
+          "all_wrong": 1,
+          "disagree": 1,
+          "n": 2,
+          "rate": 0.5
+        }
+      }
     },
-    "Grok": {
-      "expected_pairs": 15,
-      "recorded_pairs": 15,
-      "successfully_graded_pairs": 2,
-      "attempted_provider_calls": 3,
-      "successful_provider_responses": 2,
-      "failed_provider_attempts": 1,
-      "successfully_graded_responses": 2,
-      "correct_responses": 0,
-      "accuracy_over_graded": 0.0,
-      "provider_failures": 1,
-      "parsing_failures": 0,
-      "grading_failures": 0,
-      "skipped_pairs": 12,
-      "unrecorded_pairs": 0,
-      "spend_limit_stops": 0,
-      "total_recorded_cost_usd": 0.113504,
-      "average_response_latency_ms": 125699.02612449999
+    {
+      "models": [
+        "openai/gpt-5.6-sol",
+        "deepseek/deepseek-flash"
+      ],
+      "subsets": {
+        "all": {
+          "all_agree": 2,
+          "all_correct": 1,
+          "all_wrong": 1,
+          "disagree": 0,
+          "n": 2,
+          "rate": 0.0
+        },
+        "livecodebench": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "math_500": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "mmlu_pro": {
+          "all_agree": 2,
+          "all_correct": 1,
+          "all_wrong": 1,
+          "disagree": 0,
+          "n": 2,
+          "rate": 0.0
+        }
+      }
     },
-    "DeepSeek": {
-      "expected_pairs": 15,
-      "recorded_pairs": 15,
-      "successfully_graded_pairs": 2,
-      "attempted_provider_calls": 3,
-      "successful_provider_responses": 2,
-      "failed_provider_attempts": 1,
-      "successfully_graded_responses": 2,
-      "correct_responses": 1,
-      "accuracy_over_graded": 0.5,
-      "provider_failures": 1,
-      "parsing_failures": 0,
-      "grading_failures": 0,
-      "skipped_pairs": 12,
-      "unrecorded_pairs": 0,
-      "spend_limit_stops": 0,
-      "total_recorded_cost_usd": 0.0039204,
-      "average_response_latency_ms": 8883.195333500013
+    {
+      "models": [
+        "openai/gpt-5.6-sol",
+        "openrouter/qwen/qwen3.8-2.4t-a95b"
+      ],
+      "subsets": {
+        "all": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "livecodebench": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "math_500": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "mmlu_pro": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        }
+      }
     },
-    "Qwen": {
-      "expected_pairs": 15,
-      "recorded_pairs": 15,
-      "successfully_graded_pairs": 0,
-      "attempted_provider_calls": 3,
-      "successful_provider_responses": 0,
-      "failed_provider_attempts": 3,
-      "successfully_graded_responses": 0,
-      "correct_responses": 0,
-      "accuracy_over_graded": null,
-      "provider_failures": 2,
-      "parsing_failures": 0,
-      "grading_failures": 0,
-      "skipped_pairs": 13,
-      "unrecorded_pairs": 0,
-      "spend_limit_stops": 0,
-      "total_recorded_cost_usd": 0.062406,
-      "average_response_latency_ms": null
+    {
+      "models": [
+        "anthropic/claude-opus-5",
+        "xai/grok-4.6"
+      ],
+      "subsets": {
+        "all": {
+          "all_agree": 1,
+          "all_correct": 0,
+          "all_wrong": 1,
+          "disagree": 1,
+          "n": 2,
+          "rate": 0.5
+        },
+        "livecodebench": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "math_500": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "mmlu_pro": {
+          "all_agree": 1,
+          "all_correct": 0,
+          "all_wrong": 1,
+          "disagree": 1,
+          "n": 2,
+          "rate": 0.5
+        }
+      }
+    },
+    {
+      "models": [
+        "anthropic/claude-opus-5",
+        "deepseek/deepseek-flash"
+      ],
+      "subsets": {
+        "all": {
+          "all_agree": 2,
+          "all_correct": 1,
+          "all_wrong": 1,
+          "disagree": 0,
+          "n": 2,
+          "rate": 0.0
+        },
+        "livecodebench": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "math_500": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "mmlu_pro": {
+          "all_agree": 2,
+          "all_correct": 1,
+          "all_wrong": 1,
+          "disagree": 0,
+          "n": 2,
+          "rate": 0.0
+        }
+      }
+    },
+    {
+      "models": [
+        "anthropic/claude-opus-5",
+        "openrouter/qwen/qwen3.8-2.4t-a95b"
+      ],
+      "subsets": {
+        "all": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "livecodebench": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "math_500": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "mmlu_pro": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        }
+      }
+    },
+    {
+      "models": [
+        "xai/grok-4.6",
+        "deepseek/deepseek-flash"
+      ],
+      "subsets": {
+        "all": {
+          "all_agree": 1,
+          "all_correct": 0,
+          "all_wrong": 1,
+          "disagree": 1,
+          "n": 2,
+          "rate": 0.5
+        },
+        "livecodebench": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "math_500": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "mmlu_pro": {
+          "all_agree": 1,
+          "all_correct": 0,
+          "all_wrong": 1,
+          "disagree": 1,
+          "n": 2,
+          "rate": 0.5
+        }
+      }
+    },
+    {
+      "models": [
+        "xai/grok-4.6",
+        "openrouter/qwen/qwen3.8-2.4t-a95b"
+      ],
+      "subsets": {
+        "all": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "livecodebench": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "math_500": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "mmlu_pro": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        }
+      }
+    },
+    {
+      "models": [
+        "deepseek/deepseek-flash",
+        "openrouter/qwen/qwen3.8-2.4t-a95b"
+      ],
+      "subsets": {
+        "all": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "livecodebench": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "math_500": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        },
+        "mmlu_pro": {
+          "all_agree": 0,
+          "all_correct": 0,
+          "all_wrong": 0,
+          "disagree": 0,
+          "n": 0,
+          "rate": null
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "base_commit": "ee278cb63abc4921affd2d2d7d04b194309cb596",
+    "before_offline_regrade": {
+      "metrics": {
+        "accuracy_over_graded": 0.5217391304347826,
+        "attempted_provider_calls": 31,
+        "average_response_latency_ms": 16409.038107708333,
+        "correct_responses": 12,
+        "expected_pairs": 75,
+        "failed_provider_attempts": 7,
+        "grading_failures": 0,
+        "parsing_failures": 1,
+        "provider_failures": 6,
+        "recorded_pairs": 75,
+        "skipped_pairs": 45,
+        "spend_limit_stops": 0,
+        "successful_provider_responses": 24,
+        "successfully_graded_pairs": 23,
+        "successfully_graded_responses": 23,
+        "total_recorded_cost_usd": 0.3449374,
+        "unrecorded_pairs": 0
+      },
+      "row_count": 75,
+      "sha256": "a807bea092612d340cda0ac6415d19a55588a88341141c5c1ed10a2ef3bf8359",
+      "size_bytes": 155973
+    },
+    "earlier_intermediate_snapshot": {
+      "path": "data/results/hard_pilot_analysis_snapshot.csv",
+      "role": "Superseded; not required for reproduction",
+      "same_bytes_as_final": true
+    },
+    "final_artifact": {
+      "metrics": {
+        "accuracy_over_graded": 0.5416666666666666,
+        "attempted_provider_calls": 31,
+        "average_response_latency_ms": 16409.038107708333,
+        "correct_responses": 13,
+        "expected_pairs": 75,
+        "failed_provider_attempts": 7,
+        "grading_failures": 0,
+        "parsing_failures": 0,
+        "provider_failures": 6,
+        "recorded_pairs": 75,
+        "skipped_pairs": 45,
+        "spend_limit_stops": 0,
+        "successful_provider_responses": 24,
+        "successfully_graded_pairs": 24,
+        "successfully_graded_responses": 24,
+        "total_recorded_cost_usd": 0.3449374,
+        "unrecorded_pairs": 0
+      },
+      "row_count": 75,
+      "sha256": "a58e79eb58519bb4a170142a4c1b60bbbc799fb671d40eb512488bfb52becf85",
+      "size_bytes": 155902
+    },
+    "frozen_at_utc": "2026-09-14T01:57:53.090980+00:00",
+    "offline_regrade": {
+      "all_other_fields_unchanged": true,
+      "allowed_changed_fields": [
+        "correct",
+        "error_code",
+        "error_message",
+        "error_type",
+        "parsed_answer",
+        "score",
+        "status"
+      ],
+      "changed_rows": [
+        {
+          "api_model_identifier": "claude-opus-5",
+          "fields": {
+            "correct": {
+              "after": "True",
+              "before": ""
+            },
+            "error_message": {
+              "after": "",
+              "before": "Could not extract one unambiguous multiple-choice option"
+            },
+            "error_type": {
+              "after": "",
+              "before": "parsing_failure"
+            },
+            "parsed_answer": {
+              "after": "F",
+              "before": ""
+            },
+            "score": {
+              "after": "1.0",
+              "before": ""
+            },
+            "status": {
+              "after": "success",
+              "before": "parsing_failure"
+            }
+          },
+          "inference_provider": "anthropic",
+          "prompt_id": "mmlu_pro:12015"
+        }
+      ],
+      "command": "python3 generate_dataset.py --regrade-results --output data/results/hard_pilot_results.csv",
+      "runs_on_final_source": 1
+    },
+    "secret_inspection": {
+      "checks": [
+        "credential_key_or_header",
+        "bearer_token",
+        "known_key_prefix",
+        "private_key",
+        "environment_reference",
+        "exact local credential value comparison",
+        "schema and populated text fields inspection"
+      ],
+      "findings": 0,
+      "sanitization": "None: complete normalized CSV preserved byte-for-byte after offline regrade; no credentials or environment values found."
+    },
+    "snapshot_path": "reports/snapshots/hard_pilot_final.csv",
+    "source_final_csv": "data/results/hard_pilot_results.csv",
+    "stability": {
+      "observations": [
+        {
+          "mtime_ns": 1789350464523668320,
+          "observed_at": "2026-09-14T01:56:31.601521+00:00",
+          "row_count": 75,
+          "sha256": "a807bea092612d340cda0ac6415d19a55588a88341141c5c1ed10a2ef3bf8359",
+          "size": 155973,
+          "statuses": {
+            "parsing_failure": 1,
+            "provider_error": 6,
+            "skipped_model": 45,
+            "success": 23
+          }
+        },
+        {
+          "mtime_ns": 1789350464523668320,
+          "observed_at": "2026-09-14T01:57:14.728262+00:00",
+          "row_count": 75,
+          "sha256": "a807bea092612d340cda0ac6415d19a55588a88341141c5c1ed10a2ef3bf8359",
+          "size": 155973
+        }
+      ],
+      "process_evidence": "Elevated ps inspection found no Python or generate_dataset/hard-pilot writer; original exit status/log unavailable."
+    },
+    "verification": {
+      "checks": [
+        "standalone bold parser accepts only an unambiguous valid option",
+        "audit reconstructs original CSV with matching SHA-256",
+        "offline regrade changes only parsing/grading fields",
+        "analysis and all reports reproduce byte-for-byte without data/ or credentials",
+        "report references tracked snapshot and verifies SHA-256",
+        "tampered snapshot fails hash verification"
+      ],
+      "offline_test_command": "python3 -m unittest discover -s tests -v",
+      "status": "passed",
+      "tests_passed": 84
     }
   },
-  "by_benchmark": {
-    "mmlu_pro": {
-      "expected_pairs": 25,
-      "recorded_pairs": 25,
-      "successfully_graded_pairs": 14,
-      "attempted_provider_calls": 19,
-      "successful_provider_responses": 14,
-      "failed_provider_attempts": 5,
-      "successfully_graded_responses": 14,
-      "correct_responses": 6,
-      "accuracy_over_graded": 0.42857142857142855,
-      "provider_failures": 4,
-      "parsing_failures": 0,
-      "grading_failures": 0,
-      "skipped_pairs": 7,
-      "unrecorded_pairs": 0,
-      "spend_limit_stops": 0,
-      "total_recorded_cost_usd": 0.2817354,
-      "average_response_latency_ms": 24973.35104764287
+  "resume": {
+    "authorized_later_resume_command": "python3 generate_dataset.py --hard-pilot --resume --max-spend-usd 2.00 --output data/results/hard_pilot_results.csv --confirm",
+    "eligible_pairs": 51,
+    "executed": false,
+    "maximum_attempts_for_eligible_pairs": 153,
+    "persistent_model_blocks": 0,
+    "preflight_command": "python3 generate_dataset.py --hard-pilot --resume --max-spend-usd 2.00 --output data/results/hard_pilot_results.csv"
+  },
+  "secondary_gpt_claude": {
+    "by_benchmark_and_model": {
+      "livecodebench": {
+        "anthropic/claude-opus-5": {
+          "accuracy_over_graded": null,
+          "attempted_provider_calls": 1,
+          "average_response_latency_ms": null,
+          "correct_responses": 0,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 1,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 1,
+          "recorded_pairs": 5,
+          "skipped_pairs": 4,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 0,
+          "successfully_graded_pairs": 0,
+          "successfully_graded_responses": 0,
+          "total_recorded_cost_usd": 0.0,
+          "unrecorded_pairs": 0
+        },
+        "openai/gpt-5.6-sol": {
+          "accuracy_over_graded": null,
+          "attempted_provider_calls": 1,
+          "average_response_latency_ms": null,
+          "correct_responses": 0,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 1,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 1,
+          "recorded_pairs": 5,
+          "skipped_pairs": 4,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 0,
+          "successfully_graded_pairs": 0,
+          "successfully_graded_responses": 0,
+          "total_recorded_cost_usd": 0.0,
+          "unrecorded_pairs": 0
+        }
+      },
+      "math_500": {
+        "anthropic/claude-opus-5": {
+          "accuracy_over_graded": 1.0,
+          "attempted_provider_calls": 5,
+          "average_response_latency_ms": 4468.408908599986,
+          "correct_responses": 5,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 5,
+          "successfully_graded_pairs": 5,
+          "successfully_graded_responses": 5,
+          "total_recorded_cost_usd": 0.04175,
+          "unrecorded_pairs": 0
+        },
+        "openai/gpt-5.6-sol": {
+          "accuracy_over_graded": 0.4,
+          "attempted_provider_calls": 5,
+          "average_response_latency_ms": 4369.591074999971,
+          "correct_responses": 2,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 5,
+          "successfully_graded_pairs": 5,
+          "successfully_graded_responses": 5,
+          "total_recorded_cost_usd": 0.021452,
+          "unrecorded_pairs": 0
+        }
+      },
+      "mmlu_pro": {
+        "anthropic/claude-opus-5": {
+          "accuracy_over_graded": 0.6,
+          "attempted_provider_calls": 5,
+          "average_response_latency_ms": 2409.55474160001,
+          "correct_responses": 3,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 5,
+          "successfully_graded_pairs": 5,
+          "successfully_graded_responses": 5,
+          "total_recorded_cost_usd": 0.035025,
+          "unrecorded_pairs": 0
+        },
+        "openai/gpt-5.6-sol": {
+          "accuracy_over_graded": 0.4,
+          "attempted_provider_calls": 5,
+          "average_response_latency_ms": 13682.939608600027,
+          "correct_responses": 2,
+          "expected_pairs": 5,
+          "failed_provider_attempts": 0,
+          "grading_failures": 0,
+          "parsing_failures": 0,
+          "provider_failures": 0,
+          "recorded_pairs": 5,
+          "skipped_pairs": 0,
+          "spend_limit_stops": 0,
+          "successful_provider_responses": 5,
+          "successfully_graded_pairs": 5,
+          "successfully_graded_responses": 5,
+          "total_recorded_cost_usd": 0.06688,
+          "unrecorded_pairs": 0
+        }
+      }
     },
-    "math_500": {
-      "expected_pairs": 25,
-      "recorded_pairs": 25,
-      "successfully_graded_pairs": 10,
-      "attempted_provider_calls": 10,
-      "successful_provider_responses": 10,
-      "failed_provider_attempts": 0,
-      "successfully_graded_responses": 10,
-      "correct_responses": 7,
-      "accuracy_over_graded": 0.7,
-      "provider_failures": 0,
-      "parsing_failures": 0,
-      "grading_failures": 0,
-      "skipped_pairs": 15,
-      "unrecorded_pairs": 0,
-      "spend_limit_stops": 0,
-      "total_recorded_cost_usd": 0.063202,
-      "average_response_latency_ms": 4418.9999917999785
+    "by_model": {
+      "anthropic/claude-opus-5": {
+        "accuracy_over_graded": 0.8,
+        "attempted_provider_calls": 11,
+        "average_response_latency_ms": 3438.981825099998,
+        "correct_responses": 8,
+        "expected_pairs": 15,
+        "failed_provider_attempts": 1,
+        "grading_failures": 0,
+        "parsing_failures": 0,
+        "provider_failures": 1,
+        "recorded_pairs": 15,
+        "skipped_pairs": 4,
+        "spend_limit_stops": 0,
+        "successful_provider_responses": 10,
+        "successfully_graded_pairs": 10,
+        "successfully_graded_responses": 10,
+        "total_recorded_cost_usd": 0.076775,
+        "unrecorded_pairs": 0
+      },
+      "openai/gpt-5.6-sol": {
+        "accuracy_over_graded": 0.4,
+        "attempted_provider_calls": 11,
+        "average_response_latency_ms": 9026.265341799999,
+        "correct_responses": 4,
+        "expected_pairs": 15,
+        "failed_provider_attempts": 1,
+        "grading_failures": 0,
+        "parsing_failures": 0,
+        "provider_failures": 1,
+        "recorded_pairs": 15,
+        "skipped_pairs": 4,
+        "spend_limit_stops": 0,
+        "successful_provider_responses": 10,
+        "successfully_graded_pairs": 10,
+        "successfully_graded_responses": 10,
+        "total_recorded_cost_usd": 0.088332,
+        "unrecorded_pairs": 0
+      }
     },
-    "livecodebench": {
-      "expected_pairs": 25,
-      "recorded_pairs": 25,
-      "successfully_graded_pairs": 0,
-      "attempted_provider_calls": 2,
-      "successful_provider_responses": 0,
-      "failed_provider_attempts": 2,
-      "successfully_graded_responses": 0,
-      "correct_responses": 0,
-      "accuracy_over_graded": null,
-      "provider_failures": 2,
-      "parsing_failures": 0,
-      "grading_failures": 0,
-      "skipped_pairs": 23,
+    "disagreement": {
+      "all_agree": 6,
+      "all_correct": 4,
+      "all_wrong": 2,
+      "disagree": 4,
+      "n": 10,
+      "rate": 0.4
+    },
+    "interpretation": "Descriptive pilot evidence only. Incomplete prompts are excluded from policy comparisons; higher cost does not prove greater capability. Oracle cost covers solved prompts only.",
+    "matrix_completeness": {
+      "description": "20 / 30 prompt-model pairs successfully graded",
+      "expected_pairs": 30,
+      "fraction": 0.6666666666666666,
+      "fully_graded_prompts": 10,
+      "planned_prompts": 15,
+      "recorded_pairs": 30,
+      "successfully_graded_pairs": 20,
       "unrecorded_pairs": 0,
-      "spend_limit_stops": 0,
-      "total_recorded_cost_usd": 0.0,
-      "average_response_latency_ms": null
+      "valid_complete_comparison": false
+    },
+    "routing_comparison": {
+      "accuracy_denominator": "prompts successfully graded by every planned model",
+      "always_best_single_model": {
+        "accuracy": 0.8,
+        "model": "anthropic/claude-opus-5",
+        "total_response_cost_usd": 0.076775
+      },
+      "always_cheapest_model": {
+        "accuracy": 0.8,
+        "model": "anthropic/claude-opus-5",
+        "total_response_cost_usd": 0.076775
+      },
+      "cheaper_solved_expensive_missed": [
+        {
+          "benchmark": "math_500",
+          "comparisons": [
+            {
+              "cheaper_correct": "anthropic/claude-opus-5",
+              "more_expensive_incorrect": "openai/gpt-5.6-sol"
+            }
+          ],
+          "prompt_id": "math_500:test/counting_and_probability/870.json"
+        },
+        {
+          "benchmark": "math_500",
+          "comparisons": [
+            {
+              "cheaper_correct": "anthropic/claude-opus-5",
+              "more_expensive_incorrect": "openai/gpt-5.6-sol"
+            }
+          ],
+          "prompt_id": "math_500:test/intermediate_algebra/960.json"
+        },
+        {
+          "benchmark": "math_500",
+          "comparisons": [
+            {
+              "cheaper_correct": "anthropic/claude-opus-5",
+              "more_expensive_incorrect": "openai/gpt-5.6-sol"
+            }
+          ],
+          "prompt_id": "math_500:test/precalculus/986.json"
+        },
+        {
+          "benchmark": "mmlu_pro",
+          "comparisons": [
+            {
+              "cheaper_correct": "anthropic/claude-opus-5",
+              "more_expensive_incorrect": "openai/gpt-5.6-sol"
+            }
+          ],
+          "prompt_id": "mmlu_pro:12015"
+        }
+      ],
+      "comparison_prompt_count": 10,
+      "comparison_prompt_ids": [
+        "math_500:test/counting_and_probability/870.json",
+        "math_500:test/geometry/965.json",
+        "math_500:test/intermediate_algebra/960.json",
+        "math_500:test/number_theory/769.json",
+        "math_500:test/precalculus/986.json",
+        "mmlu_pro:10442",
+        "mmlu_pro:12015",
+        "mmlu_pro:1346",
+        "mmlu_pro:5022",
+        "mmlu_pro:6502"
+      ],
+      "cost_order": [
+        "anthropic/claude-opus-5",
+        "openai/gpt-5.6-sol"
+      ],
+      "cost_order_is_strength_proxy": true,
+      "cost_rule": "observed response cost, excluding failed-attempt reserves; ties broken by provider/model ID",
+      "evidence_of_routing_signal": true,
+      "excluded_incomplete_prompt_ids": [
+        "livecodebench:abc400_g",
+        "livecodebench:arc196_a",
+        "livecodebench:arc196_b",
+        "livecodebench:arc196_c",
+        "livecodebench:arc196_d"
+      ],
+      "oracle_accuracy": 0.8,
+      "oracle_accuracy_lift": 0.0,
+      "oracle_cheapest_correct_cost_usd": 0.054599,
+      "oracle_cost_with_cheapest_static_fallback_usd": 0.064999,
+      "oracle_full_cost_relative_to_best_static": 0.8466167372191469,
+      "oracle_selections": [
+        {
+          "cost_usd": 0.00082,
+          "model": "anthropic/claude-opus-5",
+          "prompt_id": "math_500:test/counting_and_probability/870.json"
+        },
+        {
+          "cost_usd": 0.006472,
+          "model": "openai/gpt-5.6-sol",
+          "prompt_id": "math_500:test/geometry/965.json"
+        },
+        {
+          "cost_usd": 0.02354,
+          "model": "anthropic/claude-opus-5",
+          "prompt_id": "math_500:test/intermediate_algebra/960.json"
+        },
+        {
+          "cost_usd": 0.001852,
+          "model": "openai/gpt-5.6-sol",
+          "prompt_id": "math_500:test/number_theory/769.json"
+        },
+        {
+          "cost_usd": 0.002175,
+          "model": "anthropic/claude-opus-5",
+          "prompt_id": "math_500:test/precalculus/986.json"
+        },
+        {
+          "cost_usd": 0.001944,
+          "model": "openai/gpt-5.6-sol",
+          "prompt_id": "mmlu_pro:10442"
+        },
+        {
+          "cost_usd": 0.01232,
+          "model": "anthropic/claude-opus-5",
+          "prompt_id": "mmlu_pro:12015"
+        },
+        {
+          "cost_usd": 0.005476,
+          "model": "openai/gpt-5.6-sol",
+          "prompt_id": "mmlu_pro:1346"
+        }
+      ],
+      "oracle_unsolved_prompt_ids": [
+        "mmlu_pro:5022",
+        "mmlu_pro:6502"
+      ],
+      "prompts_requiring_higher_cost_models": []
+    },
+    "static_baselines": {
+      "anthropic/claude-opus-5": {
+        "accuracy": 0.8,
+        "average_cost_usd": 0.0076775,
+        "average_latency_ms": 3438.981825099998,
+        "correct_per_dollar": 104.20058612829698,
+        "n": 10,
+        "total_cost_usd": 0.076775
+      },
+      "openai/gpt-5.6-sol": {
+        "accuracy": 0.4,
+        "average_cost_usd": 0.0088332,
+        "average_latency_ms": 9026.265341799999,
+        "correct_per_dollar": 45.28370239550786,
+        "n": 10,
+        "total_cost_usd": 0.088332
+      }
+    }
+  },
+  "static_baselines": {
+    "anthropic/claude-opus-5": {
+      "accuracy": null,
+      "average_cost_usd": null,
+      "average_latency_ms": null,
+      "correct_per_dollar": null,
+      "n": 0,
+      "total_cost_usd": null
+    },
+    "deepseek/deepseek-flash": {
+      "accuracy": null,
+      "average_cost_usd": null,
+      "average_latency_ms": null,
+      "correct_per_dollar": null,
+      "n": 0,
+      "total_cost_usd": null
+    },
+    "openai/gpt-5.6-sol": {
+      "accuracy": null,
+      "average_cost_usd": null,
+      "average_latency_ms": null,
+      "correct_per_dollar": null,
+      "n": 0,
+      "total_cost_usd": null
+    },
+    "openrouter/qwen/qwen3.8-2.4t-a95b": {
+      "accuracy": null,
+      "average_cost_usd": null,
+      "average_latency_ms": null,
+      "correct_per_dollar": null,
+      "n": 0,
+      "total_cost_usd": null
+    },
+    "xai/grok-4.6": {
+      "accuracy": null,
+      "average_cost_usd": null,
+      "average_latency_ms": null,
+      "correct_per_dollar": null,
+      "n": 0,
+      "total_cost_usd": null
     }
   },
   "vectors": [
     {
+      "benchmark": "mmlu_pro",
+      "confirmed_disagreement": true,
+      "correctness": {
+        "anthropic/claude-opus-5": true,
+        "deepseek/deepseek-flash": true,
+        "openai/gpt-5.6-sol": true,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": null,
+        "xai/grok-4.6": false
+      },
       "prompt_id": "mmlu_pro:1346",
-      "benchmark": "mmlu_pro",
-      "correctness": {
-        "GPT": true,
-        "Claude": true,
-        "Grok": false,
-        "DeepSeek": true,
-        "Qwen": null
-      },
       "statuses": {
-        "GPT": "success",
-        "Claude": "success",
-        "Grok": "success",
-        "DeepSeek": "success",
-        "Qwen": "provider_error"
-      },
-      "confirmed_disagreement": true
+        "anthropic/claude-opus-5": "success",
+        "deepseek/deepseek-flash": "success",
+        "openai/gpt-5.6-sol": "success",
+        "openrouter/qwen/qwen3.8-2.4t-a95b": "provider_error",
+        "xai/grok-4.6": "success"
+      }
     },
     {
+      "benchmark": "mmlu_pro",
+      "confirmed_disagreement": false,
+      "correctness": {
+        "anthropic/claude-opus-5": false,
+        "deepseek/deepseek-flash": false,
+        "openai/gpt-5.6-sol": false,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": null,
+        "xai/grok-4.6": false
+      },
       "prompt_id": "mmlu_pro:5022",
-      "benchmark": "mmlu_pro",
-      "correctness": {
-        "GPT": false,
-        "Claude": false,
-        "Grok": false,
-        "DeepSeek": false,
-        "Qwen": null
-      },
       "statuses": {
-        "GPT": "success",
-        "Claude": "success",
-        "Grok": "success",
-        "DeepSeek": "success",
-        "Qwen": "provider_error"
-      },
-      "confirmed_disagreement": false
+        "anthropic/claude-opus-5": "success",
+        "deepseek/deepseek-flash": "success",
+        "openai/gpt-5.6-sol": "success",
+        "openrouter/qwen/qwen3.8-2.4t-a95b": "provider_error",
+        "xai/grok-4.6": "success"
+      }
     },
     {
+      "benchmark": "mmlu_pro",
+      "confirmed_disagreement": true,
+      "correctness": {
+        "anthropic/claude-opus-5": true,
+        "deepseek/deepseek-flash": null,
+        "openai/gpt-5.6-sol": false,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": null,
+        "xai/grok-4.6": null
+      },
       "prompt_id": "mmlu_pro:12015",
-      "benchmark": "mmlu_pro",
-      "correctness": {
-        "GPT": false,
-        "Claude": true,
-        "Grok": null,
-        "DeepSeek": null,
-        "Qwen": null
-      },
       "statuses": {
-        "GPT": "success",
-        "Claude": "success",
-        "Grok": "provider_error",
-        "DeepSeek": "provider_error",
-        "Qwen": "skipped_model"
-      },
-      "confirmed_disagreement": true
+        "anthropic/claude-opus-5": "success",
+        "deepseek/deepseek-flash": "provider_error",
+        "openai/gpt-5.6-sol": "success",
+        "openrouter/qwen/qwen3.8-2.4t-a95b": "skipped_model",
+        "xai/grok-4.6": "provider_error"
+      }
     },
     {
+      "benchmark": "mmlu_pro",
+      "confirmed_disagreement": false,
+      "correctness": {
+        "anthropic/claude-opus-5": false,
+        "deepseek/deepseek-flash": null,
+        "openai/gpt-5.6-sol": false,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": null,
+        "xai/grok-4.6": null
+      },
       "prompt_id": "mmlu_pro:6502",
-      "benchmark": "mmlu_pro",
-      "correctness": {
-        "GPT": false,
-        "Claude": false,
-        "Grok": null,
-        "DeepSeek": null,
-        "Qwen": null
-      },
       "statuses": {
-        "GPT": "success",
-        "Claude": "success",
-        "Grok": "skipped_model",
-        "DeepSeek": "skipped_model",
-        "Qwen": "skipped_model"
-      },
-      "confirmed_disagreement": false
+        "anthropic/claude-opus-5": "success",
+        "deepseek/deepseek-flash": "skipped_model",
+        "openai/gpt-5.6-sol": "success",
+        "openrouter/qwen/qwen3.8-2.4t-a95b": "skipped_model",
+        "xai/grok-4.6": "skipped_model"
+      }
     },
     {
+      "benchmark": "mmlu_pro",
+      "confirmed_disagreement": false,
+      "correctness": {
+        "anthropic/claude-opus-5": true,
+        "deepseek/deepseek-flash": null,
+        "openai/gpt-5.6-sol": true,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": null,
+        "xai/grok-4.6": null
+      },
       "prompt_id": "mmlu_pro:10442",
-      "benchmark": "mmlu_pro",
-      "correctness": {
-        "GPT": true,
-        "Claude": true,
-        "Grok": null,
-        "DeepSeek": null,
-        "Qwen": null
-      },
       "statuses": {
-        "GPT": "success",
-        "Claude": "success",
-        "Grok": "skipped_model",
-        "DeepSeek": "skipped_model",
-        "Qwen": "skipped_model"
-      },
-      "confirmed_disagreement": false
+        "anthropic/claude-opus-5": "success",
+        "deepseek/deepseek-flash": "skipped_model",
+        "openai/gpt-5.6-sol": "success",
+        "openrouter/qwen/qwen3.8-2.4t-a95b": "skipped_model",
+        "xai/grok-4.6": "skipped_model"
+      }
     },
     {
+      "benchmark": "math_500",
+      "confirmed_disagreement": true,
+      "correctness": {
+        "anthropic/claude-opus-5": true,
+        "deepseek/deepseek-flash": null,
+        "openai/gpt-5.6-sol": false,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": null,
+        "xai/grok-4.6": null
+      },
       "prompt_id": "math_500:test/intermediate_algebra/960.json",
-      "benchmark": "math_500",
-      "correctness": {
-        "GPT": false,
-        "Claude": true,
-        "Grok": null,
-        "DeepSeek": null,
-        "Qwen": null
-      },
       "statuses": {
-        "GPT": "success",
-        "Claude": "success",
-        "Grok": "skipped_model",
-        "DeepSeek": "skipped_model",
-        "Qwen": "skipped_model"
-      },
-      "confirmed_disagreement": true
+        "anthropic/claude-opus-5": "success",
+        "deepseek/deepseek-flash": "skipped_model",
+        "openai/gpt-5.6-sol": "success",
+        "openrouter/qwen/qwen3.8-2.4t-a95b": "skipped_model",
+        "xai/grok-4.6": "skipped_model"
+      }
     },
     {
+      "benchmark": "math_500",
+      "confirmed_disagreement": false,
+      "correctness": {
+        "anthropic/claude-opus-5": true,
+        "deepseek/deepseek-flash": null,
+        "openai/gpt-5.6-sol": true,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": null,
+        "xai/grok-4.6": null
+      },
       "prompt_id": "math_500:test/number_theory/769.json",
-      "benchmark": "math_500",
-      "correctness": {
-        "GPT": true,
-        "Claude": true,
-        "Grok": null,
-        "DeepSeek": null,
-        "Qwen": null
-      },
       "statuses": {
-        "GPT": "success",
-        "Claude": "success",
-        "Grok": "skipped_model",
-        "DeepSeek": "skipped_model",
-        "Qwen": "skipped_model"
-      },
-      "confirmed_disagreement": false
+        "anthropic/claude-opus-5": "success",
+        "deepseek/deepseek-flash": "skipped_model",
+        "openai/gpt-5.6-sol": "success",
+        "openrouter/qwen/qwen3.8-2.4t-a95b": "skipped_model",
+        "xai/grok-4.6": "skipped_model"
+      }
     },
     {
+      "benchmark": "math_500",
+      "confirmed_disagreement": true,
+      "correctness": {
+        "anthropic/claude-opus-5": true,
+        "deepseek/deepseek-flash": null,
+        "openai/gpt-5.6-sol": false,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": null,
+        "xai/grok-4.6": null
+      },
       "prompt_id": "math_500:test/counting_and_probability/870.json",
-      "benchmark": "math_500",
-      "correctness": {
-        "GPT": false,
-        "Claude": true,
-        "Grok": null,
-        "DeepSeek": null,
-        "Qwen": null
-      },
       "statuses": {
-        "GPT": "success",
-        "Claude": "success",
-        "Grok": "skipped_model",
-        "DeepSeek": "skipped_model",
-        "Qwen": "skipped_model"
-      },
-      "confirmed_disagreement": true
+        "anthropic/claude-opus-5": "success",
+        "deepseek/deepseek-flash": "skipped_model",
+        "openai/gpt-5.6-sol": "success",
+        "openrouter/qwen/qwen3.8-2.4t-a95b": "skipped_model",
+        "xai/grok-4.6": "skipped_model"
+      }
     },
     {
+      "benchmark": "math_500",
+      "confirmed_disagreement": false,
+      "correctness": {
+        "anthropic/claude-opus-5": true,
+        "deepseek/deepseek-flash": null,
+        "openai/gpt-5.6-sol": true,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": null,
+        "xai/grok-4.6": null
+      },
       "prompt_id": "math_500:test/geometry/965.json",
-      "benchmark": "math_500",
-      "correctness": {
-        "GPT": true,
-        "Claude": true,
-        "Grok": null,
-        "DeepSeek": null,
-        "Qwen": null
-      },
       "statuses": {
-        "GPT": "success",
-        "Claude": "success",
-        "Grok": "skipped_model",
-        "DeepSeek": "skipped_model",
-        "Qwen": "skipped_model"
-      },
-      "confirmed_disagreement": false
+        "anthropic/claude-opus-5": "success",
+        "deepseek/deepseek-flash": "skipped_model",
+        "openai/gpt-5.6-sol": "success",
+        "openrouter/qwen/qwen3.8-2.4t-a95b": "skipped_model",
+        "xai/grok-4.6": "skipped_model"
+      }
     },
     {
+      "benchmark": "math_500",
+      "confirmed_disagreement": true,
+      "correctness": {
+        "anthropic/claude-opus-5": true,
+        "deepseek/deepseek-flash": null,
+        "openai/gpt-5.6-sol": false,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": null,
+        "xai/grok-4.6": null
+      },
       "prompt_id": "math_500:test/precalculus/986.json",
-      "benchmark": "math_500",
-      "correctness": {
-        "GPT": false,
-        "Claude": true,
-        "Grok": null,
-        "DeepSeek": null,
-        "Qwen": null
-      },
       "statuses": {
-        "GPT": "success",
-        "Claude": "success",
-        "Grok": "skipped_model",
-        "DeepSeek": "skipped_model",
-        "Qwen": "skipped_model"
-      },
-      "confirmed_disagreement": true
+        "anthropic/claude-opus-5": "success",
+        "deepseek/deepseek-flash": "skipped_model",
+        "openai/gpt-5.6-sol": "success",
+        "openrouter/qwen/qwen3.8-2.4t-a95b": "skipped_model",
+        "xai/grok-4.6": "skipped_model"
+      }
     },
     {
+      "benchmark": "livecodebench",
+      "confirmed_disagreement": false,
+      "correctness": {
+        "anthropic/claude-opus-5": null,
+        "deepseek/deepseek-flash": null,
+        "openai/gpt-5.6-sol": null,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": null,
+        "xai/grok-4.6": null
+      },
       "prompt_id": "livecodebench:arc196_d",
-      "benchmark": "livecodebench",
-      "correctness": {
-        "GPT": null,
-        "Claude": null,
-        "Grok": null,
-        "DeepSeek": null,
-        "Qwen": null
-      },
       "statuses": {
-        "GPT": "provider_error",
-        "Claude": "provider_error",
-        "Grok": "skipped_model",
-        "DeepSeek": "skipped_model",
-        "Qwen": "skipped_model"
-      },
-      "confirmed_disagreement": false
+        "anthropic/claude-opus-5": "provider_error",
+        "deepseek/deepseek-flash": "skipped_model",
+        "openai/gpt-5.6-sol": "provider_error",
+        "openrouter/qwen/qwen3.8-2.4t-a95b": "skipped_model",
+        "xai/grok-4.6": "skipped_model"
+      }
     },
     {
+      "benchmark": "livecodebench",
+      "confirmed_disagreement": false,
+      "correctness": {
+        "anthropic/claude-opus-5": null,
+        "deepseek/deepseek-flash": null,
+        "openai/gpt-5.6-sol": null,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": null,
+        "xai/grok-4.6": null
+      },
       "prompt_id": "livecodebench:arc196_c",
-      "benchmark": "livecodebench",
-      "correctness": {
-        "GPT": null,
-        "Claude": null,
-        "Grok": null,
-        "DeepSeek": null,
-        "Qwen": null
-      },
       "statuses": {
-        "GPT": "skipped_model",
-        "Claude": "skipped_model",
-        "Grok": "skipped_model",
-        "DeepSeek": "skipped_model",
-        "Qwen": "skipped_model"
-      },
-      "confirmed_disagreement": false
+        "anthropic/claude-opus-5": "skipped_model",
+        "deepseek/deepseek-flash": "skipped_model",
+        "openai/gpt-5.6-sol": "skipped_model",
+        "openrouter/qwen/qwen3.8-2.4t-a95b": "skipped_model",
+        "xai/grok-4.6": "skipped_model"
+      }
     },
     {
+      "benchmark": "livecodebench",
+      "confirmed_disagreement": false,
+      "correctness": {
+        "anthropic/claude-opus-5": null,
+        "deepseek/deepseek-flash": null,
+        "openai/gpt-5.6-sol": null,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": null,
+        "xai/grok-4.6": null
+      },
       "prompt_id": "livecodebench:arc196_b",
-      "benchmark": "livecodebench",
-      "correctness": {
-        "GPT": null,
-        "Claude": null,
-        "Grok": null,
-        "DeepSeek": null,
-        "Qwen": null
-      },
       "statuses": {
-        "GPT": "skipped_model",
-        "Claude": "skipped_model",
-        "Grok": "skipped_model",
-        "DeepSeek": "skipped_model",
-        "Qwen": "skipped_model"
-      },
-      "confirmed_disagreement": false
+        "anthropic/claude-opus-5": "skipped_model",
+        "deepseek/deepseek-flash": "skipped_model",
+        "openai/gpt-5.6-sol": "skipped_model",
+        "openrouter/qwen/qwen3.8-2.4t-a95b": "skipped_model",
+        "xai/grok-4.6": "skipped_model"
+      }
     },
     {
+      "benchmark": "livecodebench",
+      "confirmed_disagreement": false,
+      "correctness": {
+        "anthropic/claude-opus-5": null,
+        "deepseek/deepseek-flash": null,
+        "openai/gpt-5.6-sol": null,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": null,
+        "xai/grok-4.6": null
+      },
       "prompt_id": "livecodebench:arc196_a",
-      "benchmark": "livecodebench",
-      "correctness": {
-        "GPT": null,
-        "Claude": null,
-        "Grok": null,
-        "DeepSeek": null,
-        "Qwen": null
-      },
       "statuses": {
-        "GPT": "skipped_model",
-        "Claude": "skipped_model",
-        "Grok": "skipped_model",
-        "DeepSeek": "skipped_model",
-        "Qwen": "skipped_model"
-      },
-      "confirmed_disagreement": false
+        "anthropic/claude-opus-5": "skipped_model",
+        "deepseek/deepseek-flash": "skipped_model",
+        "openai/gpt-5.6-sol": "skipped_model",
+        "openrouter/qwen/qwen3.8-2.4t-a95b": "skipped_model",
+        "xai/grok-4.6": "skipped_model"
+      }
     },
     {
+      "benchmark": "livecodebench",
+      "confirmed_disagreement": false,
+      "correctness": {
+        "anthropic/claude-opus-5": null,
+        "deepseek/deepseek-flash": null,
+        "openai/gpt-5.6-sol": null,
+        "openrouter/qwen/qwen3.8-2.4t-a95b": null,
+        "xai/grok-4.6": null
+      },
       "prompt_id": "livecodebench:abc400_g",
-      "benchmark": "livecodebench",
-      "correctness": {
-        "GPT": null,
-        "Claude": null,
-        "Grok": null,
-        "DeepSeek": null,
-        "Qwen": null
-      },
       "statuses": {
-        "GPT": "skipped_model",
-        "Claude": "skipped_model",
-        "Grok": "skipped_model",
-        "DeepSeek": "skipped_model",
-        "Qwen": "skipped_model"
-      },
-      "confirmed_disagreement": false
-    }
-  ],
-  "pairwise_disagreement_on_pair_specific_overlap": [
-    {
-      "models": [
-        "GPT",
-        "Claude"
-      ],
-      "by_benchmark": {
-        "all": {
-          "n": 10,
-          "disagreements": 4,
-          "rate": 0.4
-        },
-        "mmlu_pro": {
-          "n": 5,
-          "disagreements": 1,
-          "rate": 0.2
-        },
-        "math_500": {
-          "n": 5,
-          "disagreements": 3,
-          "rate": 0.6
-        },
-        "livecodebench": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        }
-      }
-    },
-    {
-      "models": [
-        "GPT",
-        "Grok"
-      ],
-      "by_benchmark": {
-        "all": {
-          "n": 2,
-          "disagreements": 1,
-          "rate": 0.5
-        },
-        "mmlu_pro": {
-          "n": 2,
-          "disagreements": 1,
-          "rate": 0.5
-        },
-        "math_500": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "livecodebench": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        }
-      }
-    },
-    {
-      "models": [
-        "GPT",
-        "DeepSeek"
-      ],
-      "by_benchmark": {
-        "all": {
-          "n": 2,
-          "disagreements": 0,
-          "rate": 0.0
-        },
-        "mmlu_pro": {
-          "n": 2,
-          "disagreements": 0,
-          "rate": 0.0
-        },
-        "math_500": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "livecodebench": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        }
-      }
-    },
-    {
-      "models": [
-        "GPT",
-        "Qwen"
-      ],
-      "by_benchmark": {
-        "all": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "mmlu_pro": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "math_500": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "livecodebench": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        }
-      }
-    },
-    {
-      "models": [
-        "Claude",
-        "Grok"
-      ],
-      "by_benchmark": {
-        "all": {
-          "n": 2,
-          "disagreements": 1,
-          "rate": 0.5
-        },
-        "mmlu_pro": {
-          "n": 2,
-          "disagreements": 1,
-          "rate": 0.5
-        },
-        "math_500": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "livecodebench": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        }
-      }
-    },
-    {
-      "models": [
-        "Claude",
-        "DeepSeek"
-      ],
-      "by_benchmark": {
-        "all": {
-          "n": 2,
-          "disagreements": 0,
-          "rate": 0.0
-        },
-        "mmlu_pro": {
-          "n": 2,
-          "disagreements": 0,
-          "rate": 0.0
-        },
-        "math_500": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "livecodebench": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        }
-      }
-    },
-    {
-      "models": [
-        "Claude",
-        "Qwen"
-      ],
-      "by_benchmark": {
-        "all": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "mmlu_pro": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "math_500": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "livecodebench": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        }
-      }
-    },
-    {
-      "models": [
-        "Grok",
-        "DeepSeek"
-      ],
-      "by_benchmark": {
-        "all": {
-          "n": 2,
-          "disagreements": 1,
-          "rate": 0.5
-        },
-        "mmlu_pro": {
-          "n": 2,
-          "disagreements": 1,
-          "rate": 0.5
-        },
-        "math_500": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "livecodebench": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        }
-      }
-    },
-    {
-      "models": [
-        "Grok",
-        "Qwen"
-      ],
-      "by_benchmark": {
-        "all": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "mmlu_pro": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "math_500": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "livecodebench": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        }
-      }
-    },
-    {
-      "models": [
-        "DeepSeek",
-        "Qwen"
-      ],
-      "by_benchmark": {
-        "all": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "mmlu_pro": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "math_500": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        },
-        "livecodebench": {
-          "n": 0,
-          "disagreements": 0,
-          "rate": null
-        }
+        "anthropic/claude-opus-5": "skipped_model",
+        "deepseek/deepseek-flash": "skipped_model",
+        "openai/gpt-5.6-sol": "skipped_model",
+        "openrouter/qwen/qwen3.8-2.4t-a95b": "skipped_model",
+        "xai/grok-4.6": "skipped_model"
       }
     }
-  ],
-  "five_model_common_prompt_count": 0,
-  "five_model_disagreement_and_policy_metrics": null,
-  "five_model_unavailable_reason": "No prompt is successfully graded by all five models; missing outcomes are unknown, never incorrect.",
-  "confirmed_disagreement_lower_bound": 0.3333333333333333,
-  "two_model_diagnostic": {
-    "prompt_ids": [
-      "mmlu_pro:1346",
-      "mmlu_pro:5022",
-      "mmlu_pro:12015",
-      "mmlu_pro:6502",
-      "mmlu_pro:10442",
-      "math_500:test/intermediate_algebra/960.json",
-      "math_500:test/number_theory/769.json",
-      "math_500:test/counting_and_probability/870.json",
-      "math_500:test/geometry/965.json",
-      "math_500:test/precalculus/986.json"
-    ],
-    "static": {
-      "GPT": {
-        "n": 10,
-        "correct": 4,
-        "accuracy": 0.4,
-        "average_cost_usd": 0.0088332,
-        "total_cost_usd": 0.088332,
-        "average_latency_ms": 9026.265341799999,
-        "selections": [
-          {
-            "prompt_id": "mmlu_pro:1346",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "mmlu_pro:5022",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "mmlu_pro:12015",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "mmlu_pro:6502",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "mmlu_pro:10442",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "math_500:test/intermediate_algebra/960.json",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "math_500:test/number_theory/769.json",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "math_500:test/counting_and_probability/870.json",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "math_500:test/geometry/965.json",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "math_500:test/precalculus/986.json",
-            "model": "GPT"
-          }
-        ]
-      },
-      "Claude": {
-        "n": 10,
-        "correct": 8,
-        "accuracy": 0.8,
-        "average_cost_usd": 0.0076775,
-        "total_cost_usd": 0.076775,
-        "average_latency_ms": 3438.981825099998,
-        "selections": [
-          {
-            "prompt_id": "mmlu_pro:1346",
-            "model": "Claude"
-          },
-          {
-            "prompt_id": "mmlu_pro:5022",
-            "model": "Claude"
-          },
-          {
-            "prompt_id": "mmlu_pro:12015",
-            "model": "Claude"
-          },
-          {
-            "prompt_id": "mmlu_pro:6502",
-            "model": "Claude"
-          },
-          {
-            "prompt_id": "mmlu_pro:10442",
-            "model": "Claude"
-          },
-          {
-            "prompt_id": "math_500:test/intermediate_algebra/960.json",
-            "model": "Claude"
-          },
-          {
-            "prompt_id": "math_500:test/number_theory/769.json",
-            "model": "Claude"
-          },
-          {
-            "prompt_id": "math_500:test/counting_and_probability/870.json",
-            "model": "Claude"
-          },
-          {
-            "prompt_id": "math_500:test/geometry/965.json",
-            "model": "Claude"
-          },
-          {
-            "prompt_id": "math_500:test/precalculus/986.json",
-            "model": "Claude"
-          }
-        ]
-      }
-    },
-    "heuristics": {
-      "Math \u2192 Claude; otherwise GPT": {
-        "n": 10,
-        "correct": 7,
-        "accuracy": 0.7,
-        "average_cost_usd": 0.010863,
-        "total_cost_usd": 0.10863,
-        "average_latency_ms": 9075.674258600007,
-        "selections": [
-          {
-            "prompt_id": "mmlu_pro:1346",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "mmlu_pro:5022",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "mmlu_pro:12015",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "mmlu_pro:6502",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "mmlu_pro:10442",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "math_500:test/intermediate_algebra/960.json",
-            "model": "Claude"
-          },
-          {
-            "prompt_id": "math_500:test/number_theory/769.json",
-            "model": "Claude"
-          },
-          {
-            "prompt_id": "math_500:test/counting_and_probability/870.json",
-            "model": "Claude"
-          },
-          {
-            "prompt_id": "math_500:test/geometry/965.json",
-            "model": "Claude"
-          },
-          {
-            "prompt_id": "math_500:test/precalculus/986.json",
-            "model": "Claude"
-          }
-        ]
-      },
-      "Prompt > 2,000 characters \u2192 Claude; otherwise GPT": {
-        "n": 10,
-        "correct": 5,
-        "accuracy": 0.5,
-        "average_cost_usd": 0.0048566,
-        "total_cost_usd": 0.048566,
-        "average_latency_ms": 3228.203366699998,
-        "selections": [
-          {
-            "prompt_id": "mmlu_pro:1346",
-            "model": "Claude"
-          },
-          {
-            "prompt_id": "mmlu_pro:5022",
-            "model": "Claude"
-          },
-          {
-            "prompt_id": "mmlu_pro:12015",
-            "model": "Claude"
-          },
-          {
-            "prompt_id": "mmlu_pro:6502",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "mmlu_pro:10442",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "math_500:test/intermediate_algebra/960.json",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "math_500:test/number_theory/769.json",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "math_500:test/counting_and_probability/870.json",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "math_500:test/geometry/965.json",
-            "model": "GPT"
-          },
-          {
-            "prompt_id": "math_500:test/precalculus/986.json",
-            "model": "GPT"
-          }
-        ]
-      }
-    },
-    "oracle_accuracy": 0.8,
-    "oracle_accuracy_lift": 0,
-    "oracle_solved_only_cost_usd": 0.054599,
-    "oracle_unsolved_prompts": [
-      "mmlu_pro:5022",
-      "mmlu_pro:6502"
-    ],
-    "oracle_with_claude_fallback": {
-      "n": 10,
-      "correct": 8,
-      "accuracy": 0.8,
-      "average_cost_usd": 0.0064999,
-      "total_cost_usd": 0.064999,
-      "average_latency_ms": 3652.9238460000015,
-      "selections": [
-        {
-          "prompt_id": "mmlu_pro:1346",
-          "model": "GPT"
-        },
-        {
-          "prompt_id": "mmlu_pro:12015",
-          "model": "Claude"
-        },
-        {
-          "prompt_id": "mmlu_pro:10442",
-          "model": "GPT"
-        },
-        {
-          "prompt_id": "math_500:test/intermediate_algebra/960.json",
-          "model": "Claude"
-        },
-        {
-          "prompt_id": "math_500:test/number_theory/769.json",
-          "model": "GPT"
-        },
-        {
-          "prompt_id": "math_500:test/counting_and_probability/870.json",
-          "model": "Claude"
-        },
-        {
-          "prompt_id": "math_500:test/geometry/965.json",
-          "model": "GPT"
-        },
-        {
-          "prompt_id": "math_500:test/precalculus/986.json",
-          "model": "Claude"
-        },
-        {
-          "prompt_id": "mmlu_pro:5022",
-          "model": "Claude"
-        },
-        {
-          "prompt_id": "mmlu_pro:6502",
-          "model": "Claude"
-        }
-      ]
-    },
-    "oracle_full_cost_relative_to_best_and_cheapest": 0.8466167372191469
-  }
+  ]
 }

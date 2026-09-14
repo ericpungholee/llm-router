@@ -1,71 +1,87 @@
-# Hard-pilot routing decision
+# Final hard-pilot routing analysis
 
-**Decision: defer ML router training.** This artifact does not provide a completed five-model comparison. The recovered snapshot contains 24/75 graded pairs (32%) and zero fully graded five-model prompts. The available GPT/Claude overlap shows disagreement, but its accuracy oracle does not beat Claude. It is insufficient evidence of a learnable routing advantage.
+**Decision: defer ML training.** The run is no longer active, but its final artifact has only 24/75 successfully graded pairs and no fully graded five-model prompts. Stopped does not mean successfully completed.
 
-**Artifact validation and offline recovery**
+**Final artifact and provenance**
 
-The requested CSV was read directly and analyzed with the existing `pilot_analysis.py`, using the fixed 15-prompt × 5-model plan, not an inferred plan. Its rows matched all 75 unique planned pairs. It was changing during this task: the first read had 23 grades, 5 provider failures, 46 skips, 1 parsing failure, and $0.3146834 recorded spend. A later read showed an additional Qwen failure and overwrote the offline regrade. No provider calls were made by this analysis.
+Source final CSV: `data/results/hard_pilot_results.csv`. Primary analysis input: [`reports/snapshots/hard_pilot_final.csv`](snapshots/hard_pilot_final.csv). Frozen at 2026-09-14T01:57:53.090980+00:00, from working tree based on commit `ee278cb63abc4921affd2d2d7d04b194309cb596`. The input CSV is included in the repository; no `data/results/` files or credentials are needed for reproduction.
 
-To avoid further concurrent writes, the later CSV was frozen at `data/results/hard_pilot_analysis_snapshot.csv`. All tables below use that fixed snapshot after offline recovery. These counts are not a claim about the eventual state of the changing source file.
+Final SHA-256: `a58e79eb58519bb4a170142a4c1b60bbbc799fb671d40eb512488bfb52becf85`. File size: 155,902 bytes; row count: 75.
 
-The existing regrade command initially left Claude’s `mmlu_pro:12015` raw response `**F**` unparsed. A two-line change to the existing multiple-choice parser accepts a standalone bold option. Running `generate_dataset.py --regrade-results --output data/results/hard_pilot_analysis_snapshot.csv` then recovered `F`, which matches reference `F`. No raw response, spend, latency, token, request, generation, or timestamp field changed; only that row’s parsing/grading fields changed. All 82 existing/regression tests passed offline. No new evaluation infrastructure was added.
+Stability evidence: process inspection found no Python or hard-pilot writer. Identical size, SHA-256, row count and modification time were observed at 2026-09-14T01:56:31.601521+00:00 and 2026-09-14T01:57:14.728262+00:00. No original exit log/status was available, so successful exit is not asserted. Before regrade the source was 155,973 bytes, SHA-256 `a807bea092612d340cda0ac6415d19a55588a88341141c5c1ed10a2ef3bf8359`.
 
-Snapshot SHA-256: `a58e79eb58519bb4a170142a4c1b60bbbc799fb671d40eb512488bfb52becf85`.
+The earlier `data/results/hard_pilot_analysis_snapshot.csv` is superseded. The final recovered bytes happen to have the same hash as that intermediate snapshot; this final snapshot was copied directly from the stopped source after recovery, not reconstructed from the earlier snapshot. No new successful responses were added between those states.
 
-| Metric | Snapshot result |
-| --- | --- |
-| Expected pairs | 75 |
-| Recorded pairs | 75 |
-| Successfully graded pairs | 24 |
-| Provider failures (pair outcomes) | 6 |
-| Parsing failures | 0 |
-| Grading failures | 0 |
-| Skipped pairs | 45 |
-| Unrecorded pairs | 0 |
-| Spend-limit stops | 0 |
-| Total recorded spend | $0.3449374 |
-| Historical provider attempts / responses / failed attempts | 31 / 24 / 7 |
+Secret inspection found no API keys, authorization headers, credential values, environment contents, or private-key material. Pattern scans, private exact comparisons against local credential values, and schema/text inspection found no credentials. No sanitization or field removal was necessary. Normal provider request IDs remain.
 
-Recorded spend sums `estimated_cost_usd`, including failed-attempt reserves. It is not an independently verified provider bill. In this snapshot $0.2535674 belongs to returned responses and $0.0913700 to failed rows/reserves. Three legacy invalid-response failures record zero cost; this analysis does not infer their actual billing. Policy diagnostics use response cost and exclude failure reserves. All successful rows used in the two-model comparison have zero retries, permitting the documented legacy response-cost fallback.
+**One offline recovery and complete change audit**
 
-| Model | Expected / recorded | Graded | Provider failures | Skips | Recorded spend |
-| --- | --- | --- | --- | --- | --- |
-| GPT | 15 / 15 | 10 | 1 | 4 | $0.0883320 |
-| Claude | 15 / 15 | 10 | 1 | 4 | $0.0767750 |
-| Grok | 15 / 15 | 2 | 1 | 12 | $0.1135040 |
-| DeepSeek | 15 / 15 | 2 | 1 | 12 | $0.0039204 |
-| Qwen | 15 / 15 | 0 | 2 | 13 | $0.0624060 |
+Ran once against the stable source: `python3 generate_dataset.py --regrade-results --output data/results/hard_pilot_results.csv`. The existing standalone bold-option parser remains unchanged and narrow. Claude’s saved `**F**` on `mmlu_pro:12015` becomes parsed `F`, matching reference `F`. Raw responses and all provider telemetry, costs, latencies, tokens, timestamps, request IDs and generation settings were verified unchanged.
 
-| Benchmark | Expected / recorded | Graded | Provider failures | Skips | Recorded spend |
-| --- | --- | --- | --- | --- | --- |
-| mmlu_pro | 25 / 25 | 14 | 4 | 7 | $0.2817354 |
-| math_500 | 25 / 25 | 10 | 0 | 15 | $0.0632020 |
-| livecodebench | 25 / 25 | 0 | 2 | 23 | $0.0000000 |
-
-Model × benchmark completeness: each cell has five expected and five recorded rows. G = graded, F = provider failure, S = skipped. Parsing/grading failures and unrecorded rows are zero in every cell.
-
-| Benchmark | GPT | Claude | Grok | DeepSeek | Qwen |
-| --- | --- | --- | --- | --- | --- |
-| mmlu_pro | 5G / 0F / 0S | 5G / 0F / 0S | 2G / 1F / 2S | 2G / 1F / 2S | 0G / 2F / 3S |
-| math_500 | 5G / 0F / 0S | 5G / 0F / 0S | 0G / 0F / 5S | 0G / 0F / 5S | 0G / 0F / 5S |
-| livecodebench | 0G / 1F / 4S | 0G / 1F / 4S | 0G / 0F / 5S | 0G / 0F / 5S | 0G / 0F / 5S |
-
-**Why 51 pairs remain incomplete**
-
-| Prompt | Model | Saved failure | Recorded cost |
+| Prompt / model | Field | Before | After |
 | --- | --- | --- | --- |
-| mmlu_pro:1346 | Qwen | invalid_provider_response: Provider response did not contain non-empty text output | $0.0321520 |
-| mmlu_pro:5022 | Qwen | invalid_provider_response: Provider response did not contain non-empty text output | $0.0302540 |
-| mmlu_pro:12015 | Grok | network_error: The read operation timed out | $0.0289640 |
-| mmlu_pro:12015 | DeepSeek | invalid_provider_response: Provider response did not contain non-empty text output | $0.0000000 |
-| livecodebench:arc196_d | GPT | invalid_provider_response: Provider response did not contain non-empty text output | $0.0000000 |
-| livecodebench:arc196_d | Claude | invalid_provider_response: Provider response did not contain non-empty text output | $0.0000000 |
+| mmlu_pro:12015 / claude-opus-5 | correct | '' | 'True' |
+| mmlu_pro:12015 / claude-opus-5 | error_message | 'Could not extract one unambiguous multiple-choice option' | '' |
+| mmlu_pro:12015 / claude-opus-5 | error_type | 'parsing_failure' | '' |
+| mmlu_pro:12015 / claude-opus-5 | parsed_answer | '' | 'F' |
+| mmlu_pro:12015 / claude-opus-5 | score | '' | '1.0' |
+| mmlu_pro:12015 / claude-opus-5 | status | 'parsing_failure' | 'success' |
 
-All six provider-failure rows have empty saved raw responses, so none can be recovered offline. The other 45 rows are `skipped_model` with `model_disabled_after_provider_failure` and “No call made after an earlier provider/model failure in this run.” They have no saved raw responses either. GPT/Claude each skipped the four code prompts following `arc196_d`; Grok/DeepSeek each skipped the final two MMLU-Pro prompts and all ten math/code prompts; Qwen skipped the final three MMLU-Pro prompts and all ten math/code prompts. These are historical recorded outcomes; this report does not assume current runner behavior would reproduce that blocking.
+**Completeness**
 
-**Prompt correctness vectors**
+| Metric | Stable source before recovery | Final recovered snapshot |
+| --- | --- | --- |
+| expected_pairs | 75 | 75 |
+| recorded_pairs | 75 | 75 |
+| successfully_graded_pairs | 23 | 24 |
+| provider_failures | 6 | 6 |
+| parsing_failures | 1 | 0 |
+| grading_failures | 0 | 0 |
+| skipped_pairs | 45 | 45 |
+| unrecorded_pairs | 0 | 0 |
+| spend_limit_stops | 0 | 0 |
+| attempted_provider_calls | 31 | 31 |
+| successful_provider_responses | 24 | 24 |
+| failed_provider_attempts | 7 | 7 |
+| total_recorded_cost_usd | 0.3449374 | 0.3449374 |
 
-1 = graded correct; 0 = graded incorrect; F = provider failure; S = skipped. F/S are unknown correctness, never zero. Prompt IDs below are exact IDs from the fixed plan.
+Recorded spend includes failed-attempt reserves; it is not independently verified provider billing. Legacy empty-response rows with zero recorded cost do not prove zero actual billing. Attempts/responses include recorded or legacy-inferred history. Failures and skips never become incorrect answers.
+
+| Group | Expected | Recorded | Graded | Provider fail | Parse fail | Grade fail | Skipped | Missing | Spend stops | Attempts | Responses | Spend USD |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Claude | 15 | 15 | 10 | 1 | 0 | 0 | 4 | 0 | 0 | 11 | 10 | 0.076775 |
+| DeepSeek | 15 | 15 | 2 | 1 | 0 | 0 | 12 | 0 | 0 | 3 | 2 | 0.0039204 |
+| GPT | 15 | 15 | 10 | 1 | 0 | 0 | 4 | 0 | 0 | 11 | 10 | 0.088332 |
+| Qwen | 15 | 15 | 0 | 2 | 0 | 0 | 13 | 0 | 0 | 3 | 0 | 0.062406 |
+| Grok | 15 | 15 | 2 | 1 | 0 | 0 | 12 | 0 | 0 | 3 | 2 | 0.113504 |
+
+| Group | Expected | Recorded | Graded | Provider fail | Parse fail | Grade fail | Skipped | Missing | Spend stops | Attempts | Responses | Spend USD |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| mmlu_pro | 25 | 25 | 14 | 4 | 0 | 0 | 7 | 0 | 0 | 19 | 14 | 0.2817354 |
+| math_500 | 25 | 25 | 10 | 0 | 0 | 0 | 15 | 0 | 0 | 10 | 10 | 0.063202 |
+| livecodebench | 25 | 25 | 0 | 2 | 0 | 0 | 23 | 0 | 0 | 2 | 0 | 0 |
+
+| Group | Expected | Recorded | Graded | Provider fail | Parse fail | Grade fail | Skipped | Missing | Spend stops | Attempts | Responses | Spend USD |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| livecodebench / Claude | 5 | 5 | 0 | 1 | 0 | 0 | 4 | 0 | 0 | 1 | 0 | 0 |
+| livecodebench / DeepSeek | 5 | 5 | 0 | 0 | 0 | 0 | 5 | 0 | 0 | 0 | 0 | 0 |
+| livecodebench / GPT | 5 | 5 | 0 | 1 | 0 | 0 | 4 | 0 | 0 | 1 | 0 | 0 |
+| livecodebench / Qwen | 5 | 5 | 0 | 0 | 0 | 0 | 5 | 0 | 0 | 0 | 0 | 0 |
+| livecodebench / Grok | 5 | 5 | 0 | 0 | 0 | 0 | 5 | 0 | 0 | 0 | 0 | 0 |
+| math_500 / Claude | 5 | 5 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 5 | 5 | 0.04175 |
+| math_500 / DeepSeek | 5 | 5 | 0 | 0 | 0 | 0 | 5 | 0 | 0 | 0 | 0 | 0 |
+| math_500 / GPT | 5 | 5 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 5 | 5 | 0.021452 |
+| math_500 / Qwen | 5 | 5 | 0 | 0 | 0 | 0 | 5 | 0 | 0 | 0 | 0 | 0 |
+| math_500 / Grok | 5 | 5 | 0 | 0 | 0 | 0 | 5 | 0 | 0 | 0 | 0 | 0 |
+| mmlu_pro / Claude | 5 | 5 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 5 | 5 | 0.035025 |
+| mmlu_pro / DeepSeek | 5 | 5 | 2 | 1 | 0 | 0 | 2 | 0 | 0 | 3 | 2 | 0.0039204 |
+| mmlu_pro / GPT | 5 | 5 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 5 | 5 | 0.06688 |
+| mmlu_pro / Qwen | 5 | 5 | 0 | 2 | 0 | 0 | 3 | 0 | 0 | 3 | 0 | 0.062406 |
+| mmlu_pro / Grok | 5 | 5 | 2 | 1 | 0 | 0 | 2 | 0 | 0 | 3 | 2 | 0.113504 |
+
+**Five-model routing signal**
+
+Correctness vectors use 1/0 only for successfully graded answers; F = provider failure and S = skipped.
 
 | Prompt | GPT | Claude | Grok | DeepSeek | Qwen |
 | --- | --- | --- | --- | --- | --- |
@@ -85,17 +101,16 @@ All six provider-failure rows have empty saved raw responses, so none can be rec
 | livecodebench:arc196_a | S | S | S | S | S |
 | livecodebench:abc400_g | S | S | S | S | S |
 
-There are **zero eligible prompts** for the full five-model agreement calculation. On that empty common subset, all-agree, all-correct, all-wrong, and disagree counts are each 0; the disagreement rate is undefined (0/0). These are not counts for the full 15-prompt plan: full-plan all-agree/all-correct/all-wrong/disagree totals remain unknown.
+| Subset | Eligible prompts | All correct | All wrong | All agree | Disagree | Disagreement rate |
+| --- | --- | --- | --- | --- | --- | --- |
+| All five models | 0 | 0 | 0 | 0 | 0 | N/A |
+| mmlu_pro | 0 | 0 | 0 | 0 | 0 | N/A |
+| math_500 | 0 | 0 | 0 | 0 | 0 | N/A |
+| livecodebench | 0 | 0 | 0 | 0 | 0 | N/A |
 
-Partial vectors nevertheless prove disagreement when both a 1 and a 0 are already observed. Five prompts satisfy this: `mmlu_pro:1346`, `mmlu_pro:12015`, and math `intermediate_algebra/960.json`, `counting_and_probability/870.json`, `precalculus/986.json`. Thus full-plan disagreement is **at least 5/15 = 33.3%**; the remaining ten prompts are unresolved. No prompt has proven five-model agreement, all-correctness, or all-wrongness.
+The zero counts above describe an empty eligible subset, not zero disagreement across the 15-prompt plan. Full-plan totals are unknown. Partial vectors prove disagreement on at least 5/15 prompts (33.3%): two MMLU-Pro and three MATH-500; code has no grades.
 
-| Benchmark | Fully graded five-model prompts | Confirmed disagreement lower bound | Unresolved agreement |
-| --- | --- | --- | --- |
-| mmlu_pro | 0 | 2/5 | 3 |
-| math_500 | 0 | 3/5 | 2 |
-| livecodebench | 0 | 0/5 | 5 |
-
-Pairwise disagreements use each pair’s own jointly graded prompts, not the empty five-model subset. Different denominators prevent ranking pairs directly. N/A means no overlap, not zero disagreement.
+Pairwise rows use each pair’s own jointly graded overlap. Denominators differ; N/A is not agreement.
 
 | Pair | All | MMLU-Pro | MATH-500 | LiveCodeBench |
 | --- | --- | --- | --- | --- |
@@ -110,11 +125,9 @@ Pairwise disagreements use each pair’s own jointly graded prompts, not the emp
 | Grok / Qwen | N/A (n=0) | N/A (n=0) | N/A (n=0) | N/A (n=0) |
 | DeepSeek / Qwen | N/A (n=0) | N/A (n=0) | N/A (n=0) | N/A (n=0) |
 
-**Requested five-model routing baselines**
+**Static policies and oracle on the five-model common subset**
 
-All requested deterministic policies have n=0 on the common fully graded five-model subset. Their accuracy, average/total comparison cost, and latency cannot be estimated. An empty cost sum of $0 would not be a usable policy cost.
-
-| Always model | n | Accuracy | Average cost | Total cost | Average latency |
+| Policy | n | Accuracy | Total cost | Average cost | Average latency ms |
 | --- | --- | --- | --- | --- | --- |
 | GPT | 0 | N/A | N/A | N/A | N/A |
 | Claude | 0 | N/A | N/A | N/A | N/A |
@@ -122,33 +135,105 @@ All requested deterministic policies have n=0 on the common fully graded five-mo
 | DeepSeek | 0 | N/A | N/A | N/A | N/A |
 | Qwen | 0 | N/A | N/A | N/A | N/A |
 
-Best single model, cheapest model, best accuracy/cost static model, five-model oracle accuracy, cheapest-correct oracle cost, oracle accuracy improvement, and oracle cost ratios relative to best/cheapest are all **unavailable**. Benchmark/task-type and prompt-length heuristic comparisons on that same five-model subset are also unavailable. Selecting different rows for different policies would not answer the requested comparison.
+Best single model, cheapest model, best static accuracy/cost model, five-model oracle accuracy, oracle lift, cheapest-correct cost and oracle cost relative to best static are all N/A: the common subset is empty. No reduced comparison substitutes for these missing five-model results.
 
-**Supplementary GPT/Claude diagnostic: ten shared graded prompts**
+**Secondary diagnostic: GPT/Claude only, ten shared graded prompts**
 
-This separate, explicitly reduced comparison includes all five MMLU-Pro and all five MATH-500 prompts. It excludes LiveCodeBench and does not stand in for a five-model benchmark. Costs and latencies are observed single-run measurements, not predicted serving performance.
+| Model | n | Accuracy | Total cost | Average cost | Average latency ms |
+| --- | --- | --- | --- | --- | --- |
+| GPT | 10 | 0.4 | $0.0883320 | $0.0088332 | 9026.2653418 |
+| Claude | 10 | 0.8 | $0.0767750 | $0.0076775 | 3438.9818251 |
 
-| Policy | Accuracy | Average cost/prompt | Total cost | Average latency |
-| --- | --- | --- | --- | --- |
-| GPT | 4/10 (40%) | $0.0088332 | $0.0883320 | 9.026 s |
-| Claude | 8/10 (80%) | $0.0076775 | $0.0767750 | 3.439 s |
-| Math → Claude; otherwise GPT | 7/10 (70%) | $0.0108630 | $0.1086300 | 9.076 s |
-| Prompt > 2,000 characters → Claude; otherwise GPT | 5/10 (50%) | $0.0048566 | $0.0485660 | 3.228 s |
+These ten prompts comprise five MMLU-Pro and five MATH-500; neither model has a code grade. They agree on six (four both correct, two both wrong) and disagree on four (40%). MMLU-Pro disagreement is 1/5; MATH-500 is 3/5. Every disagreement favors Claude. Claude is more accurate, cheaper in observed mean cost, and faster on this subset; it also has the best static accuracy/cost ratio. That is static dominance, not complementary accuracy strengths.
 
-Claude is the best by accuracy, cheapest by observed mean response cost, and best accuracy/cost static model within this reduced set. Defining accuracy/cost as accuracy divided by mean dollars per prompt gives Claude 104.20 versus GPT 45.28 expected correct answers per dollar. This does not identify the best or cheapest among all five models.
+The reduced oracle is 80%, with 0% accuracy lift over Claude. Cheapest-correct cost is $0.0545990 for eight solved prompts only. The two unsolved prompts are `mmlu_pro:5022` and `mmlu_pro:6502`. Charging a Claude fallback on those gives $0.0649990 across all ten, 84.7% of Claude’s total cost (15.3% savings at equal accuracy). This uses ex-post correctness and realized costs; it does not demonstrate a prompt-visible policy or generalization.
 
-The two heuristic rules use only task type or the character count of the saved prompt (including its answer-format instructions). The 2,000-character threshold is a single illustrative cutoff, not a threshold search. Both rules were examined after seeing this pilot, so their results are exploratory and have no held-out validation. Neither beats Claude’s accuracy. The length rule achieves 50% accuracy for $0.0485660, losing 30 percentage points for a 36.7% cost reduction. The task-type rule is both less accurate and more expensive than always-Claude.
+**Why the matrix is incomplete and what resume would do**
 
-GPT and Claude agree on 6/10 prompts: four both correct and two both wrong. They disagree on 4/10 (40%): 1/5 MMLU-Pro (20%) and 3/5 MATH-500 (60%). Every disagreement favors Claude. Claude’s benchmark accuracy is 3/5 MMLU-Pro and 5/5 MATH-500; GPT’s is 2/5 in each. This indicates a larger observed Claude advantage on math, but no benchmark where GPT has an accuracy advantage. Length is confounded with benchmark: all five math prompts are 95–335 characters, while MMLU-Pro prompts are 1,722–3,788. There is no code evidence, and two-prompt Grok/DeepSeek overlaps cannot establish specialization.
+All 51 incomplete pairs are listed below. None has a saved response, so none is recoverable offline; each would need another provider call. Five empty-text provider failures are classified as “other”, not permanent model failures or incorrect answers: the CSV does not establish a permanent cause. One network timeout is transient. All 45 historical skips followed an earlier provider/model failure. Parsing failures, grading failures, permanent failures and spend-limit stops are zero after recovery.
 
-The two-model oracle solves 8/10 = 80%, **0 percentage points above Claude**. Cheapest-correct cost on those eight solved prompts is $0.0545990; no correct model exists for `mmlu_pro:5022` or `mmlu_pro:6502`. The solved-only cost must not be compared directly to ten-prompt policy totals as though failures cost nothing.
+| Prompt | Model | Classification | Saved reason / error |
+| --- | --- | --- | --- |
+| mmlu_pro:1346 | Qwen | other | invalid_provider_response: Provider response did not contain non-empty text output |
+| mmlu_pro:5022 | Qwen | other | invalid_provider_response: Provider response did not contain non-empty text output |
+| mmlu_pro:12015 | Grok | transient provider failure | network_error: The read operation timed out |
+| mmlu_pro:12015 | DeepSeek | other | invalid_provider_response: Provider response did not contain non-empty text output |
+| mmlu_pro:12015 | Qwen | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| mmlu_pro:6502 | Grok | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| mmlu_pro:6502 | DeepSeek | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| mmlu_pro:6502 | Qwen | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| mmlu_pro:10442 | Grok | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| mmlu_pro:10442 | DeepSeek | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| mmlu_pro:10442 | Qwen | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| math_500:test/intermediate_algebra/960.json | Grok | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| math_500:test/intermediate_algebra/960.json | DeepSeek | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| math_500:test/intermediate_algebra/960.json | Qwen | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| math_500:test/number_theory/769.json | Grok | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| math_500:test/number_theory/769.json | DeepSeek | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| math_500:test/number_theory/769.json | Qwen | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| math_500:test/counting_and_probability/870.json | Grok | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| math_500:test/counting_and_probability/870.json | DeepSeek | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| math_500:test/counting_and_probability/870.json | Qwen | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| math_500:test/geometry/965.json | Grok | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| math_500:test/geometry/965.json | DeepSeek | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| math_500:test/geometry/965.json | Qwen | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| math_500:test/precalculus/986.json | Grok | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| math_500:test/precalculus/986.json | DeepSeek | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| math_500:test/precalculus/986.json | Qwen | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_d | GPT | other | invalid_provider_response: Provider response did not contain non-empty text output |
+| livecodebench:arc196_d | Claude | other | invalid_provider_response: Provider response did not contain non-empty text output |
+| livecodebench:arc196_d | Grok | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_d | DeepSeek | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_d | Qwen | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_c | GPT | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_c | Claude | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_c | Grok | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_c | DeepSeek | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_c | Qwen | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_b | GPT | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_b | Claude | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_b | Grok | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_b | DeepSeek | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_b | Qwen | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_a | GPT | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_a | Claude | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_a | Grok | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_a | DeepSeek | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:arc196_a | Qwen | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:abc400_g | GPT | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:abc400_g | Claude | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:abc400_g | Grok | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:abc400_g | DeepSeek | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
+| livecodebench:abc400_g | Qwen | skipped historical row | model_disabled_after_provider_failure: No call made after an earlier provider/model failure in this run. |
 
-For a complete ten-prompt oracle cost accounting, choose the cheapest observed correct response when one exists and fall back to always-Claude on the two unsolved prompts. Cost becomes $0.0649990 ($0.0064999/prompt), or 84.662% of both the best and cheapest static model (Claude), a 15.3% reduction at the same 80% accuracy. This is an ex-post bound using correctness and realized response cost, not a prompt-visible deployable policy. Cost savings have not been demonstrated at equal accuracy by the two tested heuristics.
+Current safety logic identifies 51 eligible pending pairs and no persistent invalid-model/configuration blocks. The 24 paid responses remain terminal, including incorrect responses. Qwen’s non-retryable empty-response errors are not retried within that request, but their pairs are eligible on resume. Up to 153 attempts could be needed at two retries per pair. A $2 total cap includes the existing $0.3449374, leaving $1.6550626; guards may stop early and completion is not guaranteed.
 
-**Interpretation and next decision**
+Preflight only (no provider calls; not executed here):
 
-Do not train the first ML router from this artifact. Partial observations establish some disagreement, but disagreement alone does not establish complementary strengths: Claude wins every GPT/Claude disagreement, and the reduced oracle has zero accuracy lift. The existing analyzer’s broad `evidence_of_routing_signal` flag can become true merely because one cheaper model beats a more expensive one; that is compatible with static dominance and is not a sufficient ML gate.
+```bash
+python3 generate_dataset.py --hard-pilot --resume --max-spend-usd 2.00 --output data/results/hard_pilot_results.csv
+```
 
-The unresolved requirement is evaluation coverage, not additional infrastructure. Once the concurrently changing run is finished, inspect its artifact again and recover saved answers offline. Obtaining grades for the remaining empty-response failures/skips would require additional provider work, which was not initiated here. Even a completed 15-prompt pilot would be descriptive evidence for whether to collect training data, rather than enough data to establish generalization of an ML router. No embeddings, training, provider calls, or additional rule searches were performed.
+After explicit later authorization to spend, the exact resume command is:
 
-Reproduction: run `python3 pilot_analysis.py data/results/hard_pilot_analysis_snapshot.csv` for the existing accounting output (`reports/hard_pilot_existing_analysis.json`). Extended arithmetic, full vectors, pairwise denominators, selected rows for both heuristic policies, and the regrade field audit are saved in `reports/hard_pilot_routing_analysis.json`. The original changing CSV is retained separately.
+```bash
+python3 generate_dataset.py --hard-pilot --resume --max-spend-usd 2.00 --output data/results/hard_pilot_results.csv --confirm
+```
+
+From a fresh clone, first restore a working resume CSV without overwriting any existing live results: `mkdir -p data/results` then `cp -n reports/snapshots/hard_pilot_final.csv data/results/hard_pilot_results.csv`. Never pass the frozen report snapshot as the live output.
+
+**Decision and reproducibility**
+
+Evidence that routing could help: partial disagreement exists and the reduced cost oracle leaves modest theoretical savings, but five-model complementary strengths cannot be assessed; the available accuracy evidence supports choosing Claude statically. Evidence that a learned router could generalize: none. Fifteen prompts cannot establish generalization, and no held-out learned policy was evaluated. Defer ML; resolve evaluation coverage before revisiting the decision. The existing analyzer’s broad `evidence_of_routing_signal` flag also counts static cheaper-model wins and is not used as the ML decision gate.
+
+Test verification: {"checks": ["standalone bold parser accepts only an unambiguous valid option", "audit reconstructs original CSV with matching SHA-256", "offline regrade changes only parsing/grading fields", "analysis and all reports reproduce byte-for-byte without data/ or credentials", "report references tracked snapshot and verifies SHA-256", "tampered snapshot fails hash verification"], "offline_test_command": "python3 -m unittest discover -s tests -v", "status": "passed", "tests_passed": 84}.
+
+From the repository root of a fresh clone, using Python 3.9+ (standard library is sufficient for these commands):
+
+```bash
+python3 pilot_analysis.py reports/snapshots/hard_pilot_final.csv
+python3 reports/reproduce_hard_pilot.py
+python3 -m unittest discover -s tests -v
+```
+
+The report command verifies the snapshot SHA and regenerates all three analysis files deterministically. It reads the tracked snapshot, provenance and fixed benchmark plan; it never reads the moving source, loads credentials, calls providers, or rewrites the snapshot. The provenance audit reconstructs the before-regrade CSV for verification. Keep this snapshot immutable; future paid outcomes belong to a separately versioned artifact.

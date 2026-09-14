@@ -3,6 +3,29 @@
 This repository builds deterministic evaluation data for a future learned LLM
 router. It does **not** train or serve the router yet.
 
+## Frozen final hard-pilot artifact
+
+The stopped run's normalized, offline-regraded CSV is included at
+`reports/snapshots/hard_pilot_final.csv`. Its provenance file records stability
+observations, the before/after SHA-256 hashes, the complete regrade audit, and
+credential inspection. This supersedes the earlier ignored intermediate snapshot.
+The final matrix has 24/75 graded pairs and no fully graded five-model prompts;
+ML training remains deferred. See `reports/hard_pilot_routing_analysis.md`.
+
+Reproduce from a fresh clone with Python 3.9+; these commands require neither
+`data/results/` nor API keys and make no provider calls:
+
+```bash
+python3 pilot_analysis.py reports/snapshots/hard_pilot_final.csv
+python3 reports/reproduce_hard_pilot.py
+python3 -m unittest discover -s tests -v
+```
+
+The report script verifies the frozen input hash and regenerates the Markdown
+and JSON reports. Keep the frozen CSV immutable; use a separate working CSV for
+any later authorized resume. The report lists all incomplete pairs and the exact
+preflight/resume commands; further calls are not part of this offline analysis.
+
 ## Enabled hosted models
 
 | Creator | Model | Provider | Exact API identifier |

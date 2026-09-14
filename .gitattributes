@@ -1,0 +1,2 @@
+# Preserve the audited CSV bytes, including original prompt whitespace and CRLF.
+reports/snapshots/hard_pilot_final.csv -text -whitespace
