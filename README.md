@@ -96,9 +96,8 @@ python3 generate_dataset.py --hard-pilot --max-spend-usd 2.00 --resume
 
 Do not run it until its source summary and spend estimate have been reviewed.
 Pass `--confirm` only after reviewing the preflight. Calls remain sequential,
-with no retries, at most 75 inference attempts, and a maximum cap of $2.00.
-Zero retries is the existing hard-pilot policy; the shared retry helper supports
-up to two configured retries in other modes and checks spend before every attempt.
+with 75 unique pairs, up to two retries per pair for transient failures, at most
+225 provider attempts in the worst case, and a maximum cap of $2.00.
 
 After reviewing preflight, resume the existing artifact with:
 
@@ -106,10 +105,13 @@ After reviewing preflight, resume the existing artifact with:
 python3 generate_dataset.py --hard-pilot --max-spend-usd 2.00 --resume --confirm
 ```
 
-Preflight prints remaining-call maximum cost, existing recorded spend, and their
-sum. The cap includes previous runs' recorded costs; resume does not reset it.
-If the conservative total exceeds $2, completion is not guaranteed. Dispatch
-still stops before exceeding the cap; do not raise the hard-pilot safety limit.
+Preflight reports remaining pairs, up to three provider attempts per pending
+pair, previously recorded spend, conservative maximum additional/total spend,
+and the configured cap. Paid terminal pairs are excluded from the pending retry
+budget. The cap includes previous runs' recorded costs; resume does not reset it.
+If the conservative total exceeds $2, preflight warns that completion is not
+guaranteed. The spend guard checks every attempt, including retries, and stops
+before dispatch if its bound could exceed the cap.
 
 Failure and resume rules:
 

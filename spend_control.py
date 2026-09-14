@@ -2,7 +2,7 @@
 
 import os
 from dataclasses import dataclass
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal, InvalidOperation, ROUND_CEILING
 from typing import Optional, Sequence, Tuple, Union
 
 from model_registry import ModelConfig
@@ -78,15 +78,19 @@ def max_call_cost_usd(
 
 def estimate_max_spend_usd(
     calls: Sequence[PlannedCall],
+    *,
+    max_retries: int = 0,
 ) -> Decimal:
-    """Estimate the maximum token spend for all planned calls."""
+    """Bound all attempts for pending pairs, including paid failed attempts."""
+    if not isinstance(max_retries, int) or isinstance(max_retries, bool) or not 0 <= max_retries <= 2:
+        raise ValueError("max_retries must be between 0 and 2")
     return sum(
         (
-            max_call_cost_usd(call[0], call[1], call[2] if len(call) == 3 else None)
+            max_call_cost_usd(call[0], call[1], call[2] if len(call) == 3 else None) * (1 + max_retries)
             for call in calls
         ),
         Decimal("0"),
-    ).quantize(Decimal("0.000001"))
+    ).quantize(Decimal("0.000001"), rounding=ROUND_CEILING)
 
 
 @dataclass(frozen=True)
@@ -96,15 +100,21 @@ class RunPlan:
     estimated_max_cost_usd: Decimal
     configured_spend_cap_usd: Decimal
     global_max_spend_usd: Decimal
+    max_retries: int = 0
+
+    @property
+    def maximum_provider_attempts(self) -> int:
+        return self.planned_calls * (1 + self.max_retries)
 
     def confirmation_text(self) -> str:
         models = ", ".join(self.enabled_models) or "none"
         return "\n".join(
             (
                 "LIVE RUN SPEND CONFIRMATION",
-                f"- Planned calls: {self.planned_calls}",
+                f"- Remaining prompt/model pairs: {self.planned_calls}",
+                f"- Maximum provider attempts for pending pairs: {self.maximum_provider_attempts}",
                 f"- Enabled models: {models}",
-                f"- Estimated maximum cost: ${self.estimated_max_cost_usd:.6f}",
+                f"- Conservative maximum additional spend: ${self.estimated_max_cost_usd:.6f}",
                 f"- Configured spend cap: ${self.configured_spend_cap_usd:.2f}",
                 f"- Global maximum spend: ${self.global_max_spend_usd:.2f}",
             )
@@ -115,6 +125,7 @@ def build_run_plan(
     calls: Sequence[PlannedCall],
     *,
     spend_cap: Optional[object] = None,
+    max_retries: int = 0,
 ) -> RunPlan:
     global_cap = global_max_spend_usd()
     configured_cap = run_spend_cap_usd(spend_cap)
@@ -122,13 +133,14 @@ def build_run_plan(
         raise SpendPreflightError(
             f"Run spend cap ${configured_cap:.2f} exceeds global maximum ${global_cap:.2f}."
         )
-    estimated = estimate_max_spend_usd(calls)
+    estimated = estimate_max_spend_usd(calls, max_retries=max_retries)
     return RunPlan(
         planned_calls=len(calls),
         enabled_models=tuple(dict.fromkeys(call[0].canonical_model_name for call in calls)),
         estimated_max_cost_usd=estimated,
         configured_spend_cap_usd=configured_cap,
         global_max_spend_usd=global_cap,
+        max_retries=max_retries,
     )
 
 

@@ -65,13 +65,53 @@ class PilotAnalysisTests(unittest.TestCase):
 
     def test_incomplete_prompts_use_common_subset_and_absent_pairs_are_reported(self):
         report = analyze_results(self.rows[:-1], [r.prompt_id for r in self.records] + ["wholly-absent"],
-                                 [(m.inference_provider, m.api_model_identifier) for m in self.models])
+                                 [(m.inference_provider, m.api_model_identifier) for m in self.models],
+                                 {p: "smoke_test" for p in [r.prompt_id for r in self.records] + ["wholly-absent"]})
         self.assertEqual(report["matrix_completeness"]["expected_pairs"], 8)
         self.assertEqual(report["matrix_completeness"]["successfully_graded_pairs"], 5)
         self.assertEqual(report["routing_comparison"]["comparison_prompt_count"], 2)
         self.assertEqual(report["routing_comparison"]["oracle_accuracy"], 1)
         self.assertEqual(report["routing_comparison"]["always_best_single_model"]["accuracy"], 0.5)
         self.assertEqual(sum(v["unrecorded_pairs"] for v in report["by_model"].values()), 3)
+
+    def test_wholly_absent_prompt_and_benchmark_use_expected_membership(self):
+        prompts = [r.prompt_id for r in self.records] + ["absent:prompt", "absent:benchmark"]
+        membership = {r.prompt_id: r.benchmark_name for r in self.records}
+        membership.update({"absent:prompt": "smoke_test", "absent:benchmark": "wholly_absent_benchmark"})
+        rows = [dict(r) for r in self.rows]
+        for row, status in zip(rows[1:], ["provider_error", "parsing_failure", "grading_failure", "skipped_model", "success"]):
+            if status != "success":
+                row.update(status=status, error_type=status, correct=None, score=None)
+        report = analyze_results(rows, prompts, [(m.inference_provider, m.api_model_identifier) for m in self.models], membership)
+        benchmark_metrics = report["by_benchmark_and_model"]
+        for model in self.models:
+            label = f"{model.inference_provider}/{model.api_model_identifier}"
+            smoke = benchmark_metrics["smoke_test"][label]
+            absent = benchmark_metrics["wholly_absent_benchmark"][label]
+            self.assertEqual(smoke["expected_pairs"], 4)
+            self.assertEqual(smoke["recorded_pairs"], 3)
+            self.assertEqual(smoke["unrecorded_pairs"], 1)
+            self.assertEqual(absent["expected_pairs"], 1)
+            self.assertEqual(absent["recorded_pairs"], 0)
+            self.assertEqual(absent["unrecorded_pairs"], 1)
+            self.assertEqual(absent["successfully_graded_pairs"], 0)
+            for field in ("expected_pairs", "recorded_pairs", "successfully_graded_pairs", "unrecorded_pairs",
+                          "provider_failures", "parsing_failures", "grading_failures", "skipped_pairs"):
+                self.assertEqual(sum(b[label][field] for b in benchmark_metrics.values()), report["by_model"][label][field])
+        all_metrics = [v for b in benchmark_metrics.values() for v in b.values()]
+        for field in ("expected_pairs", "recorded_pairs", "successfully_graded_pairs", "unrecorded_pairs"):
+            self.assertEqual(sum(v[field] for v in all_metrics), report["matrix_completeness"][field])
+        for field in ("provider_failures", "parsing_failures", "grading_failures", "skipped_pairs"):
+            self.assertEqual(sum(v[field] for v in all_metrics), 1)
+
+    def test_absent_expected_prompt_requires_benchmark_mapping(self):
+        with self.assertRaisesRegex(ValueError, "prompt -> benchmark mapping"):
+            analyze_results(self.rows, [r.prompt_id for r in self.records] + ["absent"])
+
+    def test_observed_plan_preserves_observed_benchmark_counts(self):
+        report = analyze_results(self.rows[:-1])
+        for label, metrics in report["by_model"].items():
+            self.assertEqual(report["by_benchmark_and_model"]["smoke_test"][label], metrics)
 
     def test_no_graded_response_has_undefined_accuracy(self):
         row = dict(self.rows[0], status="provider_error", error_type="network_error", correct=None, score=None,

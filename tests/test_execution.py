@@ -8,6 +8,9 @@ from unittest.mock import Mock, patch
 
 from benchmark_loaders import BenchmarkRecord, load_enabled_benchmarks, load_hard_pilot
 from generate_dataset import (
+    HARD_PILOT_PAIR_COUNT,
+    HARD_PILOT_MAX_RETRIES,
+    HARD_PILOT_MAX_ATTEMPTS,
     generate_results,
     is_completed_result,
     main,
@@ -27,6 +30,64 @@ from spend_control import build_run_plan, max_call_cost_usd
 
 
 class ModeSelectionTests(unittest.TestCase):
+    def hard_pilot_fixture(self):
+        _, records = load_enabled_benchmarks(Path("benchmarks/manifest.json"))
+        records = select_pilot_prompts(records)
+        return records, generate_results(records, dry_run=True)
+
+    def test_hard_pilot_and_alias_configure_two_retries_and_225_attempts(self):
+        records, rows = self.hard_pilot_fixture()
+        self.assertEqual(HARD_PILOT_PAIR_COUNT, 75)
+        self.assertEqual(HARD_PILOT_MAX_RETRIES, 2)
+        self.assertEqual(HARD_PILOT_MAX_ATTEMPTS, 225)
+        for mode in ("--hard-pilot", "--pilot"):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as directory:
+                with patch("sys.argv", ["generate_dataset.py", mode, "--max-spend-usd", "2.00", "--confirm", "--output", str(Path(directory) / "pilot.csv")]):
+                    with patch("generate_dataset.generate_results", return_value=rows) as generator, patch("generate_dataset.write_results"), patch("generate_dataset.load_dotenv"), patch("builtins.print") as printer:
+                        main()
+                kwargs = generator.call_args.kwargs
+                self.assertEqual(kwargs["max_retries"], 2)
+                self.assertEqual(kwargs["max_api_attempts"], 225)
+                self.assertEqual(kwargs["run_plan"].planned_calls, 75)
+                self.assertEqual(kwargs["run_plan"].maximum_provider_attempts, 225)
+                self.assertEqual(kwargs["run_plan"].estimated_max_cost_usd,
+                                 build_run_plan(planned_calls(records), spend_cap="2.00", max_retries=2).estimated_max_cost_usd)
+                output = "\n".join(str(call.args[0]) for call in printer.call_args_list)
+                for label in ("Remaining prompt/model pairs: 75", "Maximum provider attempts for pending pairs: 225",
+                              "Previously recorded spend:", "Conservative maximum additional spend:",
+                              "Conservative maximum total spend:", "Configured spend cap: $2.00",
+                              "Conservative maximum exceeds the configured cap"):
+                    self.assertIn(label, output)
+
+    def test_hard_pilot_cap_above_two_dollars_is_rejected_before_dispatch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            with patch("sys.argv", ["generate_dataset.py", "--hard-pilot", "--max-spend-usd", "2.01", "--confirm", "--output", str(Path(directory) / "pilot.csv")]):
+                with patch("generate_dataset.generate_results") as generator, patch("generate_dataset.load_dotenv"), patch("builtins.print"):
+                    with self.assertRaisesRegex(SystemExit, "cap cannot exceed"):
+                        main()
+                generator.assert_not_called()
+
+    def test_resumed_retry_budget_excludes_paid_pairs_and_includes_transient_failure(self):
+        records, rows = self.hard_pilot_fixture()
+        existing = [dict(r) for r in rows[:4]]
+        for row, status in zip(existing[1:], ("parsing_failure", "grading_failure", "provider_error")):
+            row.update(status=status, score=None, correct=None,
+                       error_type="network_error" if status == "provider_error" else status)
+        existing[-1].update(raw_response="", parsed_answer="", failure_retryable=True, failure_scope="pair",
+                            stop_reason="", provider_attempts=3, provider_response_count=0, estimated_cost_usd=0.01)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "pilot.csv"
+            write_results(existing, path)
+            with patch("sys.argv", ["generate_dataset.py", "--hard-pilot", "--max-spend-usd", "2.00", "--resume", "--confirm", "--output", str(path)]):
+                with patch("generate_dataset.build_run_plan", wraps=build_run_plan) as planner, patch("generate_dataset.generate_results", return_value=rows) as generator, patch("generate_dataset.write_results"), patch("generate_dataset.load_dotenv"), patch("builtins.print"):
+                    main()
+        pending = planner.call_args.args[0]
+        self.assertEqual(pending, planned_calls(records)[3:])
+        self.assertEqual(planner.call_args.kwargs["max_retries"], 2)
+        self.assertEqual(generator.call_args.kwargs["run_plan"].planned_calls, 72)
+        self.assertEqual(generator.call_args.kwargs["run_plan"].maximum_provider_attempts, 216)
+        self.assertEqual(generator.call_args.kwargs["initial_spend_usd"], Decimal("0.01"))
+
     def test_hard_pilot_alias_requires_confirmation_before_calls(self):
         with patch("sys.argv", ["generate_dataset.py", "--hard-pilot", "--max-spend-usd", "2.00"]):
             self.assertTrue(parse_args().pilot)
@@ -103,6 +164,41 @@ class ExecutionSafetyTests(unittest.TestCase):
         self.assertEqual(rows[0]["retry_count"], 2)
         self.assertEqual(rows[0]["failure_scope"], "pair")
         self.assertEqual([r["provider_attempts"] for r in rows], [3, 1])
+
+    def test_third_attempt_success_still_allows_later_pairs(self):
+        rows, calls = self.run_mocked([self.error(), self.error(), self.response, self.response],
+                                      max_retries=HARD_PILOT_MAX_RETRIES, max_api_attempts=HARD_PILOT_MAX_ATTEMPTS)
+        self.assertEqual(calls, 4)
+        self.assertEqual([r["status"] for r in rows], ["success", "success"])
+        self.assertEqual([r["provider_attempts"] for r in rows], [3, 1])
+        self.assertEqual(rows[0]["retry_count"], 2)
+
+    def test_two_dollar_cap_stops_resumed_pilot_before_unsafe_attempt(self):
+        paid = generate_results([self.records[0]], dry_run=True, models=[self.model])[0]
+        paid["estimated_cost_usd"] = 1.999
+        plan = build_run_plan(planned_calls(self.records, [self.model]),
+                              spend_cap="2.00", max_retries=HARD_PILOT_MAX_RETRIES)
+        rows, calls = self.run_mocked([], completed_results=[paid], run_plan=plan,
+                                      max_retries=HARD_PILOT_MAX_RETRIES, max_api_attempts=HARD_PILOT_MAX_ATTEMPTS)
+        self.assertEqual(calls, 0)
+        self.assertEqual(rows[-1]["error_type"], "spend_limit_error")
+        self.assertEqual(rows[-1]["provider_attempts"], 0)
+        self.assertLessEqual(sum(Decimal(str(r["estimated_cost_usd"])) for r in rows), Decimal("2.00"))
+
+    def test_225_attempt_ceiling_allows_three_attempts_for_all_75_pairs(self):
+        records = [replace(smoke_test_prompt(), prompt_id=f"mock-pilot:{i}") for i in range(15)]
+        models = enabled_models()
+        effects = [ProviderError(m.inference_provider, m.api_model_identifier, "mock timeout",
+                                 error_type="network_error", retryable=True)
+                   for _ in records for m in models for _ in range(3)]
+        with patch("builtins.print"):
+            rows, calls = self.run_mocked(effects, records=records, models=models,
+                                          max_retries=HARD_PILOT_MAX_RETRIES, max_api_attempts=HARD_PILOT_MAX_ATTEMPTS)
+        self.assertEqual(calls, 225)
+        self.assertEqual(len(rows), 75)
+        self.assertTrue(all(r["status"] == "provider_error" and r["error_type"] == "network_error" for r in rows))
+        self.assertEqual(sum(r["provider_attempts"] for r in rows), 225)
+        self.assertTrue(all(r["retry_count"] == 2 for r in rows))
 
     def test_http_500_and_429_exhaustion_do_not_disable_model(self):
         for status in (500, 429):

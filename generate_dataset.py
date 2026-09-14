@@ -50,7 +50,9 @@ from spend_control import RunPlan, SpendCapExceeded, SpendLimitError, SpendTrack
 
 SMOKE_MAX_OUTPUT_TOKENS = 128
 SMOKE_MAX_API_CALLS = 5
-PILOT_MAX_MODEL_CALLS = 75
+HARD_PILOT_PAIR_COUNT = 75
+HARD_PILOT_MAX_RETRIES = 2
+HARD_PILOT_MAX_ATTEMPTS = HARD_PILOT_PAIR_COUNT * (1 + HARD_PILOT_MAX_RETRIES)
 HARD_PILOT_MAX_SPEND_USD = Decimal("2.00")
 HARD_PILOT_DEFINITION = Path("benchmarks/hard_pilot.json")
 PAID_TERMINAL_STATUSES = frozenset(("success", "parsing_failure", "grading_failure"))
@@ -689,7 +691,7 @@ def parse_args() -> argparse.Namespace:
     modes.add_argument("--smoke-test", action="store_true", help="Run one prompt against five models.")
     modes.add_argument(
         "--hard-pilot", "--pilot", dest="pilot", action="store_true",
-        help="Run the confirmed 15-prompt, 75-attempt hard pilot.",
+        help="Run the confirmed 15-prompt, 75-pair hard pilot with up to two retries per pair.",
     )
     modes.add_argument(
         "--regrade-pilot", "--regrade-results", dest="regrade_pilot",
@@ -774,8 +776,8 @@ def main() -> None:
             raise SystemExit(str(error)) from error
         output_limit = None
         spend_cap = args.max_spend_usd or "1.00"
-        max_retries = 0
-        max_attempts = PILOT_MAX_MODEL_CALLS
+        max_retries = HARD_PILOT_MAX_RETRIES
+        max_attempts = HARD_PILOT_MAX_ATTEMPTS
     else:
         benchmark = list(all_records)
         output_limit = None
@@ -802,21 +804,25 @@ def main() -> None:
     ]
     if args.smoke_test and len(remaining) > SMOKE_MAX_API_CALLS:
         raise SystemExit("Smoke test safety invariant failed: more than 5 calls selected")
-    if args.pilot and len(planned_calls(benchmark, models)) != PILOT_MAX_MODEL_CALLS:
+    if args.pilot and len(planned_calls(benchmark, models)) != HARD_PILOT_PAIR_COUNT:
         raise SystemExit("Pilot safety invariant failed: selection is not exactly 15 prompts x 5 models")
-    if args.pilot and len({(r.prompt_id, m.inference_provider, m.api_model_identifier) for r in benchmark for m in models}) != PILOT_MAX_MODEL_CALLS:
+    if args.pilot and len({(r.prompt_id, m.inference_provider, m.api_model_identifier) for r in benchmark for m in models}) != HARD_PILOT_PAIR_COUNT:
         raise SystemExit("Pilot safety invariant failed: pairs are not unique")
 
     run_plan = None
     if live_mode:
         try:
-            run_plan = build_run_plan(remaining, spend_cap=spend_cap)
+            run_plan = build_run_plan(remaining, spend_cap=spend_cap, max_retries=max_retries)
         except SpendLimitError as error:
             raise SystemExit(str(error)) from error
         print(run_plan.confirmation_text())
         recorded_spend = sum(Decimal(str(r["estimated_cost_usd"])) for r in existing_results)
         print(f"Previously recorded spend: ${recorded_spend:.6f}")
-        print(f"Maximum including remaining calls: ${recorded_spend + run_plan.estimated_max_cost_usd:.6f}")
+        maximum_total = recorded_spend + run_plan.estimated_max_cost_usd
+        print(f"Conservative maximum total spend: ${maximum_total:.6f}")
+        if maximum_total > run_plan.configured_spend_cap_usd:
+            print("Conservative maximum exceeds the configured cap; completion is not guaranteed. "
+                  "The runtime spend guard will stop before dispatching an attempt that could exceed the cap.")
         print(f"Retry policy: {max_retries} retries; attempt ceiling: {max_attempts or 'uncapped'}")
         if args.pilot:
             print(f"Hard pilot selection: {len(benchmark)} prompts x {len(models)} models = 75 pairs")
@@ -851,6 +857,7 @@ def main() -> None:
     report = analyze_results(
         results, [r.prompt_id for r in benchmark],
         [(m.inference_provider, m.api_model_identifier) for m in models],
+        {r.prompt_id: r.benchmark_name for r in benchmark},
     )
     print(json.dumps({key: report[key] for key in ("matrix_completeness", "by_model")}, indent=2, sort_keys=True))
     if args.dry_run:

@@ -1,6 +1,7 @@
 import os
 import unittest
 from dataclasses import replace
+from decimal import Decimal, ROUND_CEILING
 from pathlib import Path
 from unittest.mock import patch
 
@@ -18,6 +19,7 @@ from spend_control import (
     SpendTracker,
     build_run_plan,
     estimate_max_spend_usd,
+    max_call_cost_usd,
 )
 
 
@@ -58,13 +60,28 @@ class SpendControlTests(unittest.TestCase):
         plan = build_run_plan([(model, "short prompt")])
         confirmation = plan.confirmation_text()
         for label in (
-            "Planned calls",
+            "Remaining prompt/model pairs",
+            "Maximum provider attempts",
             "Enabled models",
-            "Estimated maximum cost",
+            "Conservative maximum additional spend",
             "Configured spend cap",
         ):
             self.assertIn(label, confirmation)
         self.assertIn("$1.00", confirmation)
+
+    def test_retry_aware_plan_bounds_three_attempts_for_each_pending_pair(self):
+        calls = [(model, "pending prompt", 128) for model in enabled_models()]
+        plan = build_run_plan(calls, spend_cap="2.00", max_retries=2)
+        expected = sum((max_call_cost_usd(*call) * 3 for call in calls), Decimal(0))
+        self.assertEqual(plan.estimated_max_cost_usd, expected.quantize(Decimal("0.000001"), rounding=ROUND_CEILING))
+        self.assertEqual(plan.planned_calls, 5)
+        self.assertEqual(plan.maximum_provider_attempts, 15)
+        self.assertEqual(plan.configured_spend_cap_usd, Decimal("2.00"))
+
+    def test_retry_estimate_rejects_unsupported_retry_counts(self):
+        for retries in (-1, 3, 1.5, True):
+            with self.subTest(retries=retries), self.assertRaises(ValueError):
+                build_run_plan([], max_retries=retries)
 
     def test_run_cap_cannot_exceed_global_limit(self):
         model = MODEL_REGISTRY[0]
