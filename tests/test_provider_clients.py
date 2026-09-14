@@ -1,4 +1,7 @@
 import unittest
+import io
+import json
+import urllib.error
 from unittest.mock import patch
 
 from model_registry import enabled_models
@@ -7,7 +10,7 @@ from provider_clients.deepseek import call_deepseek
 from provider_clients.openai import call_openai
 from provider_clients.openrouter import call_openrouter
 from provider_clients.xai import call_xai
-from provider_clients.base import _classify_http_error
+from provider_clients.base import ProviderError, _classify_http_error, _quota_scope, post_json
 
 
 def model_for(provider):
@@ -15,6 +18,41 @@ def model_for(provider):
 
 
 class ProviderAdapterTests(unittest.TestCase):
+    def test_http_billing_normalization_preserves_scope(self):
+        for message, scope in (("Insufficient credits", "provider"), ("Requires fewer max_tokens", "model")):
+            rejection = urllib.error.HTTPError("https://example.invalid", 402, "Payment required", {},
+                                              io.BytesIO(json.dumps({"error": {"message": message}}).encode()))
+            with patch("provider_clients.base.urllib.request.urlopen", side_effect=rejection):
+                with self.assertRaises(ProviderError) as raised:
+                    post_json(provider="example", model_identifier="model", url="https://example.invalid", headers={}, payload={})
+            self.assertEqual(raised.exception.failure_scope, scope)
+            self.assertFalse(raised.exception.retryable)
+
+    def test_billing_exhaustion_and_zero_resource_quota_have_different_scopes(self):
+        cases = [
+            (402, "", "Insufficient credits", "provider"),
+            (402, "", "This request requires more credits, or fewer max_tokens; can only afford 100 tokens", "model"),
+            (429, "insufficient_quota", "You exceeded your current quota", "provider"),
+            (429, "RESOURCE_EXHAUSTED", "Quota exceeded, limit: 0 for model X", "model"),
+        ]
+        for status, code, message, scope in cases:
+            with self.subTest(status=status, code=code):
+                kind, retryable, invalid = _classify_http_error(status, code, "", message)
+                self.assertEqual(kind, "quota_or_billing_error")
+                self.assertFalse(retryable)
+                error = ProviderError("provider", "model", message, status_code=status,
+                                      error_type=kind, retryable=retryable, invalid_model=invalid,
+                                      failure_scope=_quota_scope(status, code, "", message))
+                self.assertEqual(error.failure_scope, scope)
+
+    def test_ordinary_rate_limit_and_server_errors_are_retryable_pair_failures(self):
+        for status in (408, 429, 500, 502, 503):
+            kind, retryable, invalid = _classify_http_error(status, "", "", "Try again later")
+            error = ProviderError("provider", "model", "temporary", error_type=kind,
+                                  retryable=retryable, invalid_model=invalid)
+            self.assertTrue(error.retryable)
+            self.assertEqual(error.failure_scope, "pair")
+
     def test_zero_quota_is_not_classified_as_transient(self):
         error_type, retryable, invalid_model = _classify_http_error(
             429, "RESOURCE_EXHAUSTED", "", "Quota exceeded, limit: 0"

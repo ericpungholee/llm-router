@@ -17,9 +17,8 @@ router. It does **not** train or serve the router yet.
 call, `providers.py` checks every provider/identifier pair against the exact IDs
 implemented by the five adapters under `provider_clients/`. An adapter never
 substitutes a fallback model. A provider rejection is saved and printed with the
-provider's error message; an invalid model remains disabled on resume until its
-registry identifier changes or the failed row is deliberately removed after a
-manual correction.
+provider's error message. Failure scope is part of the shared `ProviderError`
+classification; evaluation does not reinterpret HTTP statuses.
 
 DeepSeek uses peak, uncached pricing ($0.30/M input and $1.20/M output) for
 conservative spend checks. Actual off-peak rates may be lower. OpenRouter's
@@ -84,19 +83,64 @@ Live outputs are resumed automatically when the output file already exists, so
 paid terminal prompt/model pairs are never called twice. Use a different
 `--output` path only when an intentionally separate run is desired.
 
-## Hard pilot (not run yet)
+## Hard pilot and resume
 
-The fixed hard-pilot definition selects five prompts from each benchmark. A
-future run will evaluate 15 prompts across five models for 75 prompt/model
+The fixed hard-pilot definition selects five prompts from each benchmark. The
+run evaluates 15 prompts across five models for 75 unique prompt/model
 pairs, writing to `data/results/hard_pilot_results.csv` so it cannot overwrite
 the completed nine-prompt pilot.
 
 ```bash
-python3 generate_dataset.py --pilot --max-spend-usd 1.00 --resume
+python3 generate_dataset.py --hard-pilot --max-spend-usd 2.00 --resume
 ```
 
 Do not run it until its source summary and spend estimate have been reviewed.
-Calls remain sequential, and the existing retry and spend controls apply.
+Pass `--confirm` only after reviewing the preflight. Calls remain sequential,
+with no retries, at most 75 inference attempts, and a maximum cap of $2.00.
+Zero retries is the existing hard-pilot policy; the shared retry helper supports
+up to two configured retries in other modes and checks spend before every attempt.
+
+After reviewing preflight, resume the existing artifact with:
+
+```bash
+python3 generate_dataset.py --hard-pilot --max-spend-usd 2.00 --resume --confirm
+```
+
+Preflight prints remaining-call maximum cost, existing recorded spend, and their
+sum. The cap includes previous runs' recorded costs; resume does not reset it.
+If the conservative total exceeds $2, completion is not guaranteed. Dispatch
+still stops before exceeding the cap; do not raise the hard-pilot safety limit.
+
+Failure and resume rules:
+
+* Retryable errors (network/timeouts, ordinary 429s, 5xx) use the configured retry
+  policy. Exhausted failures affect only that pair, never later prompts/models.
+* Empty/invalid provider responses and unrecognized rejections stay local.
+  Invalid parameters stay local because they may be prompt-specific. Explicit
+  `configuration_error` and invalid-model errors block the exact provider/model.
+* Authentication errors block that provider for the current run. Explicit empty
+  account balance/billing exhaustion blocks that provider; zero model/resource
+  quota and request affordability errors block only the affected model. No
+  provider error stops unrelated providers or the whole run.
+* Resume preserves every paid response (`success`, `parsing_failure`, or
+  `grading_failure`), including incorrect answers. Reparse/regrade saved raw
+  responses offline rather than calling those pairs again.
+* Pair failures and skipped rows are retried on resume. Auth/quota/billing blocks
+  are rechecked each run, allowing credentials/account state to be repaired.
+  Invalid-model/configuration blocks persist only for matching provider, exact
+  model ID, temperature, reasoning settings, and output limit. Changing the
+  relevant request configuration releases the block; old CSVs use their saved
+  settings. Completed paid responses remain terminal even after settings change.
+  Corrected registry IDs/providers move pending unpaid rows for the same canonical
+  model to the new identity, retaining prior spend/attempts. Paid rows retain their
+  original identity; a CSV with paid models outside the new plan is rejected.
+
+Transient failures and invalid provider responses reserve their maximum possible
+cost because inference may have been billed without returned usage. Reserves and
+attempt counts are checkpointed before retrying and retained when a failed pair
+is replaced on resume. Historical CSVs remain readable; their attempt counts are
+inferred from status/retry telemetry where necessary. No historical costs or raw
+responses are rewritten merely by preflight or analysis.
 
 The previous 45-row pilot remains at `data/results/pilot_results.csv`. Regrade
 that historical artifact entirely offline with:
@@ -138,11 +182,50 @@ incremental persistence.
 ```bash
 python -m unittest discover -s tests -v
 python experiment_summary.py
+python3 pilot_analysis.py data/results/hard_pilot_results.csv
 ```
 
 Tests mock every provider adapter and cover mode cardinality, spend caps and
 failed-attempt accounting, resume behavior, parsing failures, provider isolation,
 exact model IDs, and retry ceilings. Neither command makes provider calls.
+
+`pilot_analysis.py` emits deterministic JSON: per-model calls, responses, graded
+responses, correct responses, accuracy over graded responses, distinct failure
+counts, skips, missing pairs, recorded cost, and average latency of returned
+responses. Attempt/response counts and recorded costs are cumulative across
+resume; failure category counts describe the current pair outcomes. Spend stops
+are reported separately from provider failures. It also reports benchmark/model
+accuracy, cheaper-model wins, prompts solved only by higher-cost models, oracle
+accuracy, best-single-model and cheapest-model baselines, and cheapest-correct
+oracle cost. The default plan is the fixed 15 x 5 matrix, including wholly absent
+prompts/models. Use `--observed-plan` for historical/synthetic CSVs; that option
+cannot detect wholly absent prompts/models.
+
+Policy comparisons share the fully graded prompt subset, excluding all missing,
+skipped, provider, parsing, and grading failures. Model cost order uses average
+observed response cost on that subset; higher cost is a proxy, not proof of
+strength. Oracle selection uses each prompt's cheapest correct response cost
+(excluding failed-attempt reserves), with stable provider/model tie breaks.
+Oracle cost covers solved prompts only; unsolved prompts are listed explicitly.
+Legacy responses with retries cannot provide exact separate response costs, so
+cost policy analysis is withheld for those comparisons. Completeness is reported
+as graded pairs / 75; only an entirely graded matrix is labeled complete/valid.
+
+Reparse/regrade the hard pilot without paying for another response:
+
+```bash
+python3 generate_dataset.py --regrade-results --output data/results/hard_pilot_results.csv
+```
+
+This preserves provider failures/skips and all paid raw outputs and telemetry.
+Persistent parsing/grading failures still leave the matrix incomplete; inspect
+their saved responses and grader diagnostics rather than replacing null grades
+with incorrect answers.
+
+Before ML work, inspect completeness and failure categories first, then compare
+benchmark accuracies, prompt-level disagreements, oracle lift over the best
+single model, and accuracy/cost relative to the cheapest baseline. These are
+descriptive pilot results, not a statistical guarantee of generalization.
 
 ## Scope boundary
 

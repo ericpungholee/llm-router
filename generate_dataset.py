@@ -45,12 +45,13 @@ from providers import (
     provider_display_name,
     validate_provider_registry,
 )
-from spend_control import RunPlan, SpendLimitError, SpendTracker, build_run_plan
+from spend_control import RunPlan, SpendCapExceeded, SpendLimitError, SpendTracker, build_run_plan
 
 
 SMOKE_MAX_OUTPUT_TOKENS = 128
 SMOKE_MAX_API_CALLS = 5
 PILOT_MAX_MODEL_CALLS = 75
+HARD_PILOT_MAX_SPEND_USD = Decimal("2.00")
 HARD_PILOT_DEFINITION = Path("benchmarks/hard_pilot.json")
 PAID_TERMINAL_STATUSES = frozenset(("success", "parsing_failure", "grading_failure"))
 
@@ -148,19 +149,86 @@ def planned_calls(
     ]
 
 
-def result_key(row: Dict[str, object]) -> Tuple[str, str]:
-    return str(row["prompt_id"]), str(row["api_model_identifier"])
+def result_key(row: Dict[str, object]) -> Tuple[str, str, str]:
+    return str(row["prompt_id"]), str(row["inference_provider"]), str(row["api_model_identifier"])
 
 
 def is_completed_result(row: Dict[str, object]) -> bool:
     return str(row.get("status")) in PAID_TERMINAL_STATUSES
 
 
-def is_persistent_invalid_model_result(row: Dict[str, object]) -> bool:
-    return (
-        str(row.get("status")) == "provider_error"
-        and str(row.get("error_type")) == "invalid_model_error"
-    )
+def configuration_fingerprint(model: ModelConfig, output_limit: int) -> str:
+    """Non-secret request configuration; changing it releases saved model blocks."""
+    settings = (model.inference_provider, model.api_model_identifier,
+                model.generation.temperature_record, model.generation.reasoning_setting,
+                output_limit)
+    return hashlib.sha256(json.dumps(settings).encode()).hexdigest()
+
+
+def saved_model_blocks(rows, models, output_limit=None):
+    """Persist invalid/configuration blocks only; auth/billing is rechecked per run.
+
+    Paid responses are terminal regardless of grade. Pair failures and old skipped
+    rows are retryable on resume. No credential hashes are written to disk.
+    """
+    blocked = {}
+    for model in models:
+        for row in rows:
+            if (row.get("status") != "provider_error"
+                or row.get("error_type") not in {"invalid_model_error", "configuration_error"}
+                or row.get("inference_provider") != model.inference_provider
+                or row.get("api_model_identifier") != model.api_model_identifier):
+                continue
+            fingerprint = row.get("configuration_fingerprint")
+            matches = fingerprint == configuration_fingerprint(
+                model, output_limit or model.generation.max_output_tokens
+            ) if fingerprint else (
+                row.get("temperature") == model.generation.temperature_record
+                and row.get("reasoning_setting") == model.generation.reasoning_setting
+                and row.get("max_output_tokens") == (output_limit or model.generation.max_output_tokens)
+            )
+            if matches:
+                blocked[(model.inference_provider, model.api_model_identifier)] = row
+    return blocked
+
+
+def historical_attempts(row):
+    if "provider_attempts" in row:
+        return int(row["provider_attempts"])
+    if row.get("stop_reason") == "mock_completed" or row.get("status") == "skipped_model":
+        return 0
+    if row.get("error_type") == "spend_limit_error":
+        return int(row.get("retry_count", 0))
+    return 1 + int(row.get("retry_count", 0))
+
+
+def historical_responses(row):
+    return int(row.get("provider_response_count", int(is_completed_result(row) and row.get("stop_reason") != "mock_completed")))
+
+
+def reconcile_pending_configuration(rows, models):
+    """Move unpaid pending rows to corrected registry IDs without losing spend.
+
+    Paid outputs retain their exact identity. An output containing a paid model
+    removed from the plan is rejected by preflight rather than silently reused.
+    """
+    by_name = {m.canonical_model_name: m for m in models}
+    reconciled = []
+    for existing in rows:
+        row = dict(existing)
+        model = by_name.get(str(row["model_name"]))
+        if model and not is_completed_result(row) and (
+            row["inference_provider"], row["api_model_identifier"]
+        ) != (model.inference_provider, model.api_model_identifier):
+            row["configuration_fingerprint"] = row.get("configuration_fingerprint") or (
+                f"superseded:{row['inference_provider']}:{row['api_model_identifier']}"
+            )
+            row.update(inference_provider=model.inference_provider,
+                       api_model_identifier=model.api_model_identifier)
+        reconciled.append(row)
+    if reconciled:
+        validate_results(reconciled)
+    return reconciled
 
 
 def _base_result(
@@ -201,6 +269,12 @@ def _base_result(
         "provider_request_id": "",
         "response_model_identifier": "",
         "stop_reason": "",
+        "provider_attempts": 0,
+        "provider_response_count": 0,
+        "response_cost_usd": 0.0,
+        "failure_retryable": None,
+        "failure_scope": "",
+        "configuration_fingerprint": configuration_fingerprint(model, max_output_tokens),
     }
 
 
@@ -221,7 +295,7 @@ def generate_results(
     dry_run: bool,
     run_plan: Optional[RunPlan] = None,
     completed_results: Optional[Sequence[Dict[str, object]]] = None,
-    initial_spend_usd: object = "0",
+    initial_spend_usd: object = None,
     on_result: Optional[Callable[[List[Dict[str, object]]], None]] = None,
     models: Optional[Sequence[ModelConfig]] = None,
     max_output_tokens: Optional[int] = None,
@@ -234,23 +308,15 @@ def generate_results(
     completed_keys = {
         result_key(row) for row in results if is_completed_result(row)
     }
+    if initial_spend_usd is None:
+        initial_spend_usd = sum((Decimal(str(r["estimated_cost_usd"])) for r in results), Decimal(0))
     tracker = (
         SpendTracker(run_plan, initial_spend_usd=initial_spend_usd)
         if run_plan is not None
         else None
     )
-    persistent_invalid_keys = {
-        result_key(row) for row in results if is_persistent_invalid_model_result(row)
-    }
-    blocked_models = {
-        model.key
-        for model in selected_models
-        if any(
-            str(row.get("api_model_identifier")) == model.api_model_identifier
-            and is_persistent_invalid_model_result(row)
-            for row in results
-        )
-    }
+    blocked_models = {} if dry_run else saved_model_blocks(results, selected_models, max_output_tokens)
+    blocked_providers = {}
     api_attempts = 0
     stop_for_spend = False
 
@@ -260,13 +326,14 @@ def generate_results(
         prompt = render_prompt(record)
         for model in selected_models:
             model_id = model.api_model_identifier or "UNRESOLVED"
-            key = (record.prompt_id, model_id)
+            key = (record.prompt_id, model.inference_provider, model_id)
             if key in completed_keys:
-                continue
-            if key in persistent_invalid_keys:
                 continue
             output_limit = max_output_tokens or model.generation.max_output_tokens
             row = _base_result(record, prompt, model, output_limit)
+            prior_row = next((r for r in results if result_key(r) == key), {})
+            row["provider_attempts"] = historical_attempts(prior_row) if prior_row else 0
+            row["provider_response_count"] = historical_responses(prior_row) if prior_row else 0
             prior_recorded_cost = next(
                 (
                     Decimal(str(existing.get("estimated_cost_usd", 0)))
@@ -276,11 +343,17 @@ def generate_results(
                 Decimal("0"),
             )
 
-            if model.key in blocked_models:
+            block = blocked_providers.get(model.inference_provider) or blocked_models.get((model.inference_provider, model_id))
+            if block:
+                # Preserve the original diagnostic row and all historical spend.
+                if prior_row.get("status") == "provider_error" and prior_row.get("error_type") in {"invalid_model_error", "configuration_error"}:
+                    continue
                 row.update(
                     status="skipped_model",
-                    error_type="model_disabled_after_provider_failure",
-                    error_message="No call made after an earlier provider/model failure in this run.",
+                    error_type="blocked_by_permanent_failure",
+                    error_message=f"No call: {block['error_type']}: {block['error_message']}",
+                    failure_scope=block.get("failure_scope") or "model",
+                    estimated_cost_usd=float(prior_recorded_cost),
                 )
                 _upsert_result(results, row)
                 if on_result:
@@ -289,9 +362,10 @@ def generate_results(
 
             spent_before = tracker.spent_usd if tracker else Decimal("0")
             started = perf_counter()
+            pair_attempts = 0
 
             def before_attempt() -> None:
-                nonlocal api_attempts
+                nonlocal api_attempts, pair_attempts
                 if max_api_attempts is not None and api_attempts >= max_api_attempts:
                     raise SpendLimitError(
                         f"Run stopped before exceeding its {max_api_attempts}-attempt limit."
@@ -299,6 +373,8 @@ def generate_results(
                 if tracker:
                     tracker.assert_can_call(model, prompt, output_limit)
                 api_attempts += 1
+                pair_attempts += 1
+                row["provider_attempts"] += 1
                 if print_before_call:
                     print(
                         f"Calling model: {model.canonical_model_name} "
@@ -308,11 +384,23 @@ def generate_results(
                     )
 
             def failed_attempt(attempt_error: ProviderError) -> None:
-                # Only transient failures are candidates for a charged partial
-                # generation and for retry. Auth/model/parameter rejections do
-                # not run inference and are not assigned synthetic spend.
-                if tracker and attempt_error.retryable:
+                # Connection failures and malformed responses may have billed
+                # inference. Auth/model/parameter rejections do not run inference.
+                if tracker and (attempt_error.retryable or attempt_error.error_type == "invalid_provider_response"):
                     tracker.record_failed_attempt(model, prompt, output_limit)
+                # Checkpoint attempts and reserved cost before a possible retry.
+                row.update(
+                    status="provider_error", error_type=attempt_error.error_type,
+                    error_code=attempt_error.error_code, error_message=str(attempt_error),
+                    http_status=attempt_error.status_code,
+                    failure_retryable=attempt_error.retryable, failure_scope=attempt_error.failure_scope,
+                    retry_count=max(0, pair_attempts - 1),
+                    estimated_cost_usd=float(prior_recorded_cost + (tracker.spent_usd - spent_before if tracker else Decimal(0))),
+                    latency_ms=(perf_counter() - started) * 1000,
+                )
+                _upsert_result(results, row)
+                if on_result:
+                    on_result(results)
 
             try:
                 response, retry_count = call_model_with_retries(
@@ -326,7 +414,12 @@ def generate_results(
                     on_failed_attempt=failed_attempt,
                 )
                 if tracker:
-                    tracker.record_call(model, response)
+                    try:
+                        tracker.record_call(model, response)
+                    except SpendCapExceeded:
+                        # A returned response is paid even if its reported cost
+                        # stops the run. Save/grade it and never dispatch it twice.
+                        stop_for_spend = True
                     call_cost = tracker.spent_usd - spent_before
                 else:
                     call_cost = Decimal("0")
@@ -340,15 +433,24 @@ def generate_results(
                     provider_request_id=response.request_id,
                     response_model_identifier=response.response_model_identifier,
                     stop_reason=response.stop_reason,
+                    provider_response_count=row["provider_response_count"] + (0 if dry_run else 1),
+                    response_cost_usd=float(
+                        response.provider_reported_cost_usd
+                        if response.provider_reported_cost_usd is not None else
+                        (Decimal(response.input_tokens) * Decimal(str(model.input_price_per_million_usd))
+                         + Decimal(response.output_tokens) * Decimal(str(model.output_price_per_million_usd))) / Decimal(1000000)
+                    ),
                 )
+                row.update(failure_retryable=None, failure_scope="", error_code="", http_status=None)
             except ProviderError as error:
-                blocked_models.add(model.key)
                 row.update(
                     status="provider_error",
                     error_type=error.error_type,
                     error_code=error.error_code,
                     error_message=str(error),
                     http_status=error.status_code,
+                    failure_retryable=error.retryable,
+                    failure_scope=error.failure_scope,
                     retry_count=int(getattr(error, "retry_count", 0)),
                     latency_ms=(perf_counter() - started) * 1000,
                     estimated_cost_usd=float(
@@ -356,6 +458,10 @@ def generate_results(
                         + ((tracker.spent_usd - spent_before) if tracker else Decimal("0"))
                     ),
                 )
+                if error.failure_scope == "model":
+                    blocked_models[(model.inference_provider, model_id)] = row
+                elif error.failure_scope == "provider":
+                    blocked_providers[model.inference_provider] = row
                 _upsert_result(results, row)
                 if on_result:
                     on_result(results)
@@ -385,6 +491,12 @@ def generate_results(
                 stop_for_spend = True
                 break
 
+            # Persist paid raw output before parsing/grading, which can crash.
+            row.update(status="grading_failure", error_type="grading_failure",
+                       error_message="Response saved; grading not completed. Regrade offline.")
+            _upsert_result(results, row)
+            if on_result:
+                on_result(results)
             try:
                 parsed = parse_answer(record, response.text)
                 row["parsed_answer"] = parsed
@@ -408,6 +520,8 @@ def generate_results(
                         status="success",
                         score=1.0 if correct else 0.0,
                         correct=correct,
+                        error_type="",
+                        error_message="",
                     )
 
             _upsert_result(results, row)
@@ -416,6 +530,8 @@ def generate_results(
                 on_result(results)
             if tracker:
                 print(f"Accumulated spend: ${tracker.spent_usd:.6f}", flush=True)
+            if stop_for_spend:
+                break
 
     expected_task_types = {
         record.benchmark_name: record.task_type for record in benchmark
@@ -448,6 +564,18 @@ def read_results(path: Path) -> List[Dict[str, object]]:
             typed["http_status"] = int(str(typed["http_status"])) if typed["http_status"] else None
             for field in ("estimated_cost_usd", "latency_ms"):
                 typed[field] = float(str(typed[field]))
+            for field in ("provider_attempts", "provider_response_count"):
+                if typed.get(field) not in (None, ""):
+                    typed[field] = int(str(typed[field]))
+                else:
+                    typed.pop(field, None)
+            if typed.get("response_cost_usd") not in (None, ""):
+                typed["response_cost_usd"] = float(str(typed["response_cost_usd"]))
+            else:
+                typed.pop("response_cost_usd", None)
+            typed["failure_retryable"] = (
+                str(typed["failure_retryable"]).lower() == "true" if typed.get("failure_retryable") else None
+            )
             typed["score"] = float(str(typed["score"])) if typed["score"] else None
             typed["correct"] = (
                 str(typed["correct"]).lower() == "true" if typed["correct"] else None
@@ -559,11 +687,14 @@ def parse_args() -> argparse.Namespace:
     modes = parser.add_mutually_exclusive_group(required=True)
     modes.add_argument("--dry-run", action="store_true", help="Use offline deterministic responses.")
     modes.add_argument("--smoke-test", action="store_true", help="Run one prompt against five models.")
-    modes.add_argument("--pilot", action="store_true", help="Run the 15-prompt, 75-pair hard pilot.")
     modes.add_argument(
-        "--regrade-pilot",
+        "--hard-pilot", "--pilot", dest="pilot", action="store_true",
+        help="Run the confirmed 15-prompt, 75-attempt hard pilot.",
+    )
+    modes.add_argument(
+        "--regrade-pilot", "--regrade-results", dest="regrade_pilot",
         action="store_true",
-        help="Regrade the existing pilot CSV offline without provider calls.",
+        help="Regrade saved CSV responses offline; use --output for the hard pilot.",
     )
     modes.add_argument("--live", action="store_true", help="Run all enabled benchmark prompts live.")
     parser.add_argument(
@@ -576,7 +707,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--confirm",
         action="store_true",
-        help="Authorize generic --live mode; smoke and pilot are explicit live modes.",
+        help="Authorize --live or --hard-pilot after reviewing the spend plan.",
     )
     parser.add_argument(
         "--resume",
@@ -612,10 +743,6 @@ def main() -> None:
             raise SystemExit(f"Pilot results do not exist: {output}")
         existing_results = read_results(output)
         benchmark = benchmark_records_from_saved_results(existing_results)
-        if len(existing_results) != 45 or len(benchmark) != 9:
-            raise SystemExit(
-                "Offline regrade requires the complete 9-prompt x 5-model pilot CSV"
-            )
         results = regrade_results(existing_results, benchmark)
         write_results(results, output)
         status_counts = {
@@ -647,8 +774,8 @@ def main() -> None:
             raise SystemExit(str(error)) from error
         output_limit = None
         spend_cap = args.max_spend_usd or "1.00"
-        max_retries = 2
-        max_attempts = None
+        max_retries = 0
+        max_attempts = PILOT_MAX_MODEL_CALLS
     else:
         benchmark = list(all_records)
         output_limit = None
@@ -658,25 +785,27 @@ def main() -> None:
 
     output = args.output or _default_output(args)
     live_mode = not args.dry_run
-    existing_results = read_results(output) if live_mode and output.exists() else []
+    existing_results = reconcile_pending_configuration(read_results(output), models) if live_mode and output.exists() else []
+    plan_keys = {(r.prompt_id, m.inference_provider, m.api_model_identifier or "UNRESOLVED") for r in benchmark for m in models}
+    if any(result_key(r) not in plan_keys for r in existing_results):
+        raise SystemExit("Existing CSV contains pairs outside this run plan; choose the matching mode/output.")
     completed_keys = {
         result_key(row) for row in existing_results if is_completed_result(row)
     }
-    noncall_keys = completed_keys | {
-        result_key(row)
-        for row in existing_results
-        if is_persistent_invalid_model_result(row)
-    }
+    persistent_blocks = saved_model_blocks(existing_results, models, output_limit)
     remaining = [
         call
         for record in benchmark
         for call in planned_calls((record,), models, max_output_tokens=output_limit)
-        if (record.prompt_id, call[0].api_model_identifier or "UNRESOLVED") not in noncall_keys
+        if (record.prompt_id, call[0].inference_provider, call[0].api_model_identifier or "UNRESOLVED") not in completed_keys
+        and (call[0].inference_provider, call[0].api_model_identifier) not in persistent_blocks
     ]
     if args.smoke_test and len(remaining) > SMOKE_MAX_API_CALLS:
         raise SystemExit("Smoke test safety invariant failed: more than 5 calls selected")
     if args.pilot and len(planned_calls(benchmark, models)) != PILOT_MAX_MODEL_CALLS:
         raise SystemExit("Pilot safety invariant failed: selection is not exactly 15 prompts x 5 models")
+    if args.pilot and len({(r.prompt_id, m.inference_provider, m.api_model_identifier) for r in benchmark for m in models}) != PILOT_MAX_MODEL_CALLS:
+        raise SystemExit("Pilot safety invariant failed: pairs are not unique")
 
     run_plan = None
     if live_mode:
@@ -685,7 +814,15 @@ def main() -> None:
         except SpendLimitError as error:
             raise SystemExit(str(error)) from error
         print(run_plan.confirmation_text())
-        if args.live and not args.confirm:
+        recorded_spend = sum(Decimal(str(r["estimated_cost_usd"])) for r in existing_results)
+        print(f"Previously recorded spend: ${recorded_spend:.6f}")
+        print(f"Maximum including remaining calls: ${recorded_spend + run_plan.estimated_max_cost_usd:.6f}")
+        print(f"Retry policy: {max_retries} retries; attempt ceiling: {max_attempts or 'uncapped'}")
+        if args.pilot:
+            print(f"Hard pilot selection: {len(benchmark)} prompts x {len(models)} models = 75 pairs")
+            if run_plan.configured_spend_cap_usd > HARD_PILOT_MAX_SPEND_USD:
+                raise SystemExit("Hard pilot cap cannot exceed $2.00.")
+        if (args.live or args.pilot) and not args.confirm:
             raise SystemExit("Live run not started: pass --confirm after reviewing the plan.")
 
     initial_spend = sum(
@@ -710,6 +847,12 @@ def main() -> None:
     print(f"Selected {len(benchmark)} prompts and {len(models)} models")
     print(f"Validated {len(results)} rows with {len(RESULT_FIELDS)} required fields")
     print(f"Wrote normalized results to {output}")
+    from pilot_analysis import analyze_results
+    report = analyze_results(
+        results, [r.prompt_id for r in benchmark],
+        [(m.inference_provider, m.api_model_identifier) for m in models],
+    )
+    print(json.dumps({key: report[key] for key in ("matrix_completeness", "by_model")}, indent=2, sort_keys=True))
     if args.dry_run:
         print("Dry run complete: no API calls were made; metrics are synthetic")
     else:

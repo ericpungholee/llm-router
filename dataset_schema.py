@@ -37,6 +37,12 @@ RESULT_FIELDS = (
     "provider_request_id",
     "response_model_identifier",
     "stop_reason",
+    "provider_attempts",
+    "provider_response_count",
+    "response_cost_usd",
+    "failure_retryable",
+    "failure_scope",
+    "configuration_fingerprint",
 )
 
 ALWAYS_REQUIRED_TEXT_FIELDS = (
@@ -71,7 +77,8 @@ def _is_null(value: object) -> bool:
 
 def validate_result(row: Mapping[str, object]) -> None:
     """Raise ValueError if an evaluation row does not match the required schema."""
-    missing_fields = [field for field in RESULT_FIELDS if field not in row]
+    # Additional telemetry is optional in historical CSVs.
+    missing_fields = [field for field in RESULT_FIELDS[:-6] if field not in row]
     if missing_fields:
         raise ValueError(f"Missing result fields: {missing_fields}")
 
@@ -87,6 +94,17 @@ def validate_result(row: Mapping[str, object]) -> None:
         raise ValueError(f"Unsupported model_type: {row['model_type']}")
     if row["status"] not in VALID_STATUSES:
         raise ValueError(f"Unsupported status: {row['status']}")
+    for field in ("provider_attempts", "provider_response_count"):
+        value = row.get(field, 0)
+        if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+            raise ValueError(f"{field} must be a non-negative integer")
+    if row.get("failure_scope", "") not in {"", "pair", "model", "provider"}:
+        raise ValueError("Invalid failure_scope")
+    if row.get("failure_retryable") not in (None, "", True, False):
+        raise ValueError("failure_retryable must be null or boolean")
+    response_cost = float(row.get("response_cost_usd", 0))
+    if not math.isfinite(response_cost) or response_cost < 0:
+        raise ValueError("response_cost_usd must be non-negative")
 
     success = row["status"] == "success"
     if success:
@@ -142,6 +160,9 @@ def validate_results(
 ) -> None:
     if not rows:
         raise ValueError("No evaluation results were generated")
+    keys = [(row["prompt_id"], row["inference_provider"], row["api_model_identifier"]) for row in rows]
+    if len(keys) != len(set(keys)):
+        raise ValueError("Duplicate prompt/model pairs")
     for row in rows:
         validate_result(row)
         if expected_task_types is not None:

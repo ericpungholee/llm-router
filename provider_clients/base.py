@@ -37,6 +37,7 @@ class ProviderError(RuntimeError):
         error_code: str = "",
         retryable: bool = False,
         invalid_model: bool = False,
+        failure_scope: Optional[str] = None,
     ) -> None:
         super().__init__(message)
         self.provider = provider
@@ -46,6 +47,34 @@ class ProviderError(RuntimeError):
         self.error_code = error_code
         self.retryable = retryable
         self.invalid_model = invalid_model
+        # Scope belongs to the normalized provider error, not benchmark logic.
+        # Unknown rejections (including prompt-specific bad parameters) stay local.
+        self.failure_scope = "pair" if retryable else (failure_scope or {
+            "invalid_model_error": "model",
+            "configuration_error": "model",
+            "authentication_error": "provider",
+            "quota_or_billing_error": "model",
+        }.get(error_type, "model" if invalid_model else "pair"))
+        if self.failure_scope not in {"pair", "model", "provider"}:
+            raise ValueError("Invalid provider failure scope")
+
+
+def _quota_scope(status: int, code: str, kind: str, message: str) -> str:
+    """Only explicit account billing exhaustion disables the whole provider.
+
+    A zero model/resource quota does not imply every model on an account is
+    unusable. Ordinary rate limits never reach this function as permanent errors.
+    """
+    text = " ".join((code, kind, message)).lower()
+    # Request affordability is not an empty account: cheaper models may work.
+    if any(marker in text for marker in ("fewer max_tokens", "can only afford")):
+        return "model"
+    if status == 402 or any(marker in text for marker in (
+        "insufficient_quota", "insufficient_credits", "credit balance",
+        "insufficient balance", "billing", "current quota",
+    )):
+        return "provider"
+    return "model"
 
 
 def _error_details(body: str) -> tuple:
@@ -66,7 +95,10 @@ def _classify_http_error(status: int, code: str, kind: str, message: str) -> tup
     searchable = " ".join((code, kind, message)).lower()
     if status in (401, 403):
         return "authentication_error", False, False
-    if status == 402 or (
+    if status == 402 or any(marker in searchable for marker in (
+        "insufficient_quota", "insufficient_credits", "credit balance is too low",
+        "insufficient balance",
+    )) or (
         "quota exceeded" in searchable
         and any(marker in searchable for marker in ("limit: 0", "billing", "current quota"))
     ):
@@ -128,6 +160,10 @@ def post_json(
             error_code=code,
             retryable=retryable,
             invalid_model=invalid_model,
+            failure_scope=(
+                _quota_scope(error.code, code, provider_type, exact_message)
+                if error_type == "quota_or_billing_error" else None
+            ),
         ) from error
     except (urllib.error.URLError, TimeoutError, socket.timeout) as error:
         raise ProviderError(
