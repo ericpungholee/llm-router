@@ -1,7 +1,85 @@
 # Multi-provider ML-powered LLM Router
 
-This repository builds deterministic evaluation data for a future learned LLM
-router. It does **not** train or serve the router yet.
+This repository trains and evaluates an offline learned LLM router from frozen
+benchmark outcomes. The [router v2 experiment](reports/router_v2_results.md)
+uses conservative validation selection: its standard primary achieves **73.10%
+success versus GPT-5's 69.12%, at 22.07% lower recorded cost**. Both micro and macro
+quality intervals are positive. A stricter dataset guard still fails by one code
+success; OOD preserves quality within the stated margin but saves only 1.13%.
+These are exploratory results on previously inspected tests, not fresh external
+confirmation. Frozen local embedding controls did not beat TF-IDF.
+
+The subsequent [fixed TF-IDF robustness check](reports/router_v3_results.md)
+uses five grouped folds to evaluate every prompt once. Standard quality is
+**71.94% versus GPT-5's 67.80%, at 21.20% lower recorded cost**, with positive
+descriptive micro/macro intervals. Removing SimpleQA leaves only 1.34% savings.
+The OOD check fails to provide routing value: all five non-code validation sets
+select Qwen as the reference, so the rule routes every code prompt to Qwen
+(64.17% quality versus fixed GPT-5's 86.45%). Source-domain reference selection
+does not reliably protect unseen-domain quality. These reused-benchmark checks
+are not independent confirmation and do not replace the saved v2 router.
+
+Reproduce the fixed check locally, without downloads or new tuning:
+
+```bash
+router_check_dir=$(mktemp -d /tmp/router-v3-replay.XXXXXX)
+.venv/bin/python experiments/crossfit_tfidf_router.py --output-dir "$router_check_dir" --reports-dir "$router_check_dir/reports"
+```
+
+The [v3 protocol](reports/router_v3_robustness_spec.md) fixes C=1 and the v2
+comparative margins before fitting. Models, partitions, predictions, decisions
+and bootstrap samples are kept under the ignored `artifacts/router_v3/`.
+
+Route new prompt text locally, without calling a provider:
+
+```bash
+.venv/bin/python experiments/route_local.py --prompt 'What is the capital of France?'
+```
+
+Reproduce the v2 campaign from a fresh artifact directory:
+
+```bash
+.venv/bin/python -m pip install -r experiments/requirements-router-v2.txt
+.venv/bin/python -m routing_ml.embeddings --download
+.venv/bin/python -m routing_ml.embeddings
+.venv/bin/python experiments/embedding_logreg_router.py
+.venv/bin/python tests/run_offline_suite.py
+```
+
+The download step fetches only pinned public encoder files; encoding, fitting,
+selection and routing run locally. The [v2 protocol](reports/router_v2_experiment_spec.md)
+and source snapshot are frozen before fitting. Completed runs under
+`artifacts/router_v2/` are protected from overwrite. Regenerate their report with
+`experiments/embedding_logreg_router.py --report-only`.
+
+To replay fitting and evaluation now, reusing the verified local embedding cache
+and preserving the completed artifacts:
+
+```bash
+router_replay_dir=$(mktemp -d /tmp/router-v2-replay.XXXXXX)
+ln -s "$PWD/artifacts/router_v2/embeddings" "$router_replay_dir/embeddings"
+.venv/bin/python experiments/embedding_logreg_router.py --output-dir "$router_replay_dir" --reports-dir "$router_replay_dir/reports"
+```
+
+The earlier [v1 results](reports/router_v1_results.md) remain unchanged: its
+validation-selected standard policy saved 82.70% but lost 1.99 quality points
+and failed noninferiority. V2 separates representation controls from a new
+comparative routing/uncertainty protocol.
+
+Reproduce training and evaluation using the existing processed artifacts:
+
+```bash
+.venv/bin/python -m pip install -r experiments/requirements-router-v1.txt
+.venv/bin/python experiments/tfidf_logreg_router.py
+.venv/bin/python tests/run_offline_suite.py
+```
+
+Training runs locally with networking blocked. It does not call model providers
+or regenerate processed data. Reproducible models and probability/evaluation
+tables are saved under the git-ignored `artifacts/router_v1/`; compact reports and
+figures are under `reports/`. The command completes standard TF-IDF first, checks
+a full deterministic training replay, then fits OOD independently and runs the
+handcrafted-feature ablation in both regimes.
 
 ## Primary ML dataset: LLMRouterBench
 
@@ -26,14 +104,14 @@ audit reports, and reproduction metadata are tracked.
 
 Read the [source/schema audit](reports/llmrouterbench_data_audit.md),
 [model coverage, splits, and baselines](reports/llmrouterbench_preparation.md),
-and [future ML experiment specification](reports/ml_experiment_spec.md).
+and [frozen ML experiment specification](reports/ml_experiment_spec.md).
 Standard train/validation/test sizes are 6,094/1,307/1,305. The independent OOD
 regime holds out all 1,055 LiveCodeBench prompts. Labels, costs, and splits are
 validated; unknown grades are never converted to failures.
 
-The next experiment is eight per-model TF-IDF + logistic-regression success
-predictors, followed by validation-selected cost-aware decisions. Training has
-not started. `routing_data.loading.load_split()` returns aligned prompts,
+The first experiment fits eight per-model TF-IDF + logistic-regression success
+predictors, followed by validation-selected cost-aware decisions.
+`routing_data.loading.load_split()` returns aligned prompts,
 prompt-visible features, success targets, and evaluation costs separately.
 
 ## Closed 4096-token hard pilot
@@ -335,6 +413,9 @@ descriptive pilot results, not a statistical guarantee of generalization.
 
 ## Scope boundary
 
-No ML router training, embedding generation, routing policy, web service,
-frontend, or full benchmark sweep is part of this phase. Historical RouterBench
-work remains under `experiments/` and `data/legacy/routerbench/` only.
+Router v1 covers TF-IDF and the 16-feature logistic-regression ablation. V2 adds
+a frozen local encoder comparison and conservative comparative routing, with
+offline inference of model choices. Neural routers, gradient boosting, paid
+evaluation, provider integration for serving, and a frontend remain future work.
+Historical RouterBench work remains under `experiments/` and
+`data/legacy/routerbench/` only.

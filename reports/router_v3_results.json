@@ -1,0 +1,1746 @@
+{
+  "independent_confirmation": false,
+  "matched_code": {
+    "bootstrap": {
+      "ci_95": {
+        "cost_savings": [
+          0.9794500993478871,
+          0.9823836739210658
+        ],
+        "macro_cost_savings": [
+          0.979450099347887,
+          0.982383673921066
+        ],
+        "macro_quality_delta": [
+          -0.2511848341232227,
+          -0.19620853080568723
+        ],
+        "quality_delta": [
+          -0.25118483412322273,
+          -0.1962085308056872
+        ]
+      },
+      "groups_per_stratum": {
+        "livecodebench": 1055
+      },
+      "method": "paired stratified whole-group percentile",
+      "noninferiority_supported": false,
+      "percentile_method": "linear",
+      "replicates": 2000,
+      "seed": 3407,
+      "training_and_selection_fixed": true
+    },
+    "cost_savings_ood_vs_standard": 0.9809789185270823,
+    "interpretation": "matched prompts; independently fitted systems with different training domains",
+    "n": 1055,
+    "ood_quality": 0.6417061611374407,
+    "quality_delta_ood_minus_standard": -0.22369668246445498,
+    "standard_quality": 0.8654028436018958
+  },
+  "previous_reports_and_processed_data_unchanged": true,
+  "provenance": {
+    "assignments_sha256": "565ce3b52aee5bc1506c3ab7ec18f2279d3ecad1291f656438af19288ac1a893",
+    "environment": {
+      "packages": {
+        "Jinja2": "3.1.6",
+        "MarkupSafe": "3.0.3",
+        "PyYAML": "6.0.2",
+        "certifi": "2025.4.26",
+        "charset-normalizer": "3.4.2",
+        "contourpy": "1.3.0",
+        "cycler": "0.12.1",
+        "filelock": "3.18.0",
+        "fonttools": "4.60.2",
+        "fsspec": "2025.3.2",
+        "huggingface-hub": "0.30.2",
+        "idna": "3.10",
+        "importlib_resources": "6.5.2",
+        "joblib": "1.4.2",
+        "kiwisolver": "1.4.7",
+        "matplotlib": "3.9.4",
+        "mpmath": "1.3.0",
+        "networkx": "3.2.1",
+        "numpy": "2.0.2",
+        "packaging": "25.0",
+        "pandas": "2.2.3",
+        "pillow": "11.3.0",
+        "pip": "21.2.4",
+        "pyarrow": "19.0.1",
+        "pyparsing": "3.2.5",
+        "python-dateutil": "2.9.0.post0",
+        "python-dotenv": "1.1.1",
+        "pytz": "2026.3.post1",
+        "regex": "2024.11.6",
+        "requests": "2.32.3",
+        "safetensors": "0.5.3",
+        "scikit-learn": "1.6.1",
+        "scipy": "1.13.1",
+        "setuptools": "58.0.4",
+        "six": "1.17.0",
+        "sympy": "1.14.0",
+        "threadpoolctl": "3.6.0",
+        "tokenizers": "0.21.1",
+        "torch": "2.7.1",
+        "tqdm": "4.67.1",
+        "transformers": "4.51.3",
+        "typing_extensions": "4.15.0",
+        "tzdata": "2026.4",
+        "urllib3": "2.4.0",
+        "zipp": "3.23.0"
+      },
+      "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]"
+    },
+    "interpretation": "descriptive reused-benchmark cross-fitting; not independent confirmation",
+    "previous_report_hashes": {
+      "reports/router_v1_numerical_audit.json": "80e8902be181bbe20a1115f9d522be8f939e1c971667cd0ef0f7805eba31d3bc",
+      "reports/router_v1_results.json": "c29eace0e451abb9d2b68c9a6364c2c8060c298b7475fb34f73efba30afa09ae",
+      "reports/router_v1_results.md": "ee0d86a9569414b36c6e0675f7c8e7826c6014568e0c4f8ab606cdbd24ff0258",
+      "reports/router_v1_tests.json": "a2a3f3da9415038afcff53ea3e202ad08aa9ad31aae87df82af79e89cc3c50fa",
+      "reports/router_v2_domain_diagnostic.json": "c425970d15799f066f4e3534d601ef1c76784c7250edd33a0415e450eb65a247",
+      "reports/router_v2_experiment_spec.md": "50d12e990d524a64dbc0cb8cf9c7c9edb8486e786c8f0efd7ca19242298722c4",
+      "reports/router_v2_results.json": "c6d0c67df6a0e4670c64c399554f7ad5674b0674a9dcee9b71c84168e8efea1e",
+      "reports/router_v2_results.md": "d9bf58d27ce394981e48da98b00507aba84ae6bf532df175ed9c3f29c87cd146",
+      "reports/router_v2_tests.json": "94d8505f815f06421e4aa18c923fd4f39dc126fd68bcfa1058b2b365d2425548"
+    },
+    "seed": 3407,
+    "source_hashes": {
+      "experiments/crossfit_tfidf_router.py": "290b8f641e6deb31b6f2d92ba160de26d3bc0329b683f298cae5e6bc09834c10",
+      "experiments/requirements-router-v1.txt": "713617381caba2a25b706788b76f8e2031c3eaa3164f59aeb807869eaa77f8f3",
+      "experiments/tfidf_logreg_router.py": "004ad382bbe19171dfbd1b1b210b4651853e572a4a16dc0778cc20ba869f973e",
+      "reports/router_v3_robustness_spec.md": "f359fdbef119230e869326741562bccc6f3ebb3e38ff3b7bc2b467923350a074",
+      "routing_ml/__init__.py": "e9a2b93c5513f7380fd27bdb0a2412b657491d950aec119932e92584374594fd",
+      "routing_ml/bootstrap.py": "8c2a6bee6e07acfd14534fab21ee685b7cc8162bf4afad176ca3ea5cc9fd9ac9",
+      "routing_ml/conservative.py": "341080c9e45d1dc10b8669e35161fad93706ba76f34e29e26b16c7c6a4d7b8e6",
+      "routing_ml/crossfit.py": "5da73daac429637eed8958ba32d691c2cce8f4c35ca6946583f96ce5fbb4a509",
+      "routing_ml/embeddings.py": "f426ce765d95e3b32eb12592571d6a11fc523e4c8bfa3a5f7bb63c5488d5b558",
+      "routing_ml/local_router.py": "6eb7f08926a22afe3ece7e15a596175661f85f97daa5225071ed7c64f4cac801",
+      "routing_ml/metrics.py": "79284ab4b050ed4fdd3fd40e4acd0de2a70143993e0c89dbd4177ddc47bc316f",
+      "routing_ml/policies.py": "ecc65da4d14e583a02925dab01b78908e79e0951034bba71994777d15950572b",
+      "routing_ml/reporting.py": "8afa717647fe60b54a33d82d5c7e3c7aa0b674de8fbf3e7e436e6212df04efa0",
+      "routing_ml/reporting_v2.py": "d5bd90b6040972ec9ba5afc023b70ba0f8e6867762396acfc0dfd2a3976109bf",
+      "routing_ml/reporting_v3.py": "87229d4ca944418f96e944a888eddd220c94648dbd825368715add1b2206965e",
+      "routing_ml/semantic_training.py": "c50f154e35d8dad43f25b3800117915e69bc9a1f1bf11373a2ea8a454eb40296",
+      "routing_ml/training.py": "a7628982f1683369ce6e5dd6620d6f0379cb3f7329449efd5bd47c8e3ed5cb67"
+    },
+    "source_processed_data_hashes": {
+      "llmrouterbench_source.json": "8fecc2bef85554f75fa6f36008fab9bc2f4f8159f8af3b07f111726c179a4a5f",
+      "outcomes.parquet": "afd0904b6b798bc9ea453ec7f1c49e3fcd07571ec664515762d92acb8cbb7be3",
+      "prompt_features.parquet": "fe54c92c6aa2aa56b8599d2ad7697e1884949b3f61046213bf02766467a8aba7",
+      "prompts.parquet": "229a75158cb5cffaef7ba5bc7ebd8f2cc0d4c00b37e854e72cfcfebc2dbeefae",
+      "provenance.json": "5eec14299b08755594a8aeadd9e9b9848636a2e4aea42f56cc6139c4e05fd302",
+      "router_model_pool.json": "b318793f9663974dbbde1efdb9a8bfd0b371e8d0b9359a6fb03925273dfd48f1",
+      "router_tasks.json": "b70f10191e55bb69e5dce39be9194f94b9285add08d51d1484b115c0844ea837",
+      "splits.parquet": "58d8f85758537fb383c8fec765fe4aa27e4a3a2b545e6c7769c5ecacb6bff3e0",
+      "static_model_summary.parquet": "ea15de0c90bc9738cd9d748e263f01ec5d1bdbeb3d46ecf27e53a233c65622e2"
+    }
+  },
+  "regimes": {
+    "ood": {
+      "all_descriptive_checks_pass": false,
+      "classifier_metrics": [
+        {
+          "accuracy_at_0_5": 0.6417061611374407,
+          "brier": 0.24543766495106287,
+          "ece": 0.12795488551726367,
+          "log_loss": 0.6912126549842721,
+          "model_id": "qwen3-235b-a22b-2507",
+          "pr_auc": 0.5879452882940741,
+          "pr_auc_trapezoid": 0.5865372787570065,
+          "prevalence": 0.6417061611374407,
+          "roc_auc": 0.4100802638468813,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.4720379146919431,
+          "brier": 0.26971126689859454,
+          "ece": 0.10438812659292848,
+          "log_loss": 0.7341987763383074,
+          "model_id": "intern-s1",
+          "pr_auc": 0.4209831835749931,
+          "pr_auc_trapezoid": 0.4199131536762469,
+          "prevalence": 0.4919431279620853,
+          "roc_auc": 0.4091931958703592,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6180094786729858,
+          "brier": 0.23920814523963127,
+          "ece": 0.09968135432569412,
+          "log_loss": 0.6715188422005833,
+          "model_id": "deepseek-v3-0324",
+          "pr_auc": 0.6334489943154749,
+          "pr_auc_trapezoid": 0.6323369967962,
+          "prevalence": 0.6663507109004739,
+          "roc_auc": 0.45329674770464246,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.8,
+          "brier": 0.1820210307118105,
+          "ece": 0.12432625630653463,
+          "log_loss": 0.552737724884504,
+          "model_id": "deepseek-r1-0528",
+          "pr_auc": 0.768967301975703,
+          "pr_auc_trapezoid": 0.7684054760583036,
+          "prevalence": 0.8009478672985783,
+          "roc_auc": 0.4263567202028741,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.595260663507109,
+          "brier": 0.24955809290530684,
+          "ece": 0.08491858976808628,
+          "log_loss": 0.6937620177719566,
+          "model_id": "gemini-2.5-flash",
+          "pr_auc": 0.5469996063013365,
+          "pr_auc_trapezoid": 0.5453563381796027,
+          "prevalence": 0.6,
+          "roc_auc": 0.4257765998068327,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6161137440758294,
+          "brier": 0.2445453248126919,
+          "ece": 0.07741120251399301,
+          "log_loss": 0.6834557778783413,
+          "model_id": "gpt-5-chat",
+          "pr_auc": 0.5665980222671593,
+          "pr_auc_trapezoid": 0.5650220304660442,
+          "prevalence": 0.6218009478672986,
+          "roc_auc": 0.41846231432239145,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.8644549763033176,
+          "brier": 0.13358805775426422,
+          "ece": 0.11713781061587845,
+          "log_loss": 0.44493480234655136,
+          "model_id": "gpt-5",
+          "pr_auc": 0.8166711095018592,
+          "pr_auc_trapezoid": 0.8156772653570319,
+          "prevalence": 0.8644549763033176,
+          "roc_auc": 0.3700159489633174,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.5545023696682464,
+          "brier": 0.25302563671239126,
+          "ece": 0.09316992808349174,
+          "log_loss": 0.7000248726373537,
+          "model_id": "claude-sonnet-4",
+          "pr_auc": 0.5452661052779488,
+          "pr_auc_trapezoid": 0.5442244741576525,
+          "prevalence": 0.581042654028436,
+          "roc_auc": 0.4401725805141984,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.645260663507109,
+          "brier": 0.22713690249821916,
+          "ece": 0.1036235192154838,
+          "log_loss": 0.6464806836302337,
+          "model_id": "__macro__",
+          "pr_auc": 0.6108599514385686,
+          "pr_auc_trapezoid": 0.609684126681011,
+          "prevalence": 0.6585308056872038,
+          "roc_auc": 0.4191692964039371,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6417061611374407,
+          "brier": 0.24543766495106287,
+          "ece": 0.12795488551726367,
+          "log_loss": 0.6912126549842721,
+          "model_id": "__selected_action__",
+          "pr_auc": 0.5879452882940741,
+          "pr_auc_trapezoid": 0.5865372787570065,
+          "prevalence": 0.6417061611374407,
+          "roc_auc": 0.4100802638468813,
+          "split": "test"
+        }
+      ],
+      "composition_checks": [
+        {
+          "cost_savings": 0.0,
+          "excluded": [
+            "simpleqa"
+          ],
+          "n": 1055,
+          "quality_delta": 0.0
+        },
+        {
+          "cost_savings": 0.0,
+          "excluded": [
+            "simpleqa",
+            "mmlupro"
+          ],
+          "n": 1055,
+          "quality_delta": 0.0
+        }
+      ],
+      "dataset_model_counts": [
+        {
+          "claude-sonnet-4": 0,
+          "dataset": "livecodebench",
+          "deepseek-r1-0528": 0,
+          "deepseek-v3-0324": 0,
+          "gemini-2.5-flash": 0,
+          "gpt-5": 0,
+          "gpt-5-chat": 0,
+          "intern-s1": 0,
+          "qwen3-235b-a22b-2507": 1055
+        }
+      ],
+      "descriptive_checks": {
+        "dataset_point_guard": true,
+        "macro_interval_margin": true,
+        "micro_interval_margin": true,
+        "savings_at_least_10_percent": false
+      },
+      "distribution": [
+        {
+          "actual_success": 0.6417061611374407,
+          "count": 1055,
+          "fraction": 1.0,
+          "mean_cost_usd": 0.0009898378009478676,
+          "mean_predicted_success": 0.725185592107353,
+          "model_id": "qwen3-235b-a22b-2507"
+        },
+        {
+          "actual_success": null,
+          "count": 0,
+          "fraction": 0.0,
+          "mean_cost_usd": null,
+          "mean_predicted_success": null,
+          "model_id": "intern-s1"
+        },
+        {
+          "actual_success": null,
+          "count": 0,
+          "fraction": 0.0,
+          "mean_cost_usd": null,
+          "mean_predicted_success": null,
+          "model_id": "deepseek-v3-0324"
+        },
+        {
+          "actual_success": null,
+          "count": 0,
+          "fraction": 0.0,
+          "mean_cost_usd": null,
+          "mean_predicted_success": null,
+          "model_id": "deepseek-r1-0528"
+        },
+        {
+          "actual_success": null,
+          "count": 0,
+          "fraction": 0.0,
+          "mean_cost_usd": null,
+          "mean_predicted_success": null,
+          "model_id": "gemini-2.5-flash"
+        },
+        {
+          "actual_success": null,
+          "count": 0,
+          "fraction": 0.0,
+          "mean_cost_usd": null,
+          "mean_predicted_success": null,
+          "model_id": "gpt-5-chat"
+        },
+        {
+          "actual_success": null,
+          "count": 0,
+          "fraction": 0.0,
+          "mean_cost_usd": null,
+          "mean_predicted_success": null,
+          "model_id": "gpt-5"
+        },
+        {
+          "actual_success": null,
+          "count": 0,
+          "fraction": 0.0,
+          "mean_cost_usd": null,
+          "mean_predicted_success": null,
+          "model_id": "claude-sonnet-4"
+        }
+      ],
+      "fixed_C": 1.0,
+      "fold_checks": {
+        "quality_margin_passes": 5,
+        "savings_10_percent_passes": 0
+      },
+      "folds": [
+        {
+          "baseline": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.0010084142738589212,
+            "n": 241,
+            "quality": 0.6639004149377593
+          },
+          "best_single": "qwen3-235b-a22b-2507",
+          "cost_savings": 0.0,
+          "fold": 0,
+          "quality_delta": 0.0,
+          "router": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.0010084142738589212,
+            "n": 241,
+            "quality": 0.6639004149377593
+          },
+          "split_counts": {
+            "test": 241,
+            "train": 4948,
+            "validation": 1203
+          },
+          "training_seconds": 0.39474712499999853,
+          "vocabulary_hash": "d7e6edba8d532bbc4f461cdf1160a27687793f6f887e98eae8cd6b9759792146"
+        },
+        {
+          "baseline": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.0010278457425742574,
+            "n": 202,
+            "quality": 0.6485148514851485
+          },
+          "best_single": "qwen3-235b-a22b-2507",
+          "cost_savings": 0.0,
+          "fold": 1,
+          "quality_delta": 0.0,
+          "router": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.0010278457425742574,
+            "n": 202,
+            "quality": 0.6485148514851485
+          },
+          "split_counts": {
+            "test": 202,
+            "train": 4904,
+            "validation": 1208
+          },
+          "training_seconds": 0.40514633300000114,
+          "vocabulary_hash": "dbc15657ef33c499e8093b08af37d0c58823c9b03dbc9d06bf6c9d16de9f518b"
+        },
+        {
+          "baseline": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.000904846089108911,
+            "n": 202,
+            "quality": 0.599009900990099
+          },
+          "best_single": "qwen3-235b-a22b-2507",
+          "cost_savings": 0.0,
+          "fold": 2,
+          "quality_delta": 0.0,
+          "router": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.000904846089108911,
+            "n": 202,
+            "quality": 0.599009900990099
+          },
+          "split_counts": {
+            "test": 202,
+            "train": 4884,
+            "validation": 1228
+          },
+          "training_seconds": 0.3828117920000018,
+          "vocabulary_hash": "3f0edac82d5aa1c1d1ff4134ac73818a0d35b1e98f76e2048770a6a4a6c637c9"
+        },
+        {
+          "baseline": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.0011146724637681156,
+            "n": 207,
+            "quality": 0.6714975845410628
+          },
+          "best_single": "qwen3-235b-a22b-2507",
+          "cost_savings": 0.0,
+          "fold": 3,
+          "quality_delta": 0.0,
+          "router": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.0011146724637681156,
+            "n": 207,
+            "quality": 0.6714975845410628
+          },
+          "split_counts": {
+            "test": 207,
+            "train": 4891,
+            "validation": 1225
+          },
+          "training_seconds": 0.38584520800000277,
+          "vocabulary_hash": "b682906896d47fe740e91706518284a38514716515fa339c19cc1712705a9485"
+        },
+        {
+          "baseline": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.0008872418226600986,
+            "n": 203,
+            "quality": 0.6206896551724138
+          },
+          "best_single": "qwen3-235b-a22b-2507",
+          "cost_savings": 0.0,
+          "fold": 4,
+          "quality_delta": 0.0,
+          "router": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.0008872418226600986,
+            "n": 203,
+            "quality": 0.6206896551724138
+          },
+          "split_counts": {
+            "test": 203,
+            "train": 4872,
+            "validation": 1241
+          },
+          "training_seconds": 0.3907649589999984,
+          "vocabulary_hash": "bbdf88444732a474d626eacef9ba09bdc34c456637c764461a8adfd0e32a2e88"
+        }
+      ],
+      "macro": {
+        "always_cheapest": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.0009898378009478674,
+          "n": 1055,
+          "quality": 0.6417061611374407
+        },
+        "best_single": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.0009898378009478674,
+          "n": 1055,
+          "quality": 0.6417061611374407
+        },
+        "oracle": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.013239960360189573,
+          "n": 1055,
+          "quality": 0.9118483412322275
+        },
+        "privileged_domain_static": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.0009898378009478674,
+          "n": 1055,
+          "quality": 0.6417061611374407
+        },
+        "router": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.0009898378009478674,
+          "n": 1055,
+          "quality": 0.6417061611374407
+        },
+        "static_claude-sonnet-4": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.013461722274881516,
+          "n": 1055,
+          "quality": 0.581042654028436
+        },
+        "static_deepseek-r1-0528": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.028872312369668245,
+          "n": 1055,
+          "quality": 0.8009478672985783
+        },
+        "static_deepseek-v3-0324": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.001447101345971564,
+          "n": 1055,
+          "quality": 0.6663507109004739
+        },
+        "static_gemini-2.5-flash": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.00583428056872038,
+          "n": 1055,
+          "quality": 0.6
+        },
+        "static_gpt-5": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.0520534710900474,
+          "n": 1055,
+          "quality": 0.8644549763033176
+        },
+        "static_gpt-5-chat": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.0038063992890995262,
+          "n": 1055,
+          "quality": 0.6218009478672986
+        },
+        "static_intern-s1": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.00673282066350711,
+          "n": 1055,
+          "quality": 0.4919431279620853
+        },
+        "static_qwen3-235b-a22b-2507": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.0009898378009478674,
+          "n": 1055,
+          "quality": 0.6417061611374407
+        }
+      },
+      "margin": 0.05,
+      "micro": {
+        "always_cheapest": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0009898378009478676,
+          "n": 1055,
+          "quality": 0.6417061611374407
+        },
+        "best_single": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0009898378009478676,
+          "n": 1055,
+          "quality": 0.6417061611374407
+        },
+        "oracle": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.013239960360189573,
+          "n": 1055,
+          "quality": 0.9118483412322275
+        },
+        "privileged_domain_static": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0009898378009478676,
+          "n": 1055,
+          "quality": 0.6417061611374407
+        },
+        "router": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0009898378009478676,
+          "n": 1055,
+          "quality": 0.6417061611374407
+        },
+        "static_claude-sonnet-4": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.013461722274881514,
+          "n": 1055,
+          "quality": 0.581042654028436
+        },
+        "static_deepseek-r1-0528": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.028872312369668245,
+          "n": 1055,
+          "quality": 0.8009478672985783
+        },
+        "static_deepseek-v3-0324": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0014471013459715642,
+          "n": 1055,
+          "quality": 0.6663507109004739
+        },
+        "static_gemini-2.5-flash": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00583428056872038,
+          "n": 1055,
+          "quality": 0.6
+        },
+        "static_gpt-5": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0520534710900474,
+          "n": 1055,
+          "quality": 0.8644549763033176
+        },
+        "static_gpt-5-chat": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0038063992890995262,
+          "n": 1055,
+          "quality": 0.6218009478672986
+        },
+        "static_intern-s1": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.006732820663507109,
+          "n": 1055,
+          "quality": 0.4919431279620853
+        },
+        "static_qwen3-235b-a22b-2507": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0009898378009478676,
+          "n": 1055,
+          "quality": 0.6417061611374407
+        }
+      },
+      "n": 1055,
+      "oracle_gap_recovered": 0.0,
+      "per_dataset": [
+        {
+          "best_single": {
+            "dataset": "livecodebench",
+            "mean_cost_usd": 0.0009898378009478674,
+            "n": 1055,
+            "quality": 0.6417061611374407
+          },
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                0.0,
+                0.0
+              ],
+              "macro_cost_savings": [
+                0.0,
+                0.0
+              ],
+              "macro_quality_delta": [
+                0.0,
+                0.0
+              ],
+              "quality_delta": [
+                0.0,
+                0.0
+              ]
+            },
+            "groups_per_stratum": {
+              "livecodebench": 1055
+            },
+            "independent_confirmation": false,
+            "interpretation": "descriptive conditional intervals; overlapping fold fits and prior benchmark adaptation excluded",
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": true,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "cost_savings": 0.0,
+          "dataset": "livecodebench",
+          "n": 1055,
+          "quality_delta": 0.0,
+          "router": {
+            "dataset": "livecodebench",
+            "mean_cost_usd": 0.0009898378009478674,
+            "n": 1055,
+            "quality": 0.6417061611374407
+          }
+        }
+      ],
+      "primary": {
+        "bootstrap": {
+          "ci_95": {
+            "cost_savings": [
+              0.0,
+              0.0
+            ],
+            "macro_cost_savings": [
+              0.0,
+              0.0
+            ],
+            "macro_quality_delta": [
+              0.0,
+              0.0
+            ],
+            "quality_delta": [
+              0.0,
+              0.0
+            ]
+          },
+          "groups_per_stratum": {
+            "livecodebench": 1055
+          },
+          "independent_confirmation": false,
+          "interpretation": "descriptive conditional intervals; overlapping fold fits and prior benchmark adaptation excluded",
+          "method": "paired stratified whole-group percentile",
+          "noninferiority_supported": true,
+          "percentile_method": "linear",
+          "replicates": 2000,
+          "seed": 3407,
+          "training_and_selection_fixed": true
+        },
+        "cost_savings": 0.0,
+        "quality_delta": 0.0
+      },
+      "privileged_reference_comparison": {
+        "bootstrap": {
+          "ci_95": {
+            "cost_savings": [
+              0.0,
+              0.0
+            ],
+            "macro_cost_savings": [
+              0.0,
+              0.0
+            ],
+            "macro_quality_delta": [
+              0.0,
+              0.0
+            ],
+            "quality_delta": [
+              0.0,
+              0.0
+            ]
+          },
+          "groups_per_stratum": {
+            "livecodebench": 1055
+          },
+          "independent_confirmation": false,
+          "interpretation": "descriptive conditional intervals; overlapping fold fits and prior benchmark adaptation excluded",
+          "method": "paired stratified whole-group percentile",
+          "noninferiority_supported": true,
+          "percentile_method": "linear",
+          "replicates": 2000,
+          "seed": 3407,
+          "training_and_selection_fixed": true
+        },
+        "cost_savings": 0.0,
+        "quality_delta": 0.0
+      },
+      "regime": "ood",
+      "remaining_oracle_gap": 0.27014218009478674,
+      "router_on_pareto": true
+    },
+    "standard": {
+      "all_descriptive_checks_pass": true,
+      "classifier_metrics": [
+        {
+          "accuracy_at_0_5": 0.7138754881690788,
+          "brier": 0.1886921702845985,
+          "ece": 0.02760281599224346,
+          "log_loss": 0.560304308477902,
+          "model_id": "qwen3-235b-a22b-2507",
+          "pr_auc": 0.8243796024035918,
+          "pr_auc_trapezoid": 0.8243114170970155,
+          "prevalence": 0.6578221915920055,
+          "roc_auc": 0.7407639812427754,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.8081782678612451,
+          "brier": 0.14855930517832353,
+          "ece": 0.03550086051939501,
+          "log_loss": 0.4706227190857011,
+          "model_id": "intern-s1",
+          "pr_auc": 0.792966451424376,
+          "pr_auc_trapezoid": 0.7928533717876242,
+          "prevalence": 0.44130484723179414,
+          "roc_auc": 0.8521621793148443,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7311049850677693,
+          "brier": 0.18743194970159635,
+          "ece": 0.021834176727553382,
+          "log_loss": 0.5596597571736747,
+          "model_id": "deepseek-v3-0324",
+          "pr_auc": 0.7690513593996783,
+          "pr_auc_trapezoid": 0.7689622172206432,
+          "prevalence": 0.5101079715138984,
+          "roc_auc": 0.7846694699529299,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7817597059499196,
+          "brier": 0.16198565543502827,
+          "ece": 0.01954750662740239,
+          "log_loss": 0.4999352534501886,
+          "model_id": "deepseek-r1-0528",
+          "pr_auc": 0.8420999855720508,
+          "pr_auc_trapezoid": 0.842060133558536,
+          "prevalence": 0.5542154835745463,
+          "roc_auc": 0.8286145470226278,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7370778773259821,
+          "brier": 0.18566079356103277,
+          "ece": 0.027377056816993987,
+          "log_loss": 0.5558355282140468,
+          "model_id": "gemini-2.5-flash",
+          "pr_auc": 0.789979193988672,
+          "pr_auc_trapezoid": 0.789890328130043,
+          "prevalence": 0.5276820583505628,
+          "roc_auc": 0.7853068479610522,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6904433723868596,
+          "brier": 0.1972062947950401,
+          "ece": 0.023597827028209225,
+          "log_loss": 0.5791381831993612,
+          "model_id": "gpt-5-chat",
+          "pr_auc": 0.7929541421517454,
+          "pr_auc_trapezoid": 0.7928503000978303,
+          "prevalence": 0.5843096714909258,
+          "roc_auc": 0.7507652831339826,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7374224672639559,
+          "brier": 0.17068430169106397,
+          "ece": 0.019902408104215175,
+          "log_loss": 0.5136091249640744,
+          "model_id": "gpt-5",
+          "pr_auc": 0.8688650433397918,
+          "pr_auc_trapezoid": 0.8687929833164609,
+          "prevalence": 0.6780381346198024,
+          "roc_auc": 0.7808446082399191,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.8175970594991959,
+          "brier": 0.1424630226315167,
+          "ece": 0.033274037997794166,
+          "log_loss": 0.45511090234383,
+          "model_id": "claude-sonnet-4",
+          "pr_auc": 0.8209755540832349,
+          "pr_auc_trapezoid": 0.8208841877679659,
+          "prevalence": 0.4566965311279577,
+          "roc_auc": 0.8629601871269903,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7521824029405008,
+          "brier": 0.17283543665977502,
+          "ece": 0.026079586226725848,
+          "log_loss": 0.5242769721135974,
+          "model_id": "__macro__",
+          "pr_auc": 0.8126589165453926,
+          "pr_auc_trapezoid": 0.8125756173720149,
+          "prevalence": 0.5512721111876867,
+          "roc_auc": 0.7982608879993902,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7570640937284632,
+          "brier": 0.165768431792088,
+          "ece": 0.018715975248882435,
+          "log_loss": 0.504455544077632,
+          "model_id": "__selected_action__",
+          "pr_auc": 0.8728753369546858,
+          "pr_auc_trapezoid": 0.8728057554624865,
+          "prevalence": 0.7193889271766598,
+          "roc_auc": 0.7601238952246621,
+          "split": "test"
+        }
+      ],
+      "composition_checks": [
+        {
+          "cost_savings": 0.013404758441564857,
+          "excluded": [
+            "simpleqa"
+          ],
+          "n": 4405,
+          "quality_delta": -0.002270147559591429
+        },
+        {
+          "cost_savings": 0.002952818049596906,
+          "excluded": [
+            "simpleqa",
+            "mmlupro"
+          ],
+          "n": 1426,
+          "quality_delta": 0.0007012622720897754
+        }
+      ],
+      "dataset_model_counts": [
+        {
+          "claude-sonnet-4": 0,
+          "dataset": "aime",
+          "deepseek-r1-0528": 1,
+          "deepseek-v3-0324": 0,
+          "gemini-2.5-flash": 0,
+          "gpt-5": 55,
+          "gpt-5-chat": 0,
+          "intern-s1": 0,
+          "qwen3-235b-a22b-2507": 0
+        },
+        {
+          "claude-sonnet-4": 0,
+          "dataset": "gpqa",
+          "deepseek-r1-0528": 5,
+          "deepseek-v3-0324": 0,
+          "gemini-2.5-flash": 1,
+          "gpt-5": 192,
+          "gpt-5-chat": 0,
+          "intern-s1": 0,
+          "qwen3-235b-a22b-2507": 0
+        },
+        {
+          "claude-sonnet-4": 0,
+          "dataset": "livecodebench",
+          "deepseek-r1-0528": 10,
+          "deepseek-v3-0324": 0,
+          "gemini-2.5-flash": 0,
+          "gpt-5": 1045,
+          "gpt-5-chat": 0,
+          "intern-s1": 0,
+          "qwen3-235b-a22b-2507": 0
+        },
+        {
+          "claude-sonnet-4": 0,
+          "dataset": "livemathbench",
+          "deepseek-r1-0528": 4,
+          "deepseek-v3-0324": 0,
+          "gemini-2.5-flash": 0,
+          "gpt-5": 113,
+          "gpt-5-chat": 0,
+          "intern-s1": 0,
+          "qwen3-235b-a22b-2507": 0
+        },
+        {
+          "claude-sonnet-4": 46,
+          "dataset": "mmlupro",
+          "deepseek-r1-0528": 25,
+          "deepseek-v3-0324": 1,
+          "gemini-2.5-flash": 8,
+          "gpt-5": 2835,
+          "gpt-5-chat": 4,
+          "intern-s1": 20,
+          "qwen3-235b-a22b-2507": 40
+        },
+        {
+          "claude-sonnet-4": 0,
+          "dataset": "simpleqa",
+          "deepseek-r1-0528": 4,
+          "deepseek-v3-0324": 20,
+          "gemini-2.5-flash": 4,
+          "gpt-5": 1748,
+          "gpt-5-chat": 69,
+          "intern-s1": 0,
+          "qwen3-235b-a22b-2507": 2456
+        }
+      ],
+      "descriptive_checks": {
+        "dataset_point_guard": true,
+        "macro_interval_margin": true,
+        "micro_interval_margin": true,
+        "savings_at_least_10_percent": true
+      },
+      "distribution": [
+        {
+          "actual_success": 0.6097756410256411,
+          "count": 2496,
+          "fraction": 0.2866988283942109,
+          "mean_cost_usd": 5.973487980769231e-05,
+          "mean_predicted_success": 0.6158063957799994,
+          "model_id": "qwen3-235b-a22b-2507"
+        },
+        {
+          "actual_success": 0.6,
+          "count": 20,
+          "fraction": 0.002297266253158741,
+          "mean_cost_usd": 0.00144612,
+          "mean_predicted_success": 0.910674637322432,
+          "model_id": "intern-s1"
+        },
+        {
+          "actual_success": 0.42857142857142855,
+          "count": 21,
+          "fraction": 0.002412129565816678,
+          "mean_cost_usd": 9.748095238095239e-05,
+          "mean_predicted_success": 0.4418606318783702,
+          "model_id": "deepseek-v3-0324"
+        },
+        {
+          "actual_success": 0.7346938775510204,
+          "count": 49,
+          "fraction": 0.005628302320238916,
+          "mean_cost_usd": 0.01352366020408163,
+          "mean_predicted_success": 0.8435439317327786,
+          "model_id": "deepseek-r1-0528"
+        },
+        {
+          "actual_success": 0.6923076923076923,
+          "count": 13,
+          "fraction": 0.0014932230645531817,
+          "mean_cost_usd": 0.0026152769230769228,
+          "mean_predicted_success": 0.6624653777427585,
+          "model_id": "gemini-2.5-flash"
+        },
+        {
+          "actual_success": 0.410958904109589,
+          "count": 73,
+          "fraction": 0.008385021824029405,
+          "mean_cost_usd": 0.0009160419520547946,
+          "mean_predicted_success": 0.5314117153060431,
+          "model_id": "gpt-5-chat"
+        },
+        {
+          "actual_success": 0.7707080828323313,
+          "count": 5988,
+          "fraction": 0.687801516195727,
+          "mean_cost_usd": 0.021245293628924515,
+          "mean_predicted_success": 0.7773380968913834,
+          "model_id": "gpt-5"
+        },
+        {
+          "actual_success": 0.6521739130434783,
+          "count": 46,
+          "fraction": 0.005283712382265104,
+          "mean_cost_usd": 0.006501065217391305,
+          "mean_predicted_success": 0.9073239205623035,
+          "model_id": "claude-sonnet-4"
+        }
+      ],
+      "fixed_C": 1.0,
+      "fold_checks": {
+        "quality_margin_passes": 5,
+        "savings_10_percent_passes": 5
+      },
+      "folds": [
+        {
+          "baseline": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.0196806158816772,
+            "n": 1741,
+            "quality": 0.6748994830557151
+          },
+          "best_single": "gpt-5",
+          "cost_savings": 0.19791480615024493,
+          "fold": 0,
+          "quality_delta": 0.052268811028144735,
+          "router": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.015785530604537624,
+            "n": 1741,
+            "quality": 0.7271682940838599
+          },
+          "split_counts": {
+            "test": 1741,
+            "train": 5571,
+            "validation": 1394
+          },
+          "training_seconds": 0.5903657080000002,
+          "vocabulary_hash": "f7323b2d27ea3c8485b0e4bc964b036779bb2cbc1cd70b98bb22f7756d17941d"
+        },
+        {
+          "baseline": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.018891623492245838,
+            "n": 1741,
+            "quality": 0.6760482481332567
+          },
+          "best_single": "gpt-5",
+          "cost_savings": 0.22480508389148524,
+          "fold": 1,
+          "quality_delta": 0.04192992533026996,
+          "router": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.014644690488225158,
+            "n": 1741,
+            "quality": 0.7179781734635267
+          },
+          "split_counts": {
+            "test": 1741,
+            "train": 5572,
+            "validation": 1393
+          },
+          "training_seconds": 0.5977385829999999,
+          "vocabulary_hash": "b97f54218e2579c643d9b09992b25f27a89ff2fea21684059f5ebb1a6a229f66"
+        },
+        {
+          "baseline": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.01803887363584147,
+            "n": 1741,
+            "quality": 0.6829408385985066
+          },
+          "best_single": "gpt-5",
+          "cost_savings": 0.21189032913442185,
+          "fold": 2,
+          "quality_delta": 0.04020677771395742,
+          "router": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.014216610763928775,
+            "n": 1741,
+            "quality": 0.723147616312464
+          },
+          "split_counts": {
+            "test": 1741,
+            "train": 5572,
+            "validation": 1393
+          },
+          "training_seconds": 0.6122501249999992,
+          "vocabulary_hash": "46ccdfcbff5de8a12af628cc4f909a24119e0c35fb94cd0fb4f42e4dfdfc4e5a"
+        },
+        {
+          "baseline": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.018661978042479908,
+            "n": 1742,
+            "quality": 0.6687715269804823
+          },
+          "best_single": "gpt-5",
+          "cost_savings": 0.20329880358433983,
+          "fold": 3,
+          "quality_delta": 0.035017221584385694,
+          "router": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.014868020233926521,
+            "n": 1742,
+            "quality": 0.703788748564868
+          },
+          "split_counts": {
+            "test": 1742,
+            "train": 5571,
+            "validation": 1393
+          },
+          "training_seconds": 0.5954071669999994,
+          "vocabulary_hash": "3a8b231cc8813ca1f772e5ef3a2073be1c177c7c91fa89cca82f4e6d290b0651"
+        },
+        {
+          "baseline": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.018348545232624927,
+            "n": 1741,
+            "quality": 0.6875358989086732
+          },
+          "best_single": "gpt-5",
+          "cost_savings": 0.22274595224049998,
+          "fold": 4,
+          "quality_delta": 0.037334865020103414,
+          "router": {
+            "dataset": "__micro__",
+            "mean_cost_usd": 0.014261481052556002,
+            "n": 1741,
+            "quality": 0.7248707639287766
+          },
+          "split_counts": {
+            "test": 1741,
+            "train": 5572,
+            "validation": 1393
+          },
+          "training_seconds": 0.6205859999999994,
+          "vocabulary_hash": "01301f572b8195058d9416089719bf765a851a92b2f1c1472ba0667b1d1cfa9e"
+        }
+      ],
+      "macro": {
+        "always_cheapest": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.0015023110700975153,
+          "n": 8706,
+          "quality": 0.6909820840968229
+        },
+        "best_single": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.03793641913896285,
+          "n": 8706,
+          "quality": 0.7972058311696317
+        },
+        "oracle": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.00527698462402829,
+          "n": 8706,
+          "quality": 0.8944705954991726
+        },
+        "privileged_domain_static": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.02774300932879764,
+          "n": 8706,
+          "quality": 0.7822793562047935
+        },
+        "router": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.036369651910568276,
+          "n": 8706,
+          "quality": 0.8110861409189468
+        },
+        "static_claude-sonnet-4": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.012162165178359585,
+          "n": 8706,
+          "quality": 0.5434636531272612
+        },
+        "static_deepseek-r1-0528": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.01846966971301531,
+          "n": 8706,
+          "quality": 0.7263284319392876
+        },
+        "static_deepseek-v3-0324": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.0011555838264126863,
+          "n": 8706,
+          "quality": 0.5652917754061823
+        },
+        "static_gemini-2.5-flash": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.012545910950614941,
+          "n": 8706,
+          "quality": 0.6266597434020033
+        },
+        "static_gpt-5": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.03793641913896285,
+          "n": 8706,
+          "quality": 0.7972058311696317
+        },
+        "static_gpt-5-chat": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.005347034573361457,
+          "n": 8706,
+          "quality": 0.6504323135092204
+        },
+        "static_intern-s1": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.004206560751437974,
+          "n": 8706,
+          "quality": 0.5488371749618436
+        },
+        "static_qwen3-235b-a22b-2507": {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.0015023110700975153,
+          "n": 8706,
+          "quality": 0.6909820840968229
+        }
+      },
+      "margin": 0.02,
+      "micro": {
+        "always_cheapest": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00041473807603951306,
+          "n": 8706,
+          "quality": 0.6578221915920055
+        },
+        "best_single": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.018724320095336547,
+          "n": 8706,
+          "quality": 0.6780381346198024
+        },
+        "oracle": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0023973988338502183,
+          "n": 8706,
+          "quality": 0.8552722260509993
+        },
+        "privileged_domain_static": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.011696420072363885,
+          "n": 8706,
+          "quality": 0.7054904663450494
+        },
+        "router": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.014755279579887433,
+          "n": 8706,
+          "quality": 0.7193889271766598
+        },
+        "static_claude-sonnet-4": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.005770265678842177,
+          "n": 8706,
+          "quality": 0.4566965311279577
+        },
+        "static_deepseek-r1-0528": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00784080281415116,
+          "n": 8706,
+          "quality": 0.5542154835745463
+        },
+        "static_deepseek-v3-0324": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0004835473971973352,
+          "n": 8706,
+          "quality": 0.5101079715138984
+        },
+        "static_gemini-2.5-flash": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0026833427636113027,
+          "n": 8706,
+          "quality": 0.5276820583505628
+        },
+        "static_gpt-5": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.018724320095336547,
+          "n": 8706,
+          "quality": 0.6780381346198024
+        },
+        "static_gpt-5-chat": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.002637305249253389,
+          "n": 8706,
+          "quality": 0.5843096714909258
+        },
+        "static_intern-s1": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.002070206423156444,
+          "n": 8706,
+          "quality": 0.44130484723179414
+        },
+        "static_qwen3-235b-a22b-2507": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00041473807603951306,
+          "n": 8706,
+          "quality": 0.6578221915920055
+        }
+      },
+      "n": 8706,
+      "oracle_gap_recovered": 0.23331173039533382,
+      "per_dataset": [
+        {
+          "best_single": {
+            "dataset": "aime",
+            "mean_cost_usd": 0.07554939732142858,
+            "n": 56,
+            "quality": 0.8928571428571429
+          },
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                0.0,
+                0.015262274318981727
+              ],
+              "macro_cost_savings": [
+                0.0,
+                0.01526227431898151
+              ],
+              "macro_quality_delta": [
+                0.0,
+                0.0
+              ],
+              "quality_delta": [
+                0.0,
+                0.0
+              ]
+            },
+            "groups_per_stratum": {
+              "aime": 56
+            },
+            "independent_confirmation": false,
+            "interpretation": "descriptive conditional intervals; overlapping fold fits and prior benchmark adaptation excluded",
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": true,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "cost_savings": 0.004130729273923106,
+          "dataset": "aime",
+          "n": 56,
+          "quality_delta": 0.0,
+          "router": {
+            "dataset": "aime",
+            "mean_cost_usd": 0.07523732321428571,
+            "n": 56,
+            "quality": 0.8928571428571429
+          }
+        },
+        {
+          "best_single": {
+            "dataset": "gpqa",
+            "mean_cost_usd": 0.04010564393939394,
+            "n": 198,
+            "quality": 0.8484848484848485
+          },
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                0.0008854546085437871,
+                0.04388598362750098
+              ],
+              "macro_cost_savings": [
+                0.0008854546085437788,
+                0.04388598362750098
+              ],
+              "macro_quality_delta": [
+                -0.015151515151515138,
+                0.015151515151515138
+              ],
+              "quality_delta": [
+                -0.015151515151515152,
+                0.015151515151515152
+              ]
+            },
+            "groups_per_stratum": {
+              "gpqa": 198
+            },
+            "independent_confirmation": false,
+            "interpretation": "descriptive conditional intervals; overlapping fold fits and prior benchmark adaptation excluded",
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": false,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "cost_savings": 0.019899709322002468,
+          "dataset": "gpqa",
+          "n": 198,
+          "quality_delta": 0.0,
+          "router": {
+            "dataset": "gpqa",
+            "mean_cost_usd": 0.039307553282828284,
+            "n": 198,
+            "quality": 0.8484848484848485
+          }
+        },
+        {
+          "best_single": {
+            "dataset": "livecodebench",
+            "mean_cost_usd": 0.0520534710900474,
+            "n": 1055,
+            "quality": 0.8644549763033176
+          },
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                -0.0006423421918547667,
+                0.0012205550156395818
+              ],
+              "macro_cost_savings": [
+                -0.0006423421918547667,
+                0.0012205550156395846
+              ],
+              "macro_quality_delta": [
+                0.0,
+                0.0028436018957346265
+              ],
+              "quality_delta": [
+                0.0,
+                0.002843601895734597
+              ]
+            },
+            "groups_per_stratum": {
+              "livecodebench": 1055
+            },
+            "independent_confirmation": false,
+            "interpretation": "descriptive conditional intervals; overlapping fold fits and prior benchmark adaptation excluded",
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": true,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "cost_savings": 0.0002782647198437127,
+          "dataset": "livecodebench",
+          "n": 1055,
+          "quality_delta": 0.0009478672985781991,
+          "router": {
+            "dataset": "livecodebench",
+            "mean_cost_usd": 0.052038986445497634,
+            "n": 1055,
+            "quality": 0.8654028436018958
+          }
+        },
+        {
+          "best_single": {
+            "dataset": "livemathbench",
+            "mean_cost_usd": 0.03496127136752137,
+            "n": 117,
+            "quality": 0.8205128205128205
+          },
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                -0.0016511988835784363,
+                0.01556491350480555
+              ],
+              "macro_cost_savings": [
+                -0.0016511988835782143,
+                0.015564913504805657
+              ],
+              "macro_quality_delta": [
+                0.0,
+                0.0
+              ],
+              "quality_delta": [
+                0.0,
+                0.0
+              ]
+            },
+            "groups_per_stratum": {
+              "livemathbench": 117
+            },
+            "independent_confirmation": false,
+            "interpretation": "descriptive conditional intervals; overlapping fold fits and prior benchmark adaptation excluded",
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": true,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "cost_savings": 0.004742231559647037,
+          "dataset": "livemathbench",
+          "n": 117,
+          "quality_delta": 0.0,
+          "router": {
+            "dataset": "livemathbench",
+            "mean_cost_usd": 0.034795476923076926,
+            "n": 117,
+            "quality": 0.8205128205128205
+          }
+        },
+        {
+          "best_single": {
+            "dataset": "mmlupro",
+            "mean_cost_usd": 0.011701305807317892,
+            "n": 2979,
+            "quality": 0.8768042967438738
+          },
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                0.023200002405240644,
+                0.04864359208973389
+              ],
+              "macro_cost_savings": [
+                0.023200002405241425,
+                0.04864359208973335
+              ],
+              "macro_quality_delta": [
+                -0.006713662302786139,
+                -0.001007049345417954
+              ],
+              "quality_delta": [
+                -0.00671366230278617,
+                -0.0010070493454179255
+              ]
+            },
+            "groups_per_stratum": {
+              "mmlupro": 2979
+            },
+            "independent_confirmation": false,
+            "interpretation": "descriptive conditional intervals; overlapping fold fits and prior benchmark adaptation excluded",
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": false,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "cost_savings": 0.03474706317224152,
+          "dataset": "mmlupro",
+          "n": 2979,
+          "quality_delta": -0.0036925142665323934,
+          "router": {
+            "dataset": "mmlupro",
+            "mean_cost_usd": 0.0112947197952333,
+            "n": 2979,
+            "quality": 0.8731117824773413
+          }
+        },
+        {
+          "best_single": {
+            "dataset": "simpleqa",
+            "mean_cost_usd": 0.01324742530806789,
+            "n": 4301,
+            "quality": 0.480120902115787
+          },
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                0.5633693854193125,
+                0.6000164584011671
+              ],
+              "macro_cost_savings": [
+                0.5633693854193127,
+                0.6000164584011677
+              ],
+              "macro_quality_delta": [
+                0.07161125319693096,
+                0.09974424552429667
+              ],
+              "quality_delta": [
+                0.07161125319693094,
+                0.09974424552429667
+              ]
+            },
+            "groups_per_stratum": {
+              "simpleqa": 4301
+            },
+            "independent_confirmation": false,
+            "interpretation": "descriptive conditional intervals; overlapping fold fits and prior benchmark adaptation excluded",
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": true,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "cost_savings": 0.5815147718469112,
+          "dataset": "simpleqa",
+          "n": 4301,
+          "quality_delta": 0.08602650546384562,
+          "router": {
+            "dataset": "simpleqa",
+            "mean_cost_usd": 0.005543851802487793,
+            "n": 4301,
+            "quality": 0.5661474075796327
+          }
+        }
+      ],
+      "primary": {
+        "bootstrap": {
+          "ci_95": {
+            "cost_savings": [
+              0.20194454343557305,
+              0.22215791175801572
+            ],
+            "macro_cost_savings": [
+              0.03558072689293647,
+              0.048608889666353364
+            ],
+            "macro_quality_delta": [
+              0.010450844490722658,
+              0.017198732675614788
+            ],
+            "quality_delta": [
+              0.033769813921433495,
+              0.048242591316333565
+            ]
+          },
+          "groups_per_stratum": {
+            "aime": 56,
+            "gpqa": 198,
+            "livecodebench": 1055,
+            "livemathbench": 117,
+            "mmlupro": 2979,
+            "simpleqa": 4301
+          },
+          "independent_confirmation": false,
+          "interpretation": "descriptive conditional intervals; overlapping fold fits and prior benchmark adaptation excluded",
+          "method": "paired stratified whole-group percentile",
+          "noninferiority_supported": true,
+          "percentile_method": "linear",
+          "replicates": 2000,
+          "seed": 3407,
+          "training_and_selection_fixed": true
+        },
+        "cost_savings": 0.2119724772509971,
+        "quality_delta": 0.04135079255685734
+      },
+      "privileged_reference_comparison": {
+        "bootstrap": {
+          "ci_95": {
+            "cost_savings": [
+              -0.28547748224049074,
+              -0.24052842859177276
+            ],
+            "macro_cost_savings": [
+              -0.4259282069273476,
+              -0.21500263493718477
+            ],
+            "macro_quality_delta": [
+              0.01616162614316179,
+              0.04251044844222177
+            ],
+            "quality_delta": [
+              0.008040431886055594,
+              0.019759361359981607
+            ]
+          },
+          "groups_per_stratum": {
+            "aime": 56,
+            "gpqa": 198,
+            "livecodebench": 1055,
+            "livemathbench": 117,
+            "mmlupro": 2979,
+            "simpleqa": 4301
+          },
+          "independent_confirmation": false,
+          "interpretation": "descriptive conditional intervals; overlapping fold fits and prior benchmark adaptation excluded",
+          "method": "paired stratified whole-group percentile",
+          "noninferiority_supported": true,
+          "percentile_method": "linear",
+          "replicates": 2000,
+          "seed": 3407,
+          "training_and_selection_fixed": true
+        },
+        "cost_savings": -0.26152100288796687,
+        "quality_delta": 0.013898460831610384
+      },
+      "regime": "standard",
+      "remaining_oracle_gap": 0.13588329887433948,
+      "router_on_pareto": true
+    }
+  },
+  "seed": 3407
+}

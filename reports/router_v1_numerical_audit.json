@@ -1,0 +1,48 @@
+{
+  "method": "Compare dense sklearn probabilities to expit of non-BLAS einsum logits; retain original probabilities. Replay training/CV only; do not reselect or reevaluate test policies.",
+  "passed": true,
+  "results": {
+    "ood": {
+      "test": {
+        "dense_matmul_runtime_warnings": 24,
+        "max_probability_difference": 2.220446049250313e-16,
+        "max_scaled_feature_magnitude": 172.62069733105005,
+        "saved_probabilities_exact": true
+      },
+      "train": {
+        "dense_matmul_runtime_warnings": 24,
+        "max_probability_difference": 1.1102230246251565e-16,
+        "max_scaled_feature_magnitude": 34.716786141256016,
+        "saved_probabilities_exact": true
+      },
+      "train_only_replay_exact": true,
+      "validation": {
+        "dense_matmul_runtime_warnings": 24,
+        "max_probability_difference": 1.6653345369377348e-16,
+        "max_scaled_feature_magnitude": 33.093302445383024,
+        "saved_probabilities_exact": true
+      }
+    },
+    "standard": {
+      "test": {
+        "dense_matmul_runtime_warnings": 24,
+        "max_probability_difference": 1.6653345369377348e-16,
+        "max_scaled_feature_magnitude": 27.033287129708917,
+        "saved_probabilities_exact": true
+      },
+      "train": {
+        "dense_matmul_runtime_warnings": 24,
+        "max_probability_difference": 1.6653345369377348e-16,
+        "max_scaled_feature_magnitude": 44.24104965574117,
+        "saved_probabilities_exact": true
+      },
+      "train_only_replay_exact": true,
+      "validation": {
+        "dense_matmul_runtime_warnings": 24,
+        "max_probability_difference": 1.6653345369377348e-16,
+        "max_scaled_feature_magnitude": 30.619048342313658,
+        "saved_probabilities_exact": true
+      }
+    }
+  }
+}

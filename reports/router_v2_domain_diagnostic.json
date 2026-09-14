@@ -1,0 +1,276 @@
+{
+  "privileged_input": "dataset name",
+  "regimes": {
+    "ood": {
+      "bootstrap": {
+        "ci_95": {
+          "cost_savings": [
+            0.0049834313030352375,
+            0.019082127028746954
+          ],
+          "macro_cost_savings": [
+            0.004983431303035249,
+            0.019082127028747165
+          ],
+          "macro_quality_delta": [
+            -0.0037914691943128354,
+            0.0018957345971564177
+          ],
+          "quality_delta": [
+            -0.0037914691943127963,
+            0.0018957345971563982
+          ]
+        },
+        "groups_per_stratum": {
+          "livecodebench": 1055
+        },
+        "method": "paired stratified whole-group percentile",
+        "noninferiority_supported": true,
+        "percentile_method": "linear",
+        "replicates": 2000,
+        "seed": 3407,
+        "training_and_selection_fixed": true
+      },
+      "fallback": "gpt-5",
+      "metrics": [
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.05146555069194319,
+          "median_cost_usd": 0.023069,
+          "n": 1055,
+          "policy_id": "frozen_primary",
+          "quality": 0.8635071090047394
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.052053471090047446,
+          "median_cost_usd": 0.023196,
+          "n": 1055,
+          "policy_id": "privileged_domain_static",
+          "quality": 0.8644549763033176
+        },
+        {
+          "dataset": "livecodebench",
+          "mean_cost_usd": 0.05146555069194319,
+          "median_cost_usd": 0.023069,
+          "n": 1055,
+          "policy_id": "frozen_primary",
+          "quality": 0.8635071090047394
+        },
+        {
+          "dataset": "livecodebench",
+          "mean_cost_usd": 0.052053471090047446,
+          "median_cost_usd": 0.023196,
+          "n": 1055,
+          "policy_id": "privileged_domain_static",
+          "quality": 0.8644549763033176
+        },
+        {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.05146555069194319,
+          "median_cost_usd": null,
+          "n": 1055,
+          "policy_id": "frozen_primary",
+          "quality": 0.8635071090047394
+        },
+        {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.052053471090047446,
+          "median_cost_usd": null,
+          "n": 1055,
+          "policy_id": "privileged_domain_static",
+          "quality": 0.8644549763033176
+        }
+      ],
+      "primary_cost_savings_vs_domain": 0.011294547429646196,
+      "primary_minus_domain_quality": -0.0009478672985782088,
+      "selected_domain_models": {
+        "aime": "gpt-5",
+        "gpqa": "deepseek-r1-0528",
+        "livemathbench": "gpt-5",
+        "mmlupro": "gpt-5",
+        "simpleqa": "qwen3-235b-a22b-2507"
+      }
+    },
+    "standard": {
+      "bootstrap": {
+        "ci_95": {
+          "cost_savings": [
+            -0.3152534006058349,
+            -0.20860236419354786
+          ],
+          "macro_cost_savings": [
+            -1.4103872817387357,
+            -0.47588144152067113
+          ],
+          "macro_quality_delta": [
+            0.03782097578683656,
+            0.1599020992317236
+          ],
+          "quality_delta": [
+            0.0015325670498084292,
+            0.03065134099616858
+          ]
+        },
+        "groups_per_stratum": {
+          "aime": 8,
+          "gpqa": 30,
+          "livecodebench": 158,
+          "livemathbench": 17,
+          "mmlupro": 447,
+          "simpleqa": 645
+        },
+        "method": "paired stratified whole-group percentile",
+        "noninferiority_supported": true,
+        "percentile_method": "linear",
+        "replicates": 2000,
+        "seed": 3407,
+        "training_and_selection_fixed": true
+      },
+      "fallback": "gpt-5",
+      "metrics": [
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.01530373737164754,
+          "median_cost_usd": 0.0052125,
+          "n": 1305,
+          "policy_id": "frozen_primary",
+          "quality": 0.7310344827586207
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.012180745739463568,
+          "median_cost_usd": 0.0009075,
+          "n": 1305,
+          "policy_id": "privileged_domain_static",
+          "quality": 0.7149425287356321
+        },
+        {
+          "dataset": "aime",
+          "mean_cost_usd": 0.07853718750000001,
+          "median_cost_usd": 0.030238750000000002,
+          "n": 8,
+          "policy_id": "frozen_primary",
+          "quality": 1.0
+        },
+        {
+          "dataset": "aime",
+          "mean_cost_usd": 0.0045186125,
+          "median_cost_usd": 0.00470805,
+          "n": 8,
+          "policy_id": "privileged_domain_static",
+          "quality": 0.75
+        },
+        {
+          "dataset": "gpqa",
+          "mean_cost_usd": 0.039958176666666664,
+          "median_cost_usd": 0.026011874999999997,
+          "n": 30,
+          "policy_id": "frozen_primary",
+          "quality": 0.8666666666666667
+        },
+        {
+          "dataset": "gpqa",
+          "mean_cost_usd": 0.04301825,
+          "median_cost_usd": 0.02969625,
+          "n": 30,
+          "policy_id": "privileged_domain_static",
+          "quality": 0.8666666666666667
+        },
+        {
+          "dataset": "livecodebench",
+          "mean_cost_usd": 0.05397839936708861,
+          "median_cost_usd": 0.0299095,
+          "n": 158,
+          "policy_id": "frozen_primary",
+          "quality": 0.8924050632911392
+        },
+        {
+          "dataset": "livecodebench",
+          "mean_cost_usd": 0.05389960759493672,
+          "median_cost_usd": 0.0299095,
+          "n": 158,
+          "policy_id": "privileged_domain_static",
+          "quality": 0.8987341772151899
+        },
+        {
+          "dataset": "livemathbench",
+          "mean_cost_usd": 0.030194411764705883,
+          "median_cost_usd": 0.0155225,
+          "n": 17,
+          "policy_id": "frozen_primary",
+          "quality": 0.9411764705882353
+        },
+        {
+          "dataset": "livemathbench",
+          "mean_cost_usd": 0.001229609411764706,
+          "median_cost_usd": 0.00111321,
+          "n": 17,
+          "policy_id": "privileged_domain_static",
+          "quality": 0.6470588235294118
+        },
+        {
+          "dataset": "mmlupro",
+          "mean_cost_usd": 0.013089233243847878,
+          "median_cost_usd": 0.0063925,
+          "n": 447,
+          "policy_id": "frozen_primary",
+          "quality": 0.8993288590604027
+        },
+        {
+          "dataset": "mmlupro",
+          "mean_cost_usd": 0.013429482662192396,
+          "median_cost_usd": 0.00670625,
+          "n": 447,
+          "policy_id": "privileged_domain_static",
+          "quality": 0.8993288590604027
+        },
+        {
+          "dataset": "simpleqa",
+          "mean_cost_usd": 0.005041170713178295,
+          "median_cost_usd": 5.343e-05,
+          "n": 645,
+          "policy_id": "frozen_primary",
+          "quality": 0.5596899224806201
+        },
+        {
+          "dataset": "simpleqa",
+          "mean_cost_usd": 4.5204155038759726e-05,
+          "median_cost_usd": 3.411e-05,
+          "n": 645,
+          "policy_id": "privileged_domain_static",
+          "quality": 0.5364341085271318
+        },
+        {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.03679976320924789,
+          "median_cost_usd": null,
+          "n": 1305,
+          "policy_id": "frozen_primary",
+          "quality": 0.8598778303478439
+        },
+        {
+          "dataset": "__macro__",
+          "mean_cost_usd": 0.019356794387322098,
+          "median_cost_usd": null,
+          "n": 1305,
+          "policy_id": "privileged_domain_static",
+          "quality": 0.7663704391664671
+        }
+      ],
+      "primary_cost_savings_vs_domain": -0.2563875561465834,
+      "primary_minus_domain_quality": 0.016091954022988575,
+      "selected_domain_models": {
+        "aime": "qwen3-235b-a22b-2507",
+        "gpqa": "gpt-5",
+        "livecodebench": "gpt-5",
+        "livemathbench": "deepseek-v3-0324",
+        "mmlupro": "gpt-5",
+        "simpleqa": "qwen3-235b-a22b-2507"
+      }
+    }
+  },
+  "selection_split": "validation",
+  "status": "post-hoc diagnostic; not preregistered primary or deployment candidate",
+  "unseen_dataset_rule": "validation-selected global best-single"
+}

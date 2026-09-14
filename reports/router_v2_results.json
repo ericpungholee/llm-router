@@ -1,0 +1,3512 @@
+{
+  "code_comparison": {
+    "common_delta_pp": 0.6329113924050667,
+    "common_n": 158,
+    "ood_code_n": 1055,
+    "ood_code_quality": 0.8635071090047394,
+    "ood_common_quality": 0.8987341772151899,
+    "ood_minus_standard_pp": -2.889795428639985,
+    "standard_code_n": 158,
+    "standard_code_quality": 0.8924050632911392
+  },
+  "runs": {
+    "ood": {
+      "baselines": {
+        "always_cheapest": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0009898378009478678,
+          "median_cost_usd": 0.00067366,
+          "n": 1055,
+          "quality": 0.6417061611374407
+        },
+        "best_single": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.052053471090047446,
+          "median_cost_usd": 0.023196,
+          "n": 1055,
+          "quality": 0.8644549763033176
+        },
+        "oracle": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.013239960360189578,
+          "median_cost_usd": 0.00060594,
+          "n": 1055,
+          "quality": 0.9118483412322275
+        }
+      },
+      "best_single": {
+        "kind": "static",
+        "model_id": "gpt-5",
+        "policy_id": "best_single",
+        "value": 0.0
+      },
+      "comparison": {
+        "control_embedding": {
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                0.9439159692507877,
+                0.9535679852141163
+              ],
+              "macro_cost_savings": [
+                0.9439159692507877,
+                0.9535679852141162
+              ],
+              "macro_quality_delta": [
+                -0.2862559241706162,
+                -0.2293838862559242
+              ],
+              "quality_delta": [
+                -0.2862559241706161,
+                -0.22938388625592418
+              ]
+            },
+            "groups_per_stratum": {
+              "livecodebench": 1055
+            },
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": false,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "conditions": {
+            "dataset_point_guard": false,
+            "macro_noninferiority": false,
+            "micro_noninferiority": false,
+            "savings_at_least_10_percent": true
+          },
+          "cost_savings": 0.9490227198382881,
+          "cost_usd": 0.0026535443791469186,
+          "macro_quality": 0.6066350710900474,
+          "macro_quality_delta": -0.25781990521327014,
+          "oracle_gap_recovered": -5.4400000000000075,
+          "promising_exploratory": false,
+          "quality": 0.6066350710900474,
+          "quality_delta": -0.25781990521327014,
+          "remaining_oracle_gap": 0.30521327014218
+        },
+        "control_embedding_handcrafted": {
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                0.7557919992610311,
+                0.7908916538186892
+              ],
+              "macro_cost_savings": [
+                0.7557919992610316,
+                0.7908916538186893
+              ],
+              "macro_quality_delta": [
+                -0.3137440758293838,
+                -0.25781990521327014
+              ],
+              "quality_delta": [
+                -0.3137440758293839,
+                -0.25781990521327014
+              ]
+            },
+            "groups_per_stratum": {
+              "livecodebench": 1055
+            },
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": false,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "conditions": {
+            "dataset_point_guard": false,
+            "macro_noninferiority": false,
+            "micro_noninferiority": false,
+            "savings_at_least_10_percent": true
+          },
+          "cost_savings": 0.773970874317135,
+          "cost_usd": 0.011765600559241716,
+          "macro_quality": 0.5791469194312796,
+          "macro_quality_delta": -0.285308056872038,
+          "oracle_gap_recovered": -6.020000000000009,
+          "promising_exploratory": false,
+          "quality": 0.5791469194312796,
+          "quality_delta": -0.285308056872038,
+          "remaining_oracle_gap": 0.33270142180094786
+        },
+        "control_handcrafted": {
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                0.8668200443285174,
+                0.8878310030319241
+              ],
+              "macro_cost_savings": [
+                0.8668200443285177,
+                0.8878310030319242
+              ],
+              "macro_quality_delta": [
+                -0.376303317535545,
+                -0.3137440758293839
+              ],
+              "quality_delta": [
+                -0.376303317535545,
+                -0.3137440758293839
+              ]
+            },
+            "groups_per_stratum": {
+              "livecodebench": 1055
+            },
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": false,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "conditions": {
+            "dataset_point_guard": false,
+            "macro_noninferiority": false,
+            "micro_noninferiority": false,
+            "savings_at_least_10_percent": true
+          },
+          "cost_savings": 0.8780567789097367,
+          "cost_usd": 0.006347567933649287,
+          "macro_quality": 0.5194312796208531,
+          "macro_quality_delta": -0.34502369668246446,
+          "oracle_gap_recovered": -7.28000000000001,
+          "promising_exploratory": false,
+          "quality": 0.5194312796208531,
+          "quality_delta": -0.34502369668246446,
+          "remaining_oracle_gap": 0.39241706161137435
+        },
+        "control_tfidf": {
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                0.9794584793004175,
+                0.982392079860422
+              ],
+              "macro_cost_savings": [
+                0.9794584793004175,
+                0.982392079860422
+              ],
+              "macro_quality_delta": [
+                -0.2502369668246446,
+                -0.19526066350710902
+              ],
+              "quality_delta": [
+                -0.2502369668246445,
+                -0.195260663507109
+              ]
+            },
+            "groups_per_stratum": {
+              "livecodebench": 1055
+            },
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": false,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "conditions": {
+            "dataset_point_guard": false,
+            "macro_noninferiority": false,
+            "micro_noninferiority": false,
+            "savings_at_least_10_percent": true
+          },
+          "cost_savings": 0.9809842114229895,
+          "cost_usd": 0.0009898378009478678,
+          "macro_quality": 0.6417061611374407,
+          "macro_quality_delta": -0.22274881516587686,
+          "oracle_gap_recovered": -4.700000000000008,
+          "promising_exploratory": false,
+          "quality": 0.6417061611374407,
+          "quality_delta": -0.22274881516587686,
+          "remaining_oracle_gap": 0.27014218009478674
+        },
+        "primary": {
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                0.0049834313030352375,
+                0.019082127028746954
+              ],
+              "macro_cost_savings": [
+                0.004983431303035249,
+                0.019082127028747165
+              ],
+              "macro_quality_delta": [
+                -0.0037914691943128354,
+                0.0018957345971564177
+              ],
+              "quality_delta": [
+                -0.0037914691943127963,
+                0.0018957345971563982
+              ]
+            },
+            "groups_per_stratum": {
+              "livecodebench": 1055
+            },
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": true,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "conditions": {
+            "dataset_point_guard": true,
+            "macro_noninferiority": true,
+            "micro_noninferiority": true,
+            "savings_at_least_10_percent": false
+          },
+          "cost_savings": 0.011294547429646196,
+          "cost_usd": 0.05146555069194319,
+          "macro_quality": 0.8635071090047394,
+          "macro_quality_delta": -0.0009478672985782088,
+          "oracle_gap_recovered": -0.020000000000000233,
+          "promising_exploratory": false,
+          "quality": 0.8635071090047394,
+          "quality_delta": -0.0009478672985782088,
+          "remaining_oracle_gap": 0.048341232227488096
+        }
+      },
+      "controls": {
+        "embedding": {
+          "kind": "utility",
+          "model_id": "",
+          "policy_id": "utility_1",
+          "value": 1
+        },
+        "embedding_handcrafted": {
+          "kind": "utility",
+          "model_id": "",
+          "policy_id": "utility_0.1",
+          "value": 0.1
+        },
+        "handcrafted": {
+          "kind": "threshold",
+          "model_id": "",
+          "policy_id": "threshold_0.70",
+          "value": 0.7
+        },
+        "tfidf": {
+          "kind": "utility",
+          "model_id": "",
+          "policy_id": "utility_10",
+          "value": 10
+        }
+      },
+      "dataset_selection_counts": [
+        {
+          "claude-sonnet-4": 0,
+          "dataset": "livecodebench",
+          "deepseek-r1-0528": 0,
+          "deepseek-v3-0324": 0,
+          "gemini-2.5-flash": 0,
+          "gpt-5": 1030,
+          "gpt-5-chat": 0,
+          "intern-s1": 0,
+          "qwen3-235b-a22b-2507": 25
+        }
+      ],
+      "datasets": {
+        "livecodebench": {
+          "always_cheapest": {
+            "mean_cost_usd": 0.0009898378009478678,
+            "n": 1055,
+            "quality": 0.6417061611374407
+          },
+          "best_single": {
+            "mean_cost_usd": 0.052053471090047446,
+            "n": 1055,
+            "quality": 0.8644549763033176
+          },
+          "oracle": {
+            "mean_cost_usd": 0.013239960360189578,
+            "n": 1055,
+            "quality": 0.9118483412322275
+          },
+          "primary": {
+            "mean_cost_usd": 0.05146555069194319,
+            "n": 1055,
+            "quality": 0.8635071090047394
+          }
+        }
+      },
+      "embedding_cache_metadata": {
+        "chunks": 9397,
+        "content_tokens": 1422947,
+        "encoder_config": {
+          "attention": "eager",
+          "batch_size": 16,
+          "chunk_overlap": 0,
+          "content_tokens_per_chunk": 510,
+          "device": "cpu",
+          "dimensions": 384,
+          "dtype": "float32",
+          "fine_tuned": false,
+          "instruction": null,
+          "model_id": "BAAI/bge-small-en-v1.5",
+          "pooling": "L2 CLS per chunk; content-token-weighted mean; final L2",
+          "revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+          "torch_threads": 4
+        },
+        "encoder_manifest_hash": "6e0c602fb6f976ecf95bc98ae03ef0a641a37ed445a9df663a15359127d325b1",
+        "files": {
+          "prompt_index.parquet": "f02a642db7534d86763ef820ccf77126c71c2a3e9be63237f4bba83ece44051b",
+          "vectors.npy": "afe0a360866f99d27ca77260eb262ba24ecc60eeb4cb53af842cc3aa79c2487e"
+        },
+        "inference_seconds": 139.57635925,
+        "prompt_text_identity": "1c4c77e9a7d9dcfdf8c62cf4325ac181fa09577507ab5325ab353ecf893bf7fc",
+        "source_prompt_file_hash": "229a75158cb5cffaef7ba5bc7ebd8f2cc0d4c00b37e854e72cfcfebc2dbeefae"
+      },
+      "environment": {
+        "packages": {
+          "Jinja2": "3.1.6",
+          "MarkupSafe": "3.0.3",
+          "PyYAML": "6.0.2",
+          "certifi": "2025.4.26",
+          "charset-normalizer": "3.4.2",
+          "contourpy": "1.3.0",
+          "cycler": "0.12.1",
+          "filelock": "3.18.0",
+          "fonttools": "4.60.2",
+          "fsspec": "2025.3.2",
+          "huggingface-hub": "0.30.2",
+          "idna": "3.10",
+          "importlib_resources": "6.5.2",
+          "joblib": "1.4.2",
+          "kiwisolver": "1.4.7",
+          "matplotlib": "3.9.4",
+          "mpmath": "1.3.0",
+          "networkx": "3.2.1",
+          "numpy": "2.0.2",
+          "packaging": "25.0",
+          "pandas": "2.2.3",
+          "pillow": "11.3.0",
+          "pip": "21.2.4",
+          "pyarrow": "19.0.1",
+          "pyparsing": "3.2.5",
+          "python-dateutil": "2.9.0.post0",
+          "python-dotenv": "1.1.1",
+          "pytz": "2026.3.post1",
+          "regex": "2024.11.6",
+          "requests": "2.32.3",
+          "safetensors": "0.5.3",
+          "scikit-learn": "1.6.1",
+          "scipy": "1.13.1",
+          "setuptools": "58.0.4",
+          "six": "1.17.0",
+          "sympy": "1.14.0",
+          "threadpoolctl": "3.6.0",
+          "tokenizers": "0.21.1",
+          "torch": "2.7.1",
+          "tqdm": "4.67.1",
+          "transformers": "4.51.3",
+          "typing_extensions": "4.15.0",
+          "tzdata": "2026.4",
+          "urllib3": "2.4.0",
+          "zipp": "3.23.0"
+        },
+        "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]"
+      },
+      "families": {
+        "embedding": {
+          "model_signature": "39cf9b356d38b59e2e5a12f61144561e4a9d08af2cdcc1f0ed17b0b65e31c7fc",
+          "selected_C": 0.1,
+          "training_seconds": 36.387225707999995
+        },
+        "embedding_handcrafted": {
+          "model_signature": "1a354e3b973d8d4974bb13f50699b7e8041dcab156ef81a3bb06868a4bd45ad1",
+          "selected_C": 0.1,
+          "training_seconds": 50.125826374999995
+        },
+        "handcrafted": {
+          "model_signature": "599e0e4a89f73445fd8f68b4922496a2975ed7732d289545d86c12f168f01010",
+          "selected_C": 0.1,
+          "training_seconds": 0.9929521670000003
+        },
+        "tfidf": {
+          "model_signature": "d6de6f19ad2f9bfd3fdbe8e74f34b4ad47635429a50ba13fa80375919997ffb9",
+          "selected_C": 1.0,
+          "training_seconds": 5.951442583
+        }
+      },
+      "frontier": [
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0012756903507109018,
+          "median_cost_usd": 0.0006834,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__threshold_0.65__gate_0.00",
+          "quality": 0.6436018957345971
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0012756903507109018,
+          "median_cost_usd": 0.0006834,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__threshold_0.65__gate_0.01",
+          "quality": 0.6436018957345971
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0012756903507109018,
+          "median_cost_usd": 0.0006834,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__threshold_0.65__gate_0.05",
+          "quality": 0.6436018957345971
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0012756903507109018,
+          "median_cost_usd": 0.0006834,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__threshold_0.65__gate_0.10",
+          "quality": 0.6436018957345971
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.006112702502369671,
+          "median_cost_usd": 0.00076093,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__threshold_0.70__gate_0.00",
+          "quality": 0.6691943127962086
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.006112702502369671,
+          "median_cost_usd": 0.00076093,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__threshold_0.70__gate_0.01",
+          "quality": 0.6691943127962086
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.006112702502369671,
+          "median_cost_usd": 0.00076093,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__threshold_0.70__gate_0.05",
+          "quality": 0.6691943127962086
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.006112702502369671,
+          "median_cost_usd": 0.00076093,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__threshold_0.70__gate_0.10",
+          "quality": 0.6691943127962086
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.017587039791469198,
+          "median_cost_usd": 0.00172867,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.75__gate_0.00",
+          "quality": 0.7317535545023697
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.017587039791469198,
+          "median_cost_usd": 0.00172867,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.75__gate_0.01",
+          "quality": 0.7317535545023697
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.017587039791469198,
+          "median_cost_usd": 0.00172867,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.75__gate_0.05",
+          "quality": 0.7317535545023697
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.017587039791469198,
+          "median_cost_usd": 0.00172867,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.75__gate_0.10",
+          "quality": 0.7317535545023697
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.85__gate_0.00",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.85__gate_0.01",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.85__gate_0.05",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.85__gate_0.10",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.90__gate_0.00",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.90__gate_0.01",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.90__gate_0.05",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.90__gate_0.10",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.95__gate_0.00",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.95__gate_0.01",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.95__gate_0.05",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.95__gate_0.10",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_1.00__gate_0.00",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_1.00__gate_0.01",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_1.00__gate_0.05",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_1.00__gate_0.10",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__utility_0__gate_0.00",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__utility_0__gate_0.01",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__utility_0__gate_0.05",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.03595634118483417,
+          "median_cost_usd": 0.010396,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__utility_0__gate_0.10",
+          "quality": 0.8085308056872038
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.035895311421801,
+          "median_cost_usd": 0.01024855,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.00__gate_0.00",
+          "quality": 0.8075829383886256
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.035895311421801,
+          "median_cost_usd": 0.01024855,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.00__gate_0.01",
+          "quality": 0.8075829383886256
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.035895311421801,
+          "median_cost_usd": 0.01024855,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.00__gate_0.05",
+          "quality": 0.8075829383886256
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.035895311421801,
+          "median_cost_usd": 0.01024855,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.00__gate_0.10",
+          "quality": 0.8075829383886256
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.046679145355450306,
+          "median_cost_usd": 0.01795,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.02__gate_0.00",
+          "quality": 0.8398104265402844
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.046679145355450306,
+          "median_cost_usd": 0.01795,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.02__gate_0.01",
+          "quality": 0.8398104265402844
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.046679145355450306,
+          "median_cost_usd": 0.01795,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.02__gate_0.05",
+          "quality": 0.8398104265402844
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.046679145355450306,
+          "median_cost_usd": 0.01795,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.02__gate_0.10",
+          "quality": 0.8398104265402844
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.05146555069194319,
+          "median_cost_usd": 0.023069,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.05__gate_0.00",
+          "quality": 0.8635071090047394
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.05146555069194319,
+          "median_cost_usd": 0.023069,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.05__gate_0.01",
+          "quality": 0.8635071090047394
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.05146555069194319,
+          "median_cost_usd": 0.023069,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.05__gate_0.05",
+          "quality": 0.8635071090047394
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.05146555069194319,
+          "median_cost_usd": 0.023069,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.05__gate_0.10",
+          "quality": 0.8635071090047394
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.052053471090047446,
+          "median_cost_usd": 0.023196,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.10__gate_0.00",
+          "quality": 0.8644549763033176
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.052053471090047446,
+          "median_cost_usd": 0.023196,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.10__gate_0.01",
+          "quality": 0.8644549763033176
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.052053471090047446,
+          "median_cost_usd": 0.023196,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.10__gate_0.05",
+          "quality": 0.8644549763033176
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.052053471090047446,
+          "median_cost_usd": 0.023196,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.10__gate_0.10",
+          "quality": 0.8644549763033176
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.052053471090047446,
+          "median_cost_usd": 0.023196,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.20__gate_0.00",
+          "quality": 0.8644549763033176
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.052053471090047446,
+          "median_cost_usd": 0.023196,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.20__gate_0.01",
+          "quality": 0.8644549763033176
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.052053471090047446,
+          "median_cost_usd": 0.023196,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.20__gate_0.05",
+          "quality": 0.8644549763033176
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.052053471090047446,
+          "median_cost_usd": 0.023196,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__advantage_0.20__gate_0.10",
+          "quality": 0.8644549763033176
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.043627575573459754,
+          "median_cost_usd": 0.017675,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "handcrafted__advantage_0.10__gate_0.00",
+          "quality": 0.8180094786729858
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.043627575573459754,
+          "median_cost_usd": 0.017675,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "handcrafted__advantage_0.10__gate_0.01",
+          "quality": 0.8180094786729858
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.043627575573459754,
+          "median_cost_usd": 0.017675,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "handcrafted__advantage_0.10__gate_0.05",
+          "quality": 0.8180094786729858
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.043627575573459754,
+          "median_cost_usd": 0.017675,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "handcrafted__advantage_0.10__gate_0.10",
+          "quality": 0.8180094786729858
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0504647425497631,
+          "median_cost_usd": 0.022479,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "handcrafted__advantage_0.20__gate_0.00",
+          "quality": 0.8549763033175355
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0504647425497631,
+          "median_cost_usd": 0.022479,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "handcrafted__advantage_0.20__gate_0.01",
+          "quality": 0.8549763033175355
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0504647425497631,
+          "median_cost_usd": 0.022479,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "handcrafted__advantage_0.20__gate_0.05",
+          "quality": 0.8549763033175355
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0504647425497631,
+          "median_cost_usd": 0.022479,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "handcrafted__advantage_0.20__gate_0.10",
+          "quality": 0.8549763033175355
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0009900621895734603,
+          "median_cost_usd": 0.00067366,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "embedding__threshold_0.35__gate_0.00",
+          "quality": 0.6426540284360189
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0009900621895734603,
+          "median_cost_usd": 0.00067366,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "embedding__threshold_0.35__gate_0.01",
+          "quality": 0.6426540284360189
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0009900621895734603,
+          "median_cost_usd": 0.00067366,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "embedding__threshold_0.35__gate_0.05",
+          "quality": 0.6426540284360189
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0009900621895734603,
+          "median_cost_usd": 0.00067366,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "embedding__threshold_0.35__gate_0.10",
+          "quality": 0.6426540284360189
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.046293248483412375,
+          "median_cost_usd": 0.01738,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "embedding__advantage_0.05__gate_0.00",
+          "quality": 0.8293838862559242
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.046293248483412375,
+          "median_cost_usd": 0.01738,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "embedding__advantage_0.05__gate_0.01",
+          "quality": 0.8293838862559242
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.046293248483412375,
+          "median_cost_usd": 0.01738,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "embedding__advantage_0.05__gate_0.05",
+          "quality": 0.8293838862559242
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.046293248483412375,
+          "median_cost_usd": 0.01738,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "embedding__advantage_0.05__gate_0.10",
+          "quality": 0.8293838862559242
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0009897724644549767,
+          "median_cost_usd": 0.00067366,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "embedding_handcrafted__utility_10__gate_0.00",
+          "quality": 0.6417061611374407
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0009897724644549767,
+          "median_cost_usd": 0.00067366,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "embedding_handcrafted__utility_10__gate_0.01",
+          "quality": 0.6417061611374407
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0009897724644549767,
+          "median_cost_usd": 0.00067366,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "embedding_handcrafted__utility_10__gate_0.05",
+          "quality": 0.6417061611374407
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0009897724644549767,
+          "median_cost_usd": 0.00067366,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "embedding_handcrafted__utility_10__gate_0.10",
+          "quality": 0.6417061611374407
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0495243357725119,
+          "median_cost_usd": 0.021737,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "embedding_handcrafted__advantage_0.20__gate_0.00",
+          "quality": 0.8502369668246446
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0495243357725119,
+          "median_cost_usd": 0.021737,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "embedding_handcrafted__advantage_0.20__gate_0.01",
+          "quality": 0.8502369668246446
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0495243357725119,
+          "median_cost_usd": 0.021737,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "embedding_handcrafted__advantage_0.20__gate_0.05",
+          "quality": 0.8502369668246446
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0495243357725119,
+          "median_cost_usd": 0.021737,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "embedding_handcrafted__advantage_0.20__gate_0.10",
+          "quality": 0.8502369668246446
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.052053471090047446,
+          "median_cost_usd": 0.023196,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "best_single",
+          "quality": 0.8644549763033176
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0014471013459715673,
+          "median_cost_usd": 0.0008674900000000001,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "static_deepseek-v3-0324",
+          "quality": 0.6663507109004739
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0288723123696682,
+          "median_cost_usd": 0.025594699999999998,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "static_deepseek-r1-0528",
+          "quality": 0.8009478672985783
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.052053471090047446,
+          "median_cost_usd": 0.023196,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "static_gpt-5",
+          "quality": 0.8644549763033176
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.05146555069194319,
+          "median_cost_usd": 0.023069,
+          "n": 1055,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "primary",
+          "quality": 0.8635071090047394
+        }
+      ],
+      "frozen_selection_sha256": "d124919a8b849f09e9996446a1d600ac235eaf613a42870a0bfd6673436561cc",
+      "gate_rejection_fraction": 0.0,
+      "interpretation": "exploratory; existing tests inspected during v1; no v2 test-based selection",
+      "novelty_cutoffs": {
+        "0.01": 0.5622477328777313,
+        "0.05": 0.5893853545188904,
+        "0.1": 0.6104365825653076
+      },
+      "primary": {
+        "candidate_id": "tfidf__advantage_0.05__gate_0.00",
+        "family": "tfidf",
+        "gate_quantile": 0,
+        "kind": "advantage",
+        "value": 0.05
+      },
+      "primary_on_pareto_frontier": true,
+      "primary_prediction_reference_family": "tfidf",
+      "protocol_sha256": "50d12e990d524a64dbc0cb8cf9c7c9edb8486e786c8f0efd7ca19242298722c4",
+      "regime": "ood",
+      "selection_distribution": [
+        {
+          "actual_success": 0.88,
+          "count": 25,
+          "fraction": 0.023696682464454975,
+          "mean_cost_usd": 0.0006037592,
+          "mean_predicted_success": 0.7874291531906336,
+          "model_id": "qwen3-235b-a22b-2507"
+        },
+        {
+          "actual_success": null,
+          "count": 0,
+          "fraction": 0.0,
+          "mean_cost_usd": null,
+          "mean_predicted_success": null,
+          "model_id": "intern-s1"
+        },
+        {
+          "actual_success": null,
+          "count": 0,
+          "fraction": 0.0,
+          "mean_cost_usd": null,
+          "mean_predicted_success": null,
+          "model_id": "deepseek-v3-0324"
+        },
+        {
+          "actual_success": null,
+          "count": 0,
+          "fraction": 0.0,
+          "mean_cost_usd": null,
+          "mean_predicted_success": null,
+          "model_id": "deepseek-r1-0528"
+        },
+        {
+          "actual_success": null,
+          "count": 0,
+          "fraction": 0.0,
+          "mean_cost_usd": null,
+          "mean_predicted_success": null,
+          "model_id": "gemini-2.5-flash"
+        },
+        {
+          "actual_success": null,
+          "count": 0,
+          "fraction": 0.0,
+          "mean_cost_usd": null,
+          "mean_predicted_success": null,
+          "model_id": "gpt-5-chat"
+        },
+        {
+          "actual_success": 0.8631067961165049,
+          "count": 1030,
+          "fraction": 0.976303317535545,
+          "mean_cost_usd": 0.05270006019417475,
+          "mean_predicted_success": 0.7644133651262196,
+          "model_id": "gpt-5"
+        },
+        {
+          "actual_success": null,
+          "count": 0,
+          "fraction": 0.0,
+          "mean_cost_usd": null,
+          "mean_predicted_success": null,
+          "model_id": "claude-sonnet-4"
+        }
+      ],
+      "selection_metadata": {
+        "anchor_candidate_count": 4360,
+        "approximate_not_distribution_free": true,
+        "best_single": {
+          "kind": "static",
+          "model_id": "gpt-5",
+          "policy_id": "best_single",
+          "value": 0.0
+        },
+        "candidate_count": 545,
+        "comparators": [
+          "qwen3-235b-a22b-2507",
+          "intern-s1",
+          "deepseek-v3-0324",
+          "deepseek-r1-0528",
+          "gemini-2.5-flash",
+          "gpt-5-chat",
+          "gpt-5",
+          "claude-sonnet-4"
+        ],
+        "confidence": 0.95,
+        "critical_value": 3.997858162301305,
+        "feasible_count": 29,
+        "group_counts": {
+          "aime": 8,
+          "gpqa": 30,
+          "livemathbench": 18,
+          "mmlupro": 447,
+          "simpleqa": 645
+        },
+        "method": "paired stratified whole-group simultaneous bootstrap max-t",
+        "metrics": [
+          "micro",
+          "macro"
+        ],
+        "possible_anchor_identities": [
+          "qwen3-235b-a22b-2507",
+          "intern-s1",
+          "deepseek-v3-0324",
+          "deepseek-r1-0528",
+          "gemini-2.5-flash",
+          "gpt-5-chat",
+          "gpt-5",
+          "claude-sonnet-4"
+        ],
+        "replicates": 2000,
+        "seed": 3407,
+        "selected_candidate": {
+          "candidate_id": "tfidf__advantage_0.05__gate_0.00",
+          "family": "tfidf",
+          "gate_quantile": 0,
+          "kind": "advantage",
+          "value": 0.05
+        },
+        "selection_split": "validation",
+        "unique_action_vectors": 2880
+      },
+      "semantic_training_replay_exact": true,
+      "source_processed_data_hashes": {
+        "llmrouterbench_source.json": "8fecc2bef85554f75fa6f36008fab9bc2f4f8159f8af3b07f111726c179a4a5f",
+        "outcomes.parquet": "afd0904b6b798bc9ea453ec7f1c49e3fcd07571ec664515762d92acb8cbb7be3",
+        "prompt_features.parquet": "fe54c92c6aa2aa56b8599d2ad7697e1884949b3f61046213bf02766467a8aba7",
+        "prompts.parquet": "229a75158cb5cffaef7ba5bc7ebd8f2cc0d4c00b37e854e72cfcfebc2dbeefae",
+        "provenance.json": "5eec14299b08755594a8aeadd9e9b9848636a2e4aea42f56cc6139c4e05fd302",
+        "router_model_pool.json": "b318793f9663974dbbde1efdb9a8bfd0b371e8d0b9359a6fb03925273dfd48f1",
+        "router_tasks.json": "b70f10191e55bb69e5dce39be9194f94b9285add08d51d1484b115c0844ea837",
+        "splits.parquet": "58d8f85758537fb383c8fec765fe4aa27e4a3a2b545e6c7769c5ecacb6bff3e0",
+        "static_model_summary.parquet": "ea15de0c90bc9738cd9d748e263f01ec5d1bdbeb3d46ecf27e53a233c65622e2"
+      },
+      "split_counts": {
+        "test": 1055,
+        "train": 6503,
+        "validation": 1148
+      },
+      "test_classifier_metrics": [
+        {
+          "accuracy_at_0_5": 0.6417061611374407,
+          "brier": 0.24929387643414808,
+          "ece": 0.1279825499633356,
+          "family": "tfidf",
+          "log_loss": 0.70314247961115,
+          "model_id": "qwen3-235b-a22b-2507",
+          "pr_auc": 0.5780999197185285,
+          "pr_auc_trapezoid": 0.5768900464333983,
+          "prevalence": 0.6417061611374407,
+          "roc_auc": 0.4060240869694341,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.46919431279620855,
+          "brier": 0.26828794297944447,
+          "ece": 0.10501836649473509,
+          "family": "tfidf",
+          "log_loss": 0.7310865018513363,
+          "model_id": "intern-s1",
+          "pr_auc": 0.42616919156855804,
+          "pr_auc_trapezoid": 0.4248759281486488,
+          "prevalence": 0.4919431279620853,
+          "roc_auc": 0.40898829551663646,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.5838862559241706,
+          "brier": 0.24244018850211632,
+          "ece": 0.12072368739717498,
+          "family": "tfidf",
+          "log_loss": 0.6779403686703374,
+          "model_id": "deepseek-v3-0324",
+          "pr_auc": 0.6463630982787442,
+          "pr_auc_trapezoid": 0.6452569873998844,
+          "prevalence": 0.6663507109004739,
+          "roc_auc": 0.46754170438380965,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.8009478672985783,
+          "brier": 0.1825452070162467,
+          "ece": 0.13394083831597825,
+          "family": "tfidf",
+          "log_loss": 0.5536482214073449,
+          "model_id": "deepseek-r1-0528",
+          "pr_auc": 0.7842375302749591,
+          "pr_auc_trapezoid": 0.783490898602445,
+          "prevalence": 0.8009478672985783,
+          "roc_auc": 0.451462383770076,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.5971563981042654,
+          "brier": 0.24839075726298349,
+          "ece": 0.08552896334712862,
+          "family": "tfidf",
+          "log_loss": 0.6908825547256333,
+          "model_id": "gemini-2.5-flash",
+          "pr_auc": 0.5517482151008344,
+          "pr_auc_trapezoid": 0.5502604893795948,
+          "prevalence": 0.6,
+          "roc_auc": 0.4290858995380457,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6123222748815166,
+          "brier": 0.24767271795300125,
+          "ece": 0.09574535521115933,
+          "family": "tfidf",
+          "log_loss": 0.6899939264844027,
+          "model_id": "gpt-5-chat",
+          "pr_auc": 0.5507002470230654,
+          "pr_auc_trapezoid": 0.5497095597285314,
+          "prevalence": 0.6218009478672986,
+          "roc_auc": 0.3967770034843206,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.8644549763033176,
+          "brier": 0.13369255688851953,
+          "ece": 0.1213209330691183,
+          "family": "tfidf",
+          "log_loss": 0.4455839978793,
+          "model_id": "gpt-5",
+          "pr_auc": 0.810142207580325,
+          "pr_auc_trapezoid": 0.8093795527017756,
+          "prevalence": 0.8644549763033176,
+          "roc_auc": 0.3619417862838915,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.5545023696682464,
+          "brier": 0.2533656553998746,
+          "ece": 0.08486839182399052,
+          "family": "tfidf",
+          "log_loss": 0.7007381102818437,
+          "model_id": "claude-sonnet-4",
+          "pr_auc": 0.5356005136465549,
+          "pr_auc_trapezoid": 0.5344522772278566,
+          "prevalence": 0.581042654028436,
+          "roc_auc": 0.4313996146833687,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.640521327014218,
+          "brier": 0.22821111280454182,
+          "ece": 0.10939113570282759,
+          "family": "tfidf",
+          "log_loss": 0.6491270201139185,
+          "model_id": "__macro__",
+          "pr_auc": 0.6103826153989462,
+          "pr_auc_trapezoid": 0.6092894674527669,
+          "prevalence": 0.6585308056872038,
+          "roc_auc": 0.4191525968286979,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.4966824644549763,
+          "brier": 0.2759414121263277,
+          "ece": 0.2065362481784541,
+          "family": "handcrafted",
+          "log_loss": 0.8002256980314769,
+          "model_id": "qwen3-235b-a22b-2507",
+          "pr_auc": 0.5513144205704499,
+          "pr_auc_trapezoid": 0.5497898492231377,
+          "prevalence": 0.6417061611374407,
+          "roc_auc": 0.3508866536931529,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.442654028436019,
+          "brier": 0.37110585708802746,
+          "ece": 0.33525072466168515,
+          "family": "handcrafted",
+          "log_loss": 1.0523758096567497,
+          "model_id": "intern-s1",
+          "pr_auc": 0.42561279111723127,
+          "pr_auc_trapezoid": 0.42431008426200223,
+          "prevalence": 0.4919431279620853,
+          "roc_auc": 0.4001667960774164,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.3412322274881517,
+          "brier": 0.36858729337990986,
+          "ece": 0.37189725469605045,
+          "family": "handcrafted",
+          "log_loss": 1.0139999817926986,
+          "model_id": "deepseek-v3-0324",
+          "pr_auc": 0.6895085090380833,
+          "pr_auc_trapezoid": 0.6884481988985456,
+          "prevalence": 0.6663507109004739,
+          "roc_auc": 0.5423186344238976,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6966824644549763,
+          "brier": 0.23706809349443117,
+          "ece": 0.20837101526868315,
+          "family": "handcrafted",
+          "log_loss": 0.7130570519392596,
+          "model_id": "deepseek-r1-0528",
+          "pr_auc": 0.7506102526054254,
+          "pr_auc_trapezoid": 0.7497720100666052,
+          "prevalence": 0.8009478672985783,
+          "roc_auc": 0.3977007607776839,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.5687203791469194,
+          "brier": 0.32706832428464455,
+          "ece": 0.2819264976480574,
+          "family": "handcrafted",
+          "log_loss": 1.0060488773241445,
+          "model_id": "gemini-2.5-flash",
+          "pr_auc": 0.5114762462815453,
+          "pr_auc_trapezoid": 0.5100948499410652,
+          "prevalence": 0.6,
+          "roc_auc": 0.3477123155364884,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6189573459715639,
+          "brier": 0.2920967371013671,
+          "ece": 0.22708398101407537,
+          "family": "handcrafted",
+          "log_loss": 0.8818594886360275,
+          "model_id": "gpt-5-chat",
+          "pr_auc": 0.5334175019768698,
+          "pr_auc_trapezoid": 0.5320726694293448,
+          "prevalence": 0.6218009478672986,
+          "roc_auc": 0.3397441775169632,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.8218009478672986,
+          "brier": 0.14705512702637952,
+          "ece": 0.1273310584486746,
+          "family": "handcrafted",
+          "log_loss": 0.5058122745248033,
+          "model_id": "gpt-5",
+          "pr_auc": 0.8081270781843184,
+          "pr_auc_trapezoid": 0.8076028857429772,
+          "prevalence": 0.8644549763033176,
+          "roc_auc": 0.3647558581769108,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.5440758293838862,
+          "brier": 0.3663108434435468,
+          "ece": 0.33561784409235085,
+          "family": "handcrafted",
+          "log_loss": 1.2034142336971618,
+          "model_id": "claude-sonnet-4",
+          "pr_auc": 0.4808082780816382,
+          "pr_auc_trapezoid": 0.4795564857911826,
+          "prevalence": 0.581042654028436,
+          "roc_auc": 0.3174433281908572,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.566350710900474,
+          "brier": 0.29815421099307926,
+          "ece": 0.26175182800100383,
+          "family": "handcrafted",
+          "log_loss": 0.8970991769502902,
+          "model_id": "__macro__",
+          "pr_auc": 0.5938593847319452,
+          "pr_auc_trapezoid": 0.5927058791693576,
+          "prevalence": 0.6585308056872038,
+          "roc_auc": 0.3825910655491713,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6436018957345971,
+          "brier": 0.24340529297121424,
+          "ece": 0.1136664889925037,
+          "family": "embedding",
+          "log_loss": 0.6913638763859319,
+          "model_id": "qwen3-235b-a22b-2507",
+          "pr_auc": 0.6648508702041487,
+          "pr_auc_trapezoid": 0.6641203937920035,
+          "prevalence": 0.6417061611374407,
+          "roc_auc": 0.5240049080521755,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.4966824644549763,
+          "brier": 0.3379799933331304,
+          "ece": 0.2725438015790464,
+          "family": "embedding",
+          "log_loss": 0.9360442121362614,
+          "model_id": "intern-s1",
+          "pr_auc": 0.4773730856838696,
+          "pr_auc_trapezoid": 0.4754326617636486,
+          "prevalence": 0.4919431279620853,
+          "roc_auc": 0.4864657924251575,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6208530805687204,
+          "brier": 0.24003591611859634,
+          "ece": 0.11313150660881634,
+          "family": "embedding",
+          "log_loss": 0.678511526923393,
+          "model_id": "deepseek-v3-0324",
+          "pr_auc": 0.6601304650858255,
+          "pr_auc_trapezoid": 0.6586886143699272,
+          "prevalence": 0.6663507109004739,
+          "roc_auc": 0.5059889434889435,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7943127962085308,
+          "brier": 0.17326897205193262,
+          "ece": 0.09593144165855517,
+          "family": "embedding",
+          "log_loss": 0.5352865950381678,
+          "model_id": "deepseek-r1-0528",
+          "pr_auc": 0.7933909175834515,
+          "pr_auc_trapezoid": 0.7924529063729429,
+          "prevalence": 0.8009478672985783,
+          "roc_auc": 0.46098619329388557,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.5867298578199052,
+          "brier": 0.2724212634504415,
+          "ece": 0.1611876197456422,
+          "family": "embedding",
+          "log_loss": 0.7633759606936228,
+          "model_id": "gemini-2.5-flash",
+          "pr_auc": 0.5993480581978653,
+          "pr_auc_trapezoid": 0.598350778082258,
+          "prevalence": 0.6,
+          "roc_auc": 0.48520548355457727,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.623696682464455,
+          "brier": 0.24941112019776449,
+          "ece": 0.11261682830573709,
+          "family": "embedding",
+          "log_loss": 0.7034996141867068,
+          "model_id": "gpt-5-chat",
+          "pr_auc": 0.6402286164259123,
+          "pr_auc_trapezoid": 0.6390637848175847,
+          "prevalence": 0.6218009478672986,
+          "roc_auc": 0.5333379179656458,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.8635071090047394,
+          "brier": 0.11977282279003379,
+          "ece": 0.0406480854363507,
+          "family": "embedding",
+          "log_loss": 0.4034728315067099,
+          "model_id": "gpt-5",
+          "pr_auc": 0.887679536633112,
+          "pr_auc_trapezoid": 0.8874439158286924,
+          "prevalence": 0.8644549763033176,
+          "roc_auc": 0.5606827383143173,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.5734597156398105,
+          "brier": 0.2838666537608958,
+          "ece": 0.19073156952402343,
+          "family": "embedding",
+          "log_loss": 0.8019590341534044,
+          "model_id": "claude-sonnet-4",
+          "pr_auc": 0.6154225209520849,
+          "pr_auc_trapezoid": 0.6145137333038996,
+          "prevalence": 0.581042654028436,
+          "roc_auc": 0.5366346061576845,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6503554502369668,
+          "brier": 0.24002025433425112,
+          "ece": 0.13755716773133436,
+          "family": "embedding",
+          "log_loss": 0.6891892063780247,
+          "model_id": "__macro__",
+          "pr_auc": 0.6673030088457838,
+          "pr_auc_trapezoid": 0.6662583485413696,
+          "prevalence": 0.6585308056872038,
+          "roc_auc": 0.5116633229065484,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6066350710900474,
+          "brier": 0.3066911549867635,
+          "ece": 0.26175416548324804,
+          "family": "embedding_handcrafted",
+          "log_loss": 0.9743304493647374,
+          "model_id": "qwen3-235b-a22b-2507",
+          "pr_auc": 0.5439652053356071,
+          "pr_auc_trapezoid": 0.5424398387576318,
+          "prevalence": 0.6417061611374407,
+          "roc_auc": 0.3234312599157503,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.4881516587677725,
+          "brier": 0.38770176313411403,
+          "ece": 0.3469694373959391,
+          "family": "embedding_handcrafted",
+          "log_loss": 1.1675492019802218,
+          "model_id": "intern-s1",
+          "pr_auc": 0.44725654745970234,
+          "pr_auc_trapezoid": 0.4460013926558988,
+          "prevalence": 0.4919431279620853,
+          "roc_auc": 0.43237209904236046,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.3819905213270142,
+          "brier": 0.41319037409021764,
+          "ece": 0.4121687826620552,
+          "family": "embedding_handcrafted",
+          "log_loss": 1.219537347419677,
+          "model_id": "deepseek-v3-0324",
+          "pr_auc": 0.6880218598136216,
+          "pr_auc_trapezoid": 0.6869763273566991,
+          "prevalence": 0.6663507109004739,
+          "roc_auc": 0.5401970451312557,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6066350710900474,
+          "brier": 0.24240670712540205,
+          "ece": 0.22316287056642506,
+          "family": "embedding_handcrafted",
+          "log_loss": 0.6974896587873947,
+          "model_id": "deepseek-r1-0528",
+          "pr_auc": 0.7809438848466832,
+          "pr_auc_trapezoid": 0.7803817931780085,
+          "prevalence": 0.8009478672985783,
+          "roc_auc": 0.45043110735418435,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.547867298578199,
+          "brier": 0.33468220435998586,
+          "ece": 0.2957650317472521,
+          "family": "embedding_handcrafted",
+          "log_loss": 1.0325883860427956,
+          "model_id": "gemini-2.5-flash",
+          "pr_auc": 0.5516468935484138,
+          "pr_auc_trapezoid": 0.5502635468106827,
+          "prevalence": 0.6,
+          "roc_auc": 0.4048351714172338,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6180094786729858,
+          "brier": 0.3120868773571893,
+          "ece": 0.24305209180680254,
+          "family": "embedding_handcrafted",
+          "log_loss": 1.0021793006403499,
+          "model_id": "gpt-5-chat",
+          "pr_auc": 0.5475531983514699,
+          "pr_auc_trapezoid": 0.5460860484847485,
+          "prevalence": 0.6218009478672986,
+          "roc_auc": 0.3799857876398313,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.8587677725118483,
+          "brier": 0.12949500825251653,
+          "ece": 0.08345600252532404,
+          "family": "embedding_handcrafted",
+          "log_loss": 0.46571214615303663,
+          "model_id": "gpt-5",
+          "pr_auc": 0.8386016459123162,
+          "pr_auc_trapezoid": 0.8381651201816026,
+          "prevalence": 0.8644549763033176,
+          "roc_auc": 0.44143356643356646,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.5800947867298578,
+          "brier": 0.3954652745977478,
+          "ece": 0.3843799765719906,
+          "family": "embedding_handcrafted",
+          "log_loss": 1.674189878908418,
+          "model_id": "claude-sonnet-4",
+          "pr_auc": 0.5044372523942212,
+          "pr_auc_trapezoid": 0.5031515200230315,
+          "prevalence": 0.581042654028436,
+          "roc_auc": 0.3762078052453256,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.5860189573459715,
+          "brier": 0.31521492048799205,
+          "ece": 0.2813385448448796,
+          "family": "embedding_handcrafted",
+          "log_loss": 1.029197046162079,
+          "model_id": "__macro__",
+          "pr_auc": 0.6128033109577544,
+          "pr_auc_trapezoid": 0.6116831984310379,
+          "prevalence": 0.6585308056872038,
+          "roc_auc": 0.41861173027243853,
+          "split": "test"
+        }
+      ],
+      "validation_primary": {
+        "candidate_id": "tfidf__advantage_0.05__gate_0.00",
+        "delta_aime": 0.0,
+        "delta_gpqa": 0.0,
+        "delta_livemathbench": 0.0,
+        "delta_mmlupro": 0.0,
+        "delta_simpleqa": 0.11007751937984495,
+        "family": "tfidf",
+        "feasible": true,
+        "gate_quantile": 0.0,
+        "kind": "advantage",
+        "macro_delta": 0.022015503875969067,
+        "macro_lower": 0.008231860859382429,
+        "macro_standard_error": 0.0034477568880663585,
+        "mean_cost_usd": 0.009834341232578394,
+        "micro_delta": 0.061846689895470375,
+        "micro_lower": 0.023125218877618904,
+        "micro_standard_error": 0.009685553975622301,
+        "quality": 0.7238675958188153,
+        "value": 0.05,
+        "worst_dataset_delta": 0.0
+      }
+    },
+    "standard": {
+      "baselines": {
+        "always_cheapest": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00043554855172413774,
+          "median_cost_usd": 0.00012459,
+          "n": 1305,
+          "quality": 0.6528735632183909
+        },
+        "best_single": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.019636876819923335,
+          "median_cost_usd": 0.0103725,
+          "n": 1305,
+          "quality": 0.6911877394636016
+        },
+        "oracle": {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0030703992605364025,
+          "median_cost_usd": 0.00017092,
+          "n": 1305,
+          "quality": 0.8666666666666667
+        }
+      },
+      "best_single": {
+        "kind": "static",
+        "model_id": "gpt-5",
+        "policy_id": "best_single",
+        "value": 0.0
+      },
+      "comparison": {
+        "control_embedding": {
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                0.5584512759842759,
+                0.637661312688662
+              ],
+              "macro_cost_savings": [
+                0.3960869309750586,
+                0.6471266178617574
+              ],
+              "macro_quality_delta": [
+                -0.17818453482764646,
+                -0.07162393857335422
+              ],
+              "quality_delta": [
+                -0.04597701149425287,
+                0.0038505747126435733
+              ]
+            },
+            "groups_per_stratum": {
+              "aime": 8,
+              "gpqa": 30,
+              "livecodebench": 158,
+              "livemathbench": 17,
+              "mmlupro": 447,
+              "simpleqa": 645
+            },
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": false,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "conditions": {
+            "dataset_point_guard": false,
+            "macro_noninferiority": false,
+            "micro_noninferiority": false,
+            "savings_at_least_10_percent": true
+          },
+          "cost_savings": 0.5984632635190628,
+          "cost_usd": 0.007884927432950183,
+          "macro_quality": 0.7251284989210358,
+          "macro_quality_delta": -0.12210909330820685,
+          "oracle_gap_recovered": -0.11790393013100461,
+          "promising_exploratory": false,
+          "quality": 0.6704980842911877,
+          "quality_delta": -0.020689655172413834,
+          "remaining_oracle_gap": 0.19616858237547896
+        },
+        "control_embedding_handcrafted": {
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                0.5814521117905896,
+                0.6673522523537547
+              ],
+              "macro_cost_savings": [
+                0.3922174887508281,
+                0.6359733776631576
+              ],
+              "macro_quality_delta": [
+                -0.156769499522536,
+                -0.0528503615068522
+              ],
+              "quality_delta": [
+                -0.03908045977011494,
+                0.011494252873563218
+              ]
+            },
+            "groups_per_stratum": {
+              "aime": 8,
+              "gpqa": 30,
+              "livecodebench": 158,
+              "livemathbench": 17,
+              "mmlupro": 447,
+              "simpleqa": 645
+            },
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": false,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "conditions": {
+            "dataset_point_guard": false,
+            "macro_noninferiority": false,
+            "micro_noninferiority": false,
+            "savings_at_least_10_percent": true
+          },
+          "cost_savings": 0.6259076274477984,
+          "cost_usd": 0.007346005839080454,
+          "macro_quality": 0.7480812334199652,
+          "macro_quality_delta": -0.09915635880927742,
+          "oracle_gap_recovered": -0.07423580786026251,
+          "promising_exploratory": false,
+          "quality": 0.6781609195402298,
+          "quality_delta": -0.013026819923371735,
+          "remaining_oracle_gap": 0.18850574712643686
+        },
+        "control_handcrafted": {
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                0.684189917216576,
+                0.7512009399177351
+              ],
+              "macro_cost_savings": [
+                0.208621714594404,
+                0.5089378536860911
+              ],
+              "macro_quality_delta": [
+                -0.0904535991203362,
+                -0.01333177747966857
+              ],
+              "quality_delta": [
+                -0.03295019157088123,
+                0.01839080459770115
+              ]
+            },
+            "groups_per_stratum": {
+              "aime": 8,
+              "gpqa": 30,
+              "livecodebench": 158,
+              "livemathbench": 17,
+              "mmlupro": 447,
+              "simpleqa": 645
+            },
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": false,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "conditions": {
+            "dataset_point_guard": false,
+            "macro_noninferiority": false,
+            "micro_noninferiority": false,
+            "savings_at_least_10_percent": true
+          },
+          "cost_savings": 0.7184000815105693,
+          "cost_usd": 0.005529742911877403,
+          "macro_quality": 0.8033860871836668,
+          "macro_quality_delta": -0.04385150504557589,
+          "oracle_gap_recovered": -0.0393013100436682,
+          "promising_exploratory": false,
+          "quality": 0.6842911877394636,
+          "quality_delta": -0.006896551724137945,
+          "remaining_oracle_gap": 0.18237547892720307
+        },
+        "control_tfidf": {
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                0.7999361423763605,
+                0.851156728958635
+              ],
+              "macro_cost_savings": [
+                0.8653191410661972,
+                0.9177487603270617
+              ],
+              "macro_quality_delta": [
+                -0.22317173380313235,
+                -0.09509234132332904
+              ],
+              "quality_delta": [
+                -0.044444444444444446,
+                0.0038314176245210726
+              ]
+            },
+            "groups_per_stratum": {
+              "aime": 8,
+              "gpqa": 30,
+              "livecodebench": 158,
+              "livemathbench": 17,
+              "mmlupro": 447,
+              "simpleqa": 645
+            },
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": false,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "conditions": {
+            "dataset_point_guard": false,
+            "macro_noninferiority": false,
+            "micro_noninferiority": false,
+            "savings_at_least_10_percent": true
+          },
+          "cost_savings": 0.8270088985461774,
+          "cost_usd": 0.003397004950191575,
+          "macro_quality": 0.6912231300569441,
+          "macro_quality_delta": -0.15601446217229853,
+          "oracle_gap_recovered": -0.11353711790393008,
+          "promising_exploratory": false,
+          "quality": 0.671264367816092,
+          "quality_delta": -0.01992337164750957,
+          "remaining_oracle_gap": 0.1954022988505747
+        },
+        "primary": {
+          "bootstrap": {
+            "ci_95": {
+              "cost_savings": [
+                0.1969097182640353,
+                0.24688043721402128
+              ],
+              "macro_cost_savings": [
+                0.0341490525370221,
+                0.07464801540965704
+              ],
+              "macro_quality_delta": [
+                0.005858110097144542,
+                0.01900698888368613
+              ],
+              "quality_delta": [
+                0.020689655172413793,
+                0.05823754789272031
+              ]
+            },
+            "groups_per_stratum": {
+              "aime": 8,
+              "gpqa": 30,
+              "livecodebench": 158,
+              "livemathbench": 17,
+              "mmlupro": 447,
+              "simpleqa": 645
+            },
+            "method": "paired stratified whole-group percentile",
+            "noninferiority_supported": true,
+            "percentile_method": "linear",
+            "replicates": 2000,
+            "seed": 3407,
+            "training_and_selection_fixed": true
+          },
+          "conditions": {
+            "dataset_point_guard": false,
+            "macro_noninferiority": true,
+            "micro_noninferiority": true,
+            "savings_at_least_10_percent": true
+          },
+          "cost_savings": 0.22066337167626593,
+          "cost_usd": 0.01530373737164754,
+          "macro_quality": 0.8598778303478439,
+          "macro_quality_delta": 0.012640238118601266,
+          "oracle_gap_recovered": 0.22707423580786015,
+          "promising_exploratory": false,
+          "quality": 0.7310344827586207,
+          "quality_delta": 0.03984674329501914,
+          "remaining_oracle_gap": 0.135632183908046
+        }
+      },
+      "controls": {
+        "embedding": {
+          "kind": "utility",
+          "model_id": "",
+          "policy_id": "utility_0.1",
+          "value": 0.1
+        },
+        "embedding_handcrafted": {
+          "kind": "utility",
+          "model_id": "",
+          "policy_id": "utility_0.1",
+          "value": 0.1
+        },
+        "handcrafted": {
+          "kind": "threshold",
+          "model_id": "",
+          "policy_id": "threshold_0.75",
+          "value": 0.75
+        },
+        "tfidf": {
+          "kind": "threshold",
+          "model_id": "",
+          "policy_id": "threshold_0.60",
+          "value": 0.6
+        }
+      },
+      "dataset_selection_counts": [
+        {
+          "claude-sonnet-4": 0,
+          "dataset": "aime",
+          "deepseek-r1-0528": 0,
+          "deepseek-v3-0324": 0,
+          "gemini-2.5-flash": 0,
+          "gpt-5": 8,
+          "gpt-5-chat": 0,
+          "intern-s1": 0,
+          "qwen3-235b-a22b-2507": 0
+        },
+        {
+          "claude-sonnet-4": 0,
+          "dataset": "gpqa",
+          "deepseek-r1-0528": 3,
+          "deepseek-v3-0324": 0,
+          "gemini-2.5-flash": 0,
+          "gpt-5": 27,
+          "gpt-5-chat": 0,
+          "intern-s1": 0,
+          "qwen3-235b-a22b-2507": 0
+        },
+        {
+          "claude-sonnet-4": 0,
+          "dataset": "livecodebench",
+          "deepseek-r1-0528": 3,
+          "deepseek-v3-0324": 0,
+          "gemini-2.5-flash": 0,
+          "gpt-5": 155,
+          "gpt-5-chat": 0,
+          "intern-s1": 0,
+          "qwen3-235b-a22b-2507": 0
+        },
+        {
+          "claude-sonnet-4": 0,
+          "dataset": "livemathbench",
+          "deepseek-r1-0528": 0,
+          "deepseek-v3-0324": 0,
+          "gemini-2.5-flash": 0,
+          "gpt-5": 17,
+          "gpt-5-chat": 0,
+          "intern-s1": 0,
+          "qwen3-235b-a22b-2507": 0
+        },
+        {
+          "claude-sonnet-4": 10,
+          "dataset": "mmlupro",
+          "deepseek-r1-0528": 10,
+          "deepseek-v3-0324": 0,
+          "gemini-2.5-flash": 3,
+          "gpt-5": 413,
+          "gpt-5-chat": 0,
+          "intern-s1": 6,
+          "qwen3-235b-a22b-2507": 5
+        },
+        {
+          "claude-sonnet-4": 0,
+          "dataset": "simpleqa",
+          "deepseek-r1-0528": 1,
+          "deepseek-v3-0324": 0,
+          "gemini-2.5-flash": 1,
+          "gpt-5": 236,
+          "gpt-5-chat": 6,
+          "intern-s1": 0,
+          "qwen3-235b-a22b-2507": 401
+        }
+      ],
+      "datasets": {
+        "aime": {
+          "always_cheapest": {
+            "mean_cost_usd": 0.0045186125,
+            "n": 8,
+            "quality": 0.75
+          },
+          "best_single": {
+            "mean_cost_usd": 0.07853718750000001,
+            "n": 8,
+            "quality": 1.0
+          },
+          "oracle": {
+            "mean_cost_usd": 0.0186377765625,
+            "n": 8,
+            "quality": 1.0
+          },
+          "primary": {
+            "mean_cost_usd": 0.07853718750000001,
+            "n": 8,
+            "quality": 1.0
+          }
+        },
+        "gpqa": {
+          "always_cheapest": {
+            "mean_cost_usd": 0.00031310300000000007,
+            "n": 30,
+            "quality": 0.5333333333333333
+          },
+          "best_single": {
+            "mean_cost_usd": 0.04301825,
+            "n": 30,
+            "quality": 0.8666666666666667
+          },
+          "oracle": {
+            "mean_cost_usd": 0.007226699333333333,
+            "n": 30,
+            "quality": 0.9
+          },
+          "primary": {
+            "mean_cost_usd": 0.039958176666666664,
+            "n": 30,
+            "quality": 0.8666666666666667
+          }
+        },
+        "livecodebench": {
+          "always_cheapest": {
+            "mean_cost_usd": 0.001121096329113924,
+            "n": 158,
+            "quality": 0.5822784810126582
+          },
+          "best_single": {
+            "mean_cost_usd": 0.05389960759493672,
+            "n": 158,
+            "quality": 0.8987341772151899
+          },
+          "oracle": {
+            "mean_cost_usd": 0.01726072120253165,
+            "n": 158,
+            "quality": 0.9177215189873418
+          },
+          "primary": {
+            "mean_cost_usd": 0.05397839936708861,
+            "n": 158,
+            "quality": 0.8924050632911392
+          }
+        },
+        "livemathbench": {
+          "always_cheapest": {
+            "mean_cost_usd": 0.0020696770588235287,
+            "n": 17,
+            "quality": 0.8235294117647058
+          },
+          "best_single": {
+            "mean_cost_usd": 0.030194411764705883,
+            "n": 17,
+            "quality": 0.9411764705882353
+          },
+          "oracle": {
+            "mean_cost_usd": 0.005722914705882352,
+            "n": 17,
+            "quality": 0.9411764705882353
+          },
+          "primary": {
+            "mean_cost_usd": 0.030194411764705883,
+            "n": 17,
+            "quality": 0.9411764705882353
+          }
+        },
+        "mmlupro": {
+          "always_cheapest": {
+            "mean_cost_usd": 0.0006294730648769569,
+            "n": 447,
+            "quality": 0.8456375838926175
+          },
+          "best_single": {
+            "mean_cost_usd": 0.013429482662192396,
+            "n": 447,
+            "quality": 0.8993288590604027
+          },
+          "oracle": {
+            "mean_cost_usd": 0.0008177058165548099,
+            "n": 447,
+            "quality": 0.9530201342281879
+          },
+          "primary": {
+            "mean_cost_usd": 0.013089233243847878,
+            "n": 447,
+            "quality": 0.8993288590604027
+          }
+        },
+        "simpleqa": {
+          "always_cheapest": {
+            "mean_cost_usd": 4.5204155038759726e-05,
+            "n": 645,
+            "quality": 0.5364341085271318
+          },
+          "best_single": {
+            "mean_cost_usd": 0.013449391472868225,
+            "n": 645,
+            "quality": 0.47751937984496123
+          },
+          "oracle": {
+            "mean_cost_usd": 0.0006991780503875961,
+            "n": 645,
+            "quality": 0.7891472868217054
+          },
+          "primary": {
+            "mean_cost_usd": 0.005041170713178295,
+            "n": 645,
+            "quality": 0.5596899224806201
+          }
+        }
+      },
+      "embedding_cache_metadata": {
+        "chunks": 9397,
+        "content_tokens": 1422947,
+        "encoder_config": {
+          "attention": "eager",
+          "batch_size": 16,
+          "chunk_overlap": 0,
+          "content_tokens_per_chunk": 510,
+          "device": "cpu",
+          "dimensions": 384,
+          "dtype": "float32",
+          "fine_tuned": false,
+          "instruction": null,
+          "model_id": "BAAI/bge-small-en-v1.5",
+          "pooling": "L2 CLS per chunk; content-token-weighted mean; final L2",
+          "revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+          "torch_threads": 4
+        },
+        "encoder_manifest_hash": "6e0c602fb6f976ecf95bc98ae03ef0a641a37ed445a9df663a15359127d325b1",
+        "files": {
+          "prompt_index.parquet": "f02a642db7534d86763ef820ccf77126c71c2a3e9be63237f4bba83ece44051b",
+          "vectors.npy": "afe0a360866f99d27ca77260eb262ba24ecc60eeb4cb53af842cc3aa79c2487e"
+        },
+        "inference_seconds": 139.57635925,
+        "prompt_text_identity": "1c4c77e9a7d9dcfdf8c62cf4325ac181fa09577507ab5325ab353ecf893bf7fc",
+        "source_prompt_file_hash": "229a75158cb5cffaef7ba5bc7ebd8f2cc0d4c00b37e854e72cfcfebc2dbeefae"
+      },
+      "environment": {
+        "packages": {
+          "Jinja2": "3.1.6",
+          "MarkupSafe": "3.0.3",
+          "PyYAML": "6.0.2",
+          "certifi": "2025.4.26",
+          "charset-normalizer": "3.4.2",
+          "contourpy": "1.3.0",
+          "cycler": "0.12.1",
+          "filelock": "3.18.0",
+          "fonttools": "4.60.2",
+          "fsspec": "2025.3.2",
+          "huggingface-hub": "0.30.2",
+          "idna": "3.10",
+          "importlib_resources": "6.5.2",
+          "joblib": "1.4.2",
+          "kiwisolver": "1.4.7",
+          "matplotlib": "3.9.4",
+          "mpmath": "1.3.0",
+          "networkx": "3.2.1",
+          "numpy": "2.0.2",
+          "packaging": "25.0",
+          "pandas": "2.2.3",
+          "pillow": "11.3.0",
+          "pip": "21.2.4",
+          "pyarrow": "19.0.1",
+          "pyparsing": "3.2.5",
+          "python-dateutil": "2.9.0.post0",
+          "python-dotenv": "1.1.1",
+          "pytz": "2026.3.post1",
+          "regex": "2024.11.6",
+          "requests": "2.32.3",
+          "safetensors": "0.5.3",
+          "scikit-learn": "1.6.1",
+          "scipy": "1.13.1",
+          "setuptools": "58.0.4",
+          "six": "1.17.0",
+          "sympy": "1.14.0",
+          "threadpoolctl": "3.6.0",
+          "tokenizers": "0.21.1",
+          "torch": "2.7.1",
+          "tqdm": "4.67.1",
+          "transformers": "4.51.3",
+          "typing_extensions": "4.15.0",
+          "tzdata": "2026.4",
+          "urllib3": "2.4.0",
+          "zipp": "3.23.0"
+        },
+        "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]"
+      },
+      "families": {
+        "embedding": {
+          "model_signature": "749475074d9228a57b7ddbd9cebf0a70c1492edd0169d947afe856f43ac441c8",
+          "selected_C": 0.1,
+          "training_seconds": 50.697870834
+        },
+        "embedding_handcrafted": {
+          "model_signature": "5090e05b372c1f1dd7bfbc7b2bfac4ce7cf0a4af78cd1e015830dc9e6f6d17fa",
+          "selected_C": 0.1,
+          "training_seconds": 46.48812162499999
+        },
+        "handcrafted": {
+          "model_signature": "0cedc82bae3f6ffe9c7ca0ffe25d52a3e99b30c5ac8357687e9fe82b7ea22968",
+          "selected_C": 0.1,
+          "training_seconds": 0.9509182920000008
+        },
+        "tfidf": {
+          "model_signature": "b5dc96eeacc64502c001d0f72100860f64d57004fe23cf336e69cbff387cba8e",
+          "selected_C": 1.0,
+          "training_seconds": 7.325489
+        }
+      },
+      "frontier": [
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00043554855172413774,
+          "median_cost_usd": 0.00012459,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__threshold_0.00__gate_0.00",
+          "quality": 0.6528735632183909
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00043554855172413774,
+          "median_cost_usd": 0.00012459,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__threshold_0.05__gate_0.00",
+          "quality": 0.6528735632183909
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00043554855172413774,
+          "median_cost_usd": 0.00012459,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__threshold_0.10__gate_0.00",
+          "quality": 0.6528735632183909
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0016606529942528724,
+          "median_cost_usd": 0.00020043,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__threshold_0.45__gate_0.05",
+          "quality": 0.6636015325670498
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0018151665498084301,
+          "median_cost_usd": 0.00018855,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__threshold_0.50__gate_0.00",
+          "quality": 0.6666666666666666
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0023423947720306523,
+          "median_cost_usd": 0.00021904,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__threshold_0.50__gate_0.05",
+          "quality": 0.6674329501915709
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0041837147471264395,
+          "median_cost_usd": 0.00025124,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.65__gate_0.00",
+          "quality": 0.6781609195402298
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.006156128264367821,
+          "median_cost_usd": 0.00025929,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.70__gate_0.00",
+          "quality": 0.6881226053639847
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.007569474892720315,
+          "median_cost_usd": 0.00026934,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.75__gate_0.00",
+          "quality": 0.696551724137931
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.009862908126436767,
+          "median_cost_usd": 0.00041003999999999997,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.80__gate_0.00",
+          "quality": 0.7103448275862069
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.012035471160919527,
+          "median_cost_usd": 0.00182357,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__threshold_0.85__gate_0.00",
+          "quality": 0.7233716475095785
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.013758740325670522,
+          "median_cost_usd": 0.0043625,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__utility_0.01__gate_0.00",
+          "quality": 0.7310344827586207
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.012717847672413808,
+          "median_cost_usd": 0.0032613499999999997,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__utility_0.03__gate_0.00",
+          "quality": 0.7264367816091954
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00785550170306513,
+          "median_cost_usd": 0.00026479,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__utility_0.1__gate_0.00",
+          "quality": 0.7034482758620689
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00835847724329502,
+          "median_cost_usd": 0.0003675,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__utility_0.1__gate_0.05",
+          "quality": 0.7049808429118773
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.003056177159003836,
+          "median_cost_usd": 0.00017488,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__utility_0.3__gate_0.00",
+          "quality": 0.6727969348659004
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0036178739789272077,
+          "median_cost_usd": 0.00022929,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "tfidf__utility_0.3__gate_0.05",
+          "quality": 0.6743295019157088
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0005919246302681987,
+          "median_cost_usd": 0.0001434,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__utility_1__gate_0.00",
+          "quality": 0.6620689655172414
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.0011552324080459748,
+          "median_cost_usd": 0.00019182,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "tfidf__utility_1__gate_0.05",
+          "quality": 0.6628352490421456
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00043554855172413774,
+          "median_cost_usd": 0.00012459,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "handcrafted__threshold_0.00__gate_0.00",
+          "quality": 0.6528735632183909
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00043554855172413774,
+          "median_cost_usd": 0.00012459,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "handcrafted__threshold_0.05__gate_0.00",
+          "quality": 0.6528735632183909
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00043554855172413774,
+          "median_cost_usd": 0.00012459,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "handcrafted__threshold_0.10__gate_0.00",
+          "quality": 0.6528735632183909
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00043554855172413774,
+          "median_cost_usd": 0.00012459,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "handcrafted__threshold_0.15__gate_0.00",
+          "quality": 0.6528735632183909
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.005529742911877403,
+          "median_cost_usd": 0.00013167,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "handcrafted__threshold_0.75__gate_0.00",
+          "quality": 0.6842911877394636
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.007249692145593841,
+          "median_cost_usd": 0.00013525,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "handcrafted__threshold_0.80__gate_0.00",
+          "quality": 0.6904214559386973
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00973136895785438,
+          "median_cost_usd": 0.00015084,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "handcrafted__threshold_0.85__gate_0.00",
+          "quality": 0.70727969348659
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00046774816091954026,
+          "median_cost_usd": 0.00012701,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "handcrafted__utility_10__gate_0.00",
+          "quality": 0.6567049808429118
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00043554855172413774,
+          "median_cost_usd": 0.00012459,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "embedding__threshold_0.00__gate_0.00",
+          "quality": 0.6528735632183909
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00047616072796934837,
+          "median_cost_usd": 0.00013971,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "embedding__utility_10__gate_0.00",
+          "quality": 0.6574712643678161
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00043554855172413774,
+          "median_cost_usd": 0.00012459,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "embedding_handcrafted__threshold_0.00__gate_0.00",
+          "quality": 0.6528735632183909
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00048266354022988474,
+          "median_cost_usd": 0.00014285,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "embedding_handcrafted__utility_10__gate_0.00",
+          "quality": 0.6597701149425287
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00043554855172413774,
+          "median_cost_usd": 0.00012459,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "static_qwen3-235b-a22b-2507",
+          "quality": 0.6528735632183909
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.00043554855172413774,
+          "median_cost_usd": 0.00012459,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": true,
+          "policy_id": "always_cheapest",
+          "quality": 0.6528735632183909
+        },
+        {
+          "dataset": "__micro__",
+          "mean_cost_usd": 0.005529742911877403,
+          "median_cost_usd": 0.00013167,
+          "n": 1305,
+          "pareto_deployable": true,
+          "pareto_with_oracle": false,
+          "policy_id": "control_handcrafted",
+          "quality": 0.6842911877394636
+        }
+      ],
+      "frozen_selection_sha256": "45dbbc273c3bdabf1583a075c44de2fdcb9f71168bc0e136a9bb54304691904b",
+      "gate_rejection_fraction": 0.0,
+      "interpretation": "exploratory; existing tests inspected during v1; no v2 test-based selection",
+      "novelty_cutoffs": {
+        "0.01": 0.5583115351200104,
+        "0.05": 0.5870943188667297,
+        "0.1": 0.6090980291366577
+      },
+      "primary": {
+        "candidate_id": "tfidf__advantage_0.02__gate_0.00",
+        "family": "tfidf",
+        "gate_quantile": 0,
+        "kind": "advantage",
+        "value": 0.02
+      },
+      "primary_on_pareto_frontier": false,
+      "primary_prediction_reference_family": "tfidf",
+      "protocol_sha256": "50d12e990d524a64dbc0cb8cf9c7c9edb8486e786c8f0efd7ca19242298722c4",
+      "regime": "standard",
+      "selection_distribution": [
+        {
+          "actual_success": 0.5935960591133005,
+          "count": 406,
+          "fraction": 0.3111111111111111,
+          "mean_cost_usd": 5.408551724137931e-05,
+          "mean_predicted_success": 0.6083372770238005,
+          "model_id": "qwen3-235b-a22b-2507"
+        },
+        {
+          "actual_success": 0.8333333333333334,
+          "count": 6,
+          "fraction": 0.004597701149425287,
+          "mean_cost_usd": 0.0010554,
+          "mean_predicted_success": 0.8823918755152711,
+          "model_id": "intern-s1"
+        },
+        {
+          "actual_success": null,
+          "count": 0,
+          "fraction": 0.0,
+          "mean_cost_usd": null,
+          "mean_predicted_success": null,
+          "model_id": "deepseek-v3-0324"
+        },
+        {
+          "actual_success": 0.8235294117647058,
+          "count": 17,
+          "fraction": 0.013026819923371647,
+          "mean_cost_usd": 0.010278420588235294,
+          "mean_predicted_success": 0.8335011562475415,
+          "model_id": "deepseek-r1-0528"
+        },
+        {
+          "actual_success": 0.25,
+          "count": 4,
+          "fraction": 0.0030651340996168583,
+          "mean_cost_usd": 0.0013315,
+          "mean_predicted_success": 0.6428225555112118,
+          "model_id": "gemini-2.5-flash"
+        },
+        {
+          "actual_success": 0.5,
+          "count": 6,
+          "fraction": 0.004597701149425287,
+          "mean_cost_usd": 0.000581875,
+          "mean_predicted_success": 0.45510812820162866,
+          "model_id": "gpt-5-chat"
+        },
+        {
+          "actual_success": 0.7955607476635514,
+          "count": 856,
+          "fraction": 0.6559386973180077,
+          "mean_cost_usd": 0.02299552190420561,
+          "mean_predicted_success": 0.7791590323058983,
+          "model_id": "gpt-5"
+        },
+        {
+          "actual_success": 0.9,
+          "count": 10,
+          "fraction": 0.007662835249042145,
+          "mean_cost_usd": 0.007536900000000001,
+          "mean_predicted_success": 0.9225395180282,
+          "model_id": "claude-sonnet-4"
+        }
+      ],
+      "selection_metadata": {
+        "anchor_candidate_count": 4360,
+        "approximate_not_distribution_free": true,
+        "best_single": {
+          "kind": "static",
+          "model_id": "gpt-5",
+          "policy_id": "best_single",
+          "value": 0.0
+        },
+        "candidate_count": 545,
+        "comparators": [
+          "qwen3-235b-a22b-2507",
+          "intern-s1",
+          "deepseek-v3-0324",
+          "deepseek-r1-0528",
+          "gemini-2.5-flash",
+          "gpt-5-chat",
+          "gpt-5",
+          "claude-sonnet-4"
+        ],
+        "confidence": 0.95,
+        "critical_value": 4.036053790413185,
+        "feasible_count": 28,
+        "group_counts": {
+          "aime": 9,
+          "gpqa": 30,
+          "livecodebench": 158,
+          "livemathbench": 18,
+          "mmlupro": 447,
+          "simpleqa": 645
+        },
+        "method": "paired stratified whole-group simultaneous bootstrap max-t",
+        "metrics": [
+          "micro",
+          "macro"
+        ],
+        "possible_anchor_identities": [
+          "qwen3-235b-a22b-2507",
+          "intern-s1",
+          "deepseek-v3-0324",
+          "deepseek-r1-0528",
+          "gemini-2.5-flash",
+          "gpt-5-chat",
+          "gpt-5",
+          "claude-sonnet-4"
+        ],
+        "replicates": 2000,
+        "seed": 3407,
+        "selected_candidate": {
+          "candidate_id": "tfidf__advantage_0.02__gate_0.00",
+          "family": "tfidf",
+          "gate_quantile": 0,
+          "kind": "advantage",
+          "value": 0.02
+        },
+        "selection_split": "validation",
+        "unique_action_vectors": 2997
+      },
+      "semantic_training_replay_exact": true,
+      "source_processed_data_hashes": {
+        "llmrouterbench_source.json": "8fecc2bef85554f75fa6f36008fab9bc2f4f8159f8af3b07f111726c179a4a5f",
+        "outcomes.parquet": "afd0904b6b798bc9ea453ec7f1c49e3fcd07571ec664515762d92acb8cbb7be3",
+        "prompt_features.parquet": "fe54c92c6aa2aa56b8599d2ad7697e1884949b3f61046213bf02766467a8aba7",
+        "prompts.parquet": "229a75158cb5cffaef7ba5bc7ebd8f2cc0d4c00b37e854e72cfcfebc2dbeefae",
+        "provenance.json": "5eec14299b08755594a8aeadd9e9b9848636a2e4aea42f56cc6139c4e05fd302",
+        "router_model_pool.json": "b318793f9663974dbbde1efdb9a8bfd0b371e8d0b9359a6fb03925273dfd48f1",
+        "router_tasks.json": "b70f10191e55bb69e5dce39be9194f94b9285add08d51d1484b115c0844ea837",
+        "splits.parquet": "58d8f85758537fb383c8fec765fe4aa27e4a3a2b545e6c7769c5ecacb6bff3e0",
+        "static_model_summary.parquet": "ea15de0c90bc9738cd9d748e263f01ec5d1bdbeb3d46ecf27e53a233c65622e2"
+      },
+      "split_counts": {
+        "test": 1305,
+        "train": 6094,
+        "validation": 1307
+      },
+      "test_classifier_metrics": [
+        {
+          "accuracy_at_0_5": 0.7103448275862069,
+          "brier": 0.19047515238753757,
+          "ece": 0.046975478992795416,
+          "family": "tfidf",
+          "log_loss": 0.5627225306591164,
+          "model_id": "qwen3-235b-a22b-2507",
+          "pr_auc": 0.8358016024444217,
+          "pr_auc_trapezoid": 0.8355886810499645,
+          "prevalence": 0.6528735632183909,
+          "roc_auc": 0.7462988008995843,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.8015325670498085,
+          "brier": 0.15073777110773653,
+          "ece": 0.03177305932731912,
+          "family": "tfidf",
+          "log_loss": 0.4735910223599705,
+          "model_id": "intern-s1",
+          "pr_auc": 0.8004135220126112,
+          "pr_auc_trapezoid": 0.7998909395385384,
+          "prevalence": 0.43754789272030653,
+          "roc_auc": 0.8490613532356351,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7440613026819923,
+          "brier": 0.1822695096300724,
+          "ece": 0.024151680496234302,
+          "family": "tfidf",
+          "log_loss": 0.546496093995015,
+          "model_id": "deepseek-v3-0324",
+          "pr_auc": 0.7867935649503048,
+          "pr_auc_trapezoid": 0.7864643924854196,
+          "prevalence": 0.5019157088122606,
+          "roc_auc": 0.7990264239577217,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7800766283524905,
+          "brier": 0.1619164966894152,
+          "ece": 0.020572502934875964,
+          "family": "tfidf",
+          "log_loss": 0.4986303036573027,
+          "model_id": "deepseek-r1-0528",
+          "pr_auc": 0.8461773591677774,
+          "pr_auc_trapezoid": 0.8459692647871424,
+          "prevalence": 0.5555555555555556,
+          "roc_auc": 0.8293614744351961,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7440613026819923,
+          "brier": 0.18128883472518248,
+          "ece": 0.0338478193353767,
+          "family": "tfidf",
+          "log_loss": 0.5441892316130381,
+          "model_id": "gemini-2.5-flash",
+          "pr_auc": 0.7960805845240277,
+          "pr_auc_trapezoid": 0.7957795738059446,
+          "prevalence": 0.514176245210728,
+          "roc_auc": 0.799233217524576,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6996168582375479,
+          "brier": 0.19497762458839843,
+          "ece": 0.026714957316815655,
+          "family": "tfidf",
+          "log_loss": 0.5731156978414249,
+          "model_id": "gpt-5-chat",
+          "pr_auc": 0.8049020569336002,
+          "pr_auc_trapezoid": 0.804652167706271,
+          "prevalence": 0.5908045977011495,
+          "roc_auc": 0.7548929596758915,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.753256704980843,
+          "brier": 0.15973570248116242,
+          "ece": 0.03379874236212661,
+          "family": "tfidf",
+          "log_loss": 0.486861175306402,
+          "model_id": "gpt-5",
+          "pr_auc": 0.8902909910931232,
+          "pr_auc_trapezoid": 0.8901757864753743,
+          "prevalence": 0.6911877394636016,
+          "roc_auc": 0.8006153956193294,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.8099616858237548,
+          "brier": 0.14429229750049535,
+          "ece": 0.04093346999590665,
+          "family": "tfidf",
+          "log_loss": 0.456958584232875,
+          "model_id": "claude-sonnet-4",
+          "pr_auc": 0.8204562222987432,
+          "pr_auc_trapezoid": 0.8201623878355182,
+          "prevalence": 0.4482758620689655,
+          "roc_auc": 0.8612238841405508,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7553639846743295,
+          "brier": 0.17071167363875006,
+          "ece": 0.032345963845181305,
+          "family": "tfidf",
+          "log_loss": 0.517820579958143,
+          "model_id": "__macro__",
+          "pr_auc": 0.8226144879280761,
+          "pr_auc_trapezoid": 0.8223353992105216,
+          "prevalence": 0.5490421455938698,
+          "roc_auc": 0.8049641886860606,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6567049808429118,
+          "brier": 0.20634113989062577,
+          "ece": 0.010412856141053407,
+          "family": "handcrafted",
+          "log_loss": 0.5979069227464475,
+          "model_id": "qwen3-235b-a22b-2507",
+          "pr_auc": 0.7933425893502597,
+          "pr_auc_trapezoid": 0.7928143199947948,
+          "prevalence": 0.6528735632183909,
+          "roc_auc": 0.6719833348879147,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7793103448275862,
+          "brier": 0.15720180079346888,
+          "ece": 0.027719497928404186,
+          "family": "handcrafted",
+          "log_loss": 0.4896602999873351,
+          "model_id": "intern-s1",
+          "pr_auc": 0.7875710086015048,
+          "pr_auc_trapezoid": 0.7868965466349748,
+          "prevalence": 0.43754789272030653,
+          "roc_auc": 0.8402391712040161,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.728735632183908,
+          "brier": 0.19339769149358668,
+          "ece": 0.03245817661333128,
+          "family": "handcrafted",
+          "log_loss": 0.5748101402173023,
+          "model_id": "deepseek-v3-0324",
+          "pr_auc": 0.7505079403083799,
+          "pr_auc_trapezoid": 0.7499468114049738,
+          "prevalence": 0.5019157088122606,
+          "roc_auc": 0.7657651203758074,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7724137931034483,
+          "brier": 0.17103692578948984,
+          "ece": 0.019953391950822956,
+          "family": "handcrafted",
+          "log_loss": 0.5217468696835207,
+          "model_id": "deepseek-r1-0528",
+          "pr_auc": 0.8301210303034078,
+          "pr_auc_trapezoid": 0.829832547339222,
+          "prevalence": 0.5555555555555556,
+          "roc_auc": 0.8080166468489893,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7203065134099617,
+          "brier": 0.1946306162675281,
+          "ece": 0.02857827722971543,
+          "family": "handcrafted",
+          "log_loss": 0.5763449472208668,
+          "model_id": "gemini-2.5-flash",
+          "pr_auc": 0.7621074129353791,
+          "pr_auc_trapezoid": 0.7616531948438018,
+          "prevalence": 0.514176245210728,
+          "roc_auc": 0.7629415110927238,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6804597701149425,
+          "brier": 0.20616294557295214,
+          "ece": 0.021112194200376657,
+          "family": "handcrafted",
+          "log_loss": 0.5990950165040276,
+          "model_id": "gpt-5-chat",
+          "pr_auc": 0.7839413841673399,
+          "pr_auc_trapezoid": 0.7835724150625814,
+          "prevalence": 0.5908045977011495,
+          "roc_auc": 0.724879406578353,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7080459770114943,
+          "brier": 0.17274208986625797,
+          "ece": 0.023284798631924935,
+          "family": "handcrafted",
+          "log_loss": 0.5177528111423926,
+          "model_id": "gpt-5",
+          "pr_auc": 0.8683852779070439,
+          "pr_auc_trapezoid": 0.8681953449715183,
+          "prevalence": 0.6911877394636016,
+          "roc_auc": 0.7619544106562203,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7885057471264367,
+          "brier": 0.15565520572423674,
+          "ece": 0.027832481485914835,
+          "family": "handcrafted",
+          "log_loss": 0.48592139866489426,
+          "model_id": "claude-sonnet-4",
+          "pr_auc": 0.8025411241128266,
+          "pr_auc_trapezoid": 0.8022176117030716,
+          "prevalence": 0.4482758620689655,
+          "roc_auc": 0.8435185185185184,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7293103448275862,
+          "brier": 0.18214605192476827,
+          "ece": 0.023918959272692962,
+          "family": "handcrafted",
+          "log_loss": 0.5454048007708483,
+          "model_id": "__macro__",
+          "pr_auc": 0.7973147209607676,
+          "pr_auc_trapezoid": 0.7968910989943674,
+          "prevalence": 0.5490421455938698,
+          "roc_auc": 0.7724122650203179,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6781609195402298,
+          "brier": 0.21347497279904312,
+          "ece": 0.0659941881688145,
+          "family": "embedding",
+          "log_loss": 0.6208942338181362,
+          "model_id": "qwen3-235b-a22b-2507",
+          "pr_auc": 0.7814656404382945,
+          "pr_auc_trapezoid": 0.781188119163748,
+          "prevalence": 0.6528735632183909,
+          "roc_auc": 0.669115132294873,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7839080459770115,
+          "brier": 0.1614709960241341,
+          "ece": 0.04503710856960825,
+          "family": "embedding",
+          "log_loss": 0.5082399216679938,
+          "model_id": "intern-s1",
+          "pr_auc": 0.7816686768664849,
+          "pr_auc_trapezoid": 0.7808960359741531,
+          "prevalence": 0.43754789272030653,
+          "roc_auc": 0.8343601025019446,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7164750957854407,
+          "brier": 0.1926323776840674,
+          "ece": 0.03879769997109574,
+          "family": "embedding",
+          "log_loss": 0.5745628751056981,
+          "model_id": "deepseek-v3-0324",
+          "pr_auc": 0.7479226373407553,
+          "pr_auc_trapezoid": 0.7467943974042116,
+          "prevalence": 0.5019157088122606,
+          "roc_auc": 0.7778790369935409,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7716475095785441,
+          "brier": 0.17453177004836792,
+          "ece": 0.05863637629076117,
+          "family": "embedding",
+          "log_loss": 0.5401336134937881,
+          "model_id": "deepseek-r1-0528",
+          "pr_auc": 0.8082060336943646,
+          "pr_auc_trapezoid": 0.8074456431280599,
+          "prevalence": 0.5555555555555556,
+          "roc_auc": 0.8065493460166469,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7118773946360153,
+          "brier": 0.19916879879368385,
+          "ece": 0.04284666417235441,
+          "family": "embedding",
+          "log_loss": 0.5888818906554646,
+          "model_id": "gemini-2.5-flash",
+          "pr_auc": 0.7547210396776739,
+          "pr_auc_trapezoid": 0.754250878977106,
+          "prevalence": 0.514176245210728,
+          "roc_auc": 0.7635714856586759,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6842911877394636,
+          "brier": 0.2034438566780794,
+          "ece": 0.042770452825123886,
+          "family": "embedding",
+          "log_loss": 0.5965294848435766,
+          "model_id": "gpt-5-chat",
+          "pr_auc": 0.7775565966390052,
+          "pr_auc_trapezoid": 0.7770961394872602,
+          "prevalence": 0.5908045977011495,
+          "roc_auc": 0.7357437444439587,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7402298850574712,
+          "brier": 0.17449179289213695,
+          "ece": 0.035593794616230745,
+          "family": "embedding",
+          "log_loss": 0.5256401535361346,
+          "model_id": "gpt-5",
+          "pr_auc": 0.8702294885995088,
+          "pr_auc_trapezoid": 0.8697827105774395,
+          "prevalence": 0.6911877394636016,
+          "roc_auc": 0.7725979763745301,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7846743295019157,
+          "brier": 0.15768984269161218,
+          "ece": 0.038017042976154894,
+          "family": "embedding",
+          "log_loss": 0.4952965874080352,
+          "model_id": "claude-sonnet-4",
+          "pr_auc": 0.7709040741927331,
+          "pr_auc_trapezoid": 0.7701994965025113,
+          "prevalence": 0.4482758620689655,
+          "roc_auc": 0.8436087369420703,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7339080459770115,
+          "brier": 0.18461305095139063,
+          "ece": 0.04596166594876795,
+          "family": "embedding",
+          "log_loss": 0.5562723450661033,
+          "model_id": "__macro__",
+          "pr_auc": 0.7865842734311026,
+          "pr_auc_trapezoid": 0.7859566776518112,
+          "prevalence": 0.5490421455938698,
+          "roc_auc": 0.7754281951532801,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6789272030651341,
+          "brier": 0.20954969372659676,
+          "ece": 0.07144908325816819,
+          "family": "embedding_handcrafted",
+          "log_loss": 0.6106454505094601,
+          "model_id": "qwen3-235b-a22b-2507",
+          "pr_auc": 0.7944810240410893,
+          "pr_auc_trapezoid": 0.7942243757239366,
+          "prevalence": 0.6528735632183909,
+          "roc_auc": 0.6830856367047021,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7831417624521073,
+          "brier": 0.15911171411157202,
+          "ece": 0.042034847420642014,
+          "family": "embedding_handcrafted",
+          "log_loss": 0.5015897545255057,
+          "model_id": "intern-s1",
+          "pr_auc": 0.7912918417469934,
+          "pr_auc_trapezoid": 0.7908899653804491,
+          "prevalence": 0.43754789272030653,
+          "roc_auc": 0.8384711558191806,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7103448275862069,
+          "brier": 0.19271793147600896,
+          "ece": 0.044234568786358584,
+          "family": "embedding_handcrafted",
+          "log_loss": 0.5739986174244193,
+          "model_id": "deepseek-v3-0324",
+          "pr_auc": 0.7528164619637441,
+          "pr_auc_trapezoid": 0.7517112408138629,
+          "prevalence": 0.5019157088122606,
+          "roc_auc": 0.779011156782149,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7624521072796935,
+          "brier": 0.1737177982026093,
+          "ece": 0.04396717729238993,
+          "family": "embedding_handcrafted",
+          "log_loss": 0.5364640473493306,
+          "model_id": "deepseek-r1-0528",
+          "pr_auc": 0.8193507008828249,
+          "pr_auc_trapezoid": 0.8189020606302557,
+          "prevalence": 0.5555555555555556,
+          "roc_auc": 0.810178359096314,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.714176245210728,
+          "brier": 0.19921290953659293,
+          "ece": 0.04646985794464977,
+          "family": "embedding_handcrafted",
+          "log_loss": 0.5886906740085218,
+          "model_id": "gemini-2.5-flash",
+          "pr_auc": 0.7613188473941532,
+          "pr_auc_trapezoid": 0.7608166813341679,
+          "prevalence": 0.514176245210728,
+          "roc_auc": 0.7645070449021424,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.6865900383141762,
+          "brier": 0.20299666074980047,
+          "ece": 0.04034045592823461,
+          "family": "embedding_handcrafted",
+          "log_loss": 0.5956725750066205,
+          "model_id": "gpt-5-chat",
+          "pr_auc": 0.7826029669478323,
+          "pr_auc_trapezoid": 0.782066620102655,
+          "prevalence": 0.5908045977011495,
+          "roc_auc": 0.7395182092423381,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7394636015325671,
+          "brier": 0.17543205312140206,
+          "ece": 0.040627687276318845,
+          "family": "embedding_handcrafted",
+          "log_loss": 0.52696393210169,
+          "model_id": "gpt-5",
+          "pr_auc": 0.8716212211080829,
+          "pr_auc_trapezoid": 0.8713467252301264,
+          "prevalence": 0.6911877394636016,
+          "roc_auc": 0.7715663565388191,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7923371647509578,
+          "brier": 0.15652038591845366,
+          "ece": 0.045189996811382825,
+          "family": "embedding_handcrafted",
+          "log_loss": 0.495549330021443,
+          "model_id": "claude-sonnet-4",
+          "pr_auc": 0.7785971934225047,
+          "pr_auc_trapezoid": 0.777990274123305,
+          "prevalence": 0.4482758620689655,
+          "roc_auc": 0.844394586894587,
+          "split": "test"
+        },
+        {
+          "accuracy_at_0_5": 0.7334291187739463,
+          "brier": 0.1836573933553795,
+          "ece": 0.046789209339768094,
+          "family": "embedding_handcrafted",
+          "log_loss": 0.5536967976183739,
+          "model_id": "__macro__",
+          "pr_auc": 0.7940100321884032,
+          "pr_auc_trapezoid": 0.7934934929173447,
+          "prevalence": 0.5490421455938698,
+          "roc_auc": 0.7788415632475291,
+          "split": "test"
+        }
+      ],
+      "validation_primary": {
+        "candidate_id": "tfidf__advantage_0.02__gate_0.00",
+        "delta_aime": 0.0,
+        "delta_gpqa": 0.0,
+        "delta_livecodebench": 0.006329113924050556,
+        "delta_livemathbench": 0.0,
+        "delta_mmlupro": 0.0,
+        "delta_simpleqa": 0.09612403100775196,
+        "family": "tfidf",
+        "feasible": true,
+        "gate_quantile": 0.0,
+        "kind": "advantage",
+        "macro_delta": 0.01707552415530056,
+        "macro_lower": 0.00333053650515084,
+        "macro_standard_error": 0.0034055511556357622,
+        "mean_cost_usd": 0.013922609781943363,
+        "micro_delta": 0.04820198928844677,
+        "micro_lower": 0.009465382194763151,
+        "micro_standard_error": 0.009597643912896914,
+        "quality": 0.7268553940321346,
+        "value": 0.02,
+        "worst_dataset_delta": 0.0
+      }
+    }
+  }
+}

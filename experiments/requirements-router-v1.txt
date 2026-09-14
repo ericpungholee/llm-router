@@ -1,0 +1,16 @@
+# Frozen CPU environment for the first learned router (CPython 3.9).
+-r requirements-llmrouterbench.txt
+scikit-learn==1.6.1
+scipy==1.13.1
+matplotlib==3.9.4
+joblib==1.4.2
+threadpoolctl==3.6.0
+contourpy==1.3.0
+cycler==0.12.1
+fonttools==4.60.2
+kiwisolver==1.4.7
+packaging==25.0
+pillow==11.3.0
+pyparsing==3.2.5
+importlib-resources==6.5.2
+zipp==3.23.0
