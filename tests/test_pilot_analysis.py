@@ -17,9 +17,15 @@ class PilotAnalysisTests(unittest.TestCase):
         for row in self.rows:
             cheap = row["api_model_identifier"] == self.models[0].api_model_identifier
             correct = row["prompt_id"] == ("smoke_test:0" if cheap else "smoke_test:1")
-            row.update(correct=correct, score=float(correct), estimated_cost_usd=0.01 if cheap else 0.03,
-                       response_cost_usd=0.01 if cheap else 0.03,
-                       provider_attempts=1, provider_response_count=1, latency_ms=10 if cheap else 20)
+            row.update(
+                correct=correct,
+                score=float(correct),
+                estimated_cost_usd=0.01 if cheap else 0.03,
+                response_cost_usd=0.01 if cheap else 0.03,
+                provider_attempts=1,
+                provider_response_count=1,
+                latency_ms=10 if cheap else 20,
+            )
 
     def test_oracle_baselines_cost_and_complementary_prompt_signal(self):
         report = analyze_results(self.rows)
@@ -30,24 +36,47 @@ class PilotAnalysisTests(unittest.TestCase):
         self.assertAlmostEqual(comparison["always_cheapest_model"]["total_response_cost_usd"], 0.03)
         self.assertAlmostEqual(comparison["oracle_cheapest_correct_cost_usd"], 0.04)
         self.assertEqual(comparison["oracle_unsolved_prompt_ids"], ["smoke_test:2"])
-        self.assertEqual([r["prompt_id"] for r in comparison["cheaper_solved_expensive_missed"]], ["smoke_test:0"])
-        self.assertEqual([r["prompt_id"] for r in comparison["prompts_requiring_higher_cost_models"]], ["smoke_test:1"])
+        self.assertEqual(
+            [r["prompt_id"] for r in comparison["cheaper_solved_expensive_missed"]],
+            ["smoke_test:0"],
+        )
+        self.assertEqual(
+            [r["prompt_id"] for r in comparison["prompts_requiring_higher_cost_models"]],
+            ["smoke_test:1"],
+        )
         self.assertTrue(comparison["evidence_of_routing_signal"])
         self.assertTrue(report["matrix_completeness"]["valid_complete_comparison"])
         self.assertEqual(report, analyze_results(list(reversed(self.rows))))
 
     def test_failure_categories_are_excluded_from_accuracy_denominator(self):
         model = enabled_models()[0]
-        records = [replace(smoke_test_prompt(), prompt_id=f"smoke_test:failure-{i}") for i in range(6)]
+        records = [
+            replace(smoke_test_prompt(), prompt_id=f"smoke_test:failure-{i}") for i in range(6)
+        ]
         rows = generate_results(records, dry_run=True, models=[model])
         for index, row in enumerate(rows):
-            status = ["success", "success", "provider_error", "parsing_failure", "grading_failure", "skipped_model"][index]
-            row.update(status=status, correct=(index == 0) if status == "success" else None,
-                       score=float(index == 0) if status == "success" else None,
-                       error_type="" if status == "success" else status,
-                       provider_attempts=0 if status == "skipped_model" else 1,
-                       provider_response_count=int(status in {"success", "parsing_failure", "grading_failure"}),
-                       estimated_cost_usd=0.01, latency_ms=10 if status in {"success", "parsing_failure", "grading_failure"} else 999)
+            status = [
+                "success",
+                "success",
+                "provider_error",
+                "parsing_failure",
+                "grading_failure",
+                "skipped_model",
+            ][index]
+            row.update(
+                status=status,
+                correct=(index == 0) if status == "success" else None,
+                score=float(index == 0) if status == "success" else None,
+                error_type="" if status == "success" else status,
+                provider_attempts=0 if status == "skipped_model" else 1,
+                provider_response_count=int(
+                    status in {"success", "parsing_failure", "grading_failure"}
+                ),
+                estimated_cost_usd=0.01,
+                latency_ms=10
+                if status in {"success", "parsing_failure", "grading_failure"}
+                else 999,
+            )
         report = analyze_results(rows)
         metrics = next(iter(report["by_model"].values()))
         self.assertEqual(metrics["attempted_provider_calls"], 5)
@@ -61,12 +90,20 @@ class PilotAnalysisTests(unittest.TestCase):
         self.assertEqual(metrics["average_response_latency_ms"], 10)
         self.assertFalse(report["matrix_completeness"]["valid_complete_comparison"])
         self.assertEqual(report["matrix_completeness"]["successfully_graded_pairs"], 2)
-        self.assertEqual(next(iter(report["by_benchmark_and_model"]["smoke_test"].values()))["accuracy_over_graded"], 0.5)
+        self.assertEqual(
+            next(iter(report["by_benchmark_and_model"]["smoke_test"].values()))[
+                "accuracy_over_graded"
+            ],
+            0.5,
+        )
 
     def test_incomplete_prompts_use_common_subset_and_absent_pairs_are_reported(self):
-        report = analyze_results(self.rows[:-1], [r.prompt_id for r in self.records] + ["wholly-absent"],
-                                 [(m.inference_provider, m.api_model_identifier) for m in self.models],
-                                 {p: "smoke_test" for p in [r.prompt_id for r in self.records] + ["wholly-absent"]})
+        report = analyze_results(
+            self.rows[:-1],
+            [r.prompt_id for r in self.records] + ["wholly-absent"],
+            [(m.inference_provider, m.api_model_identifier) for m in self.models],
+            {p: "smoke_test" for p in [r.prompt_id for r in self.records] + ["wholly-absent"]},
+        )
         self.assertEqual(report["matrix_completeness"]["expected_pairs"], 8)
         self.assertEqual(report["matrix_completeness"]["successfully_graded_pairs"], 5)
         self.assertEqual(report["routing_comparison"]["comparison_prompt_count"], 2)
@@ -77,12 +114,22 @@ class PilotAnalysisTests(unittest.TestCase):
     def test_wholly_absent_prompt_and_benchmark_use_expected_membership(self):
         prompts = [r.prompt_id for r in self.records] + ["absent:prompt", "absent:benchmark"]
         membership = {r.prompt_id: r.benchmark_name for r in self.records}
-        membership.update({"absent:prompt": "smoke_test", "absent:benchmark": "wholly_absent_benchmark"})
+        membership.update(
+            {"absent:prompt": "smoke_test", "absent:benchmark": "wholly_absent_benchmark"}
+        )
         rows = [dict(r) for r in self.rows]
-        for row, status in zip(rows[1:], ["provider_error", "parsing_failure", "grading_failure", "skipped_model", "success"]):
+        for row, status in zip(
+            rows[1:],
+            ["provider_error", "parsing_failure", "grading_failure", "skipped_model", "success"],
+        ):
             if status != "success":
                 row.update(status=status, error_type=status, correct=None, score=None)
-        report = analyze_results(rows, prompts, [(m.inference_provider, m.api_model_identifier) for m in self.models], membership)
+        report = analyze_results(
+            rows,
+            prompts,
+            [(m.inference_provider, m.api_model_identifier) for m in self.models],
+            membership,
+        )
         benchmark_metrics = report["by_benchmark_and_model"]
         for model in self.models:
             label = f"{model.inference_provider}/{model.api_model_identifier}"
@@ -95,12 +142,30 @@ class PilotAnalysisTests(unittest.TestCase):
             self.assertEqual(absent["recorded_pairs"], 0)
             self.assertEqual(absent["unrecorded_pairs"], 1)
             self.assertEqual(absent["successfully_graded_pairs"], 0)
-            for field in ("expected_pairs", "recorded_pairs", "successfully_graded_pairs", "unrecorded_pairs",
-                          "provider_failures", "parsing_failures", "grading_failures", "skipped_pairs"):
-                self.assertEqual(sum(b[label][field] for b in benchmark_metrics.values()), report["by_model"][label][field])
+            for field in (
+                "expected_pairs",
+                "recorded_pairs",
+                "successfully_graded_pairs",
+                "unrecorded_pairs",
+                "provider_failures",
+                "parsing_failures",
+                "grading_failures",
+                "skipped_pairs",
+            ):
+                self.assertEqual(
+                    sum(b[label][field] for b in benchmark_metrics.values()),
+                    report["by_model"][label][field],
+                )
         all_metrics = [v for b in benchmark_metrics.values() for v in b.values()]
-        for field in ("expected_pairs", "recorded_pairs", "successfully_graded_pairs", "unrecorded_pairs"):
-            self.assertEqual(sum(v[field] for v in all_metrics), report["matrix_completeness"][field])
+        for field in (
+            "expected_pairs",
+            "recorded_pairs",
+            "successfully_graded_pairs",
+            "unrecorded_pairs",
+        ):
+            self.assertEqual(
+                sum(v[field] for v in all_metrics), report["matrix_completeness"][field]
+            )
         for field in ("provider_failures", "parsing_failures", "grading_failures", "skipped_pairs"):
             self.assertEqual(sum(v[field] for v in all_metrics), 1)
 
@@ -114,19 +179,29 @@ class PilotAnalysisTests(unittest.TestCase):
             self.assertEqual(report["by_benchmark_and_model"]["smoke_test"][label], metrics)
 
     def test_no_graded_response_has_undefined_accuracy(self):
-        row = dict(self.rows[0], status="provider_error", error_type="network_error", correct=None, score=None,
-                   provider_response_count=0)
+        row = dict(
+            self.rows[0],
+            status="provider_error",
+            error_type="network_error",
+            correct=None,
+            score=None,
+            provider_response_count=0,
+        )
         report = analyze_results([row])
         self.assertIsNone(next(iter(report["by_model"].values()))["accuracy_over_graded"])
         self.assertIsNone(report["routing_comparison"]["oracle_accuracy"])
         self.assertIsNone(report["routing_comparison"]["evidence_of_routing_signal"])
 
     def test_failure_reserves_do_not_inflate_oracle_response_cost(self):
-        rows = [dict(r, estimated_cost_usd=1.0, retry_count=1, provider_attempts=2) for r in self.rows]
+        rows = [
+            dict(r, estimated_cost_usd=1.0, retry_count=1, provider_attempts=2) for r in self.rows
+        ]
         report = analyze_results(rows)
         self.assertEqual(next(iter(report["by_model"].values()))["attempted_provider_calls"], 6)
         self.assertEqual(next(iter(report["by_model"].values()))["total_recorded_cost_usd"], 3)
-        self.assertAlmostEqual(report["routing_comparison"]["oracle_cheapest_correct_cost_usd"], 0.04)
+        self.assertAlmostEqual(
+            report["routing_comparison"]["oracle_cheapest_correct_cost_usd"], 0.04
+        )
 
     def test_duplicate_pairs_are_rejected(self):
         with self.assertRaisesRegex(ValueError, "Duplicate prompt/model"):

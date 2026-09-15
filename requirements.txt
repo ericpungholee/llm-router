@@ -1,2 +1,2 @@
-python-dotenv>=1,<2
-
+# Default install supports local TF-IDF routing and the offline test suite.
+-r experiments/requirements-router-v1.txt

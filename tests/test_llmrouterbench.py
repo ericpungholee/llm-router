@@ -3,10 +3,10 @@
 import copy
 import io
 import json
-from pathlib import Path
 import tarfile
 import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 import pandas as pd
@@ -14,8 +14,20 @@ import pandas as pd
 from routing_data.baselines import baseline_artifacts, choose_best_single
 from routing_data.features import FEATURE_COLUMNS, extract_prompt_features, feature_table
 from routing_data.loading import load_split
-from routing_data.matrix import complete_case, coverage_table, normalize_outcomes, validate_pairs, validate_processed
-from routing_data.prepare import CONFIG_NAMES, prepare, validate_pool, verify_pool_statistics, write_json
+from routing_data.matrix import (
+    complete_case,
+    coverage_table,
+    normalize_outcomes,
+    validate_pairs,
+    validate_processed,
+)
+from routing_data.prepare import (
+    CONFIG_NAMES,
+    prepare,
+    validate_pool,
+    verify_pool_statistics,
+    write_json,
+)
 from routing_data.source import download_archive, file_hash, read_archive, verify_file
 from routing_data.splits import add_leakage_groups, make_splits, validate_splits
 
@@ -26,19 +38,42 @@ def example_rows():
     rows = []
     for pid in ("p1", "p2"):
         for model in ("a", "b"):
-            rows.append(dict(prompt_id=pid, model_id=model, raw_score=1.0, raw_cost_usd=0.001,
-                             input_tokens=10, output_tokens=20, has_output=True, generation_failure=False))
+            rows.append(
+                dict(
+                    prompt_id=pid,
+                    model_id=model,
+                    raw_score=1.0,
+                    raw_cost_usd=0.001,
+                    input_tokens=10,
+                    output_tokens=20,
+                    has_output=True,
+                    generation_failure=False,
+                )
+            )
     return pd.DataFrame(rows)
 
 
 def example_prompts(n=40):
-    return pd.DataFrame([dict(prompt_id=f"p{i}", prompt=f"Question {i}", origin_query=f"Question {i}",
-                              dataset="code" if i >= n//2 else "math", task_type="code" if i >= n//2 else "math")
-                         for i in range(n)])
+    return pd.DataFrame(
+        [
+            dict(
+                prompt_id=f"p{i}",
+                prompt=f"Question {i}",
+                origin_query=f"Question {i}",
+                dataset="code" if i >= n // 2 else "math",
+                task_type="code" if i >= n // 2 else "math",
+            )
+            for i in range(n)
+        ]
+    )
 
 
-SPLIT_CONFIG = dict(seed=3407, standard_fractions=[0.7, 0.15, 0.15],
-                    ood_validation_fraction=0.15, ood_held_out_datasets=["code"])
+SPLIT_CONFIG = dict(
+    seed=3407,
+    standard_fractions=[0.7, 0.15, 0.15],
+    ood_validation_fraction=0.15,
+    ood_held_out_datasets=["code"],
+)
 
 
 class MatrixTests(unittest.TestCase):
@@ -93,7 +128,9 @@ class MatrixTests(unittest.TestCase):
             self.assertFalse(normalize_outcomes(rows).loc[0, "eligible"])
 
     def test_complete_case_excludes_missing_model_and_missing_label(self):
-        prompts = pd.DataFrame([dict(prompt_id=x, dataset="math", task_type="math") for x in ["p1", "p2"]])
+        prompts = pd.DataFrame(
+            [dict(prompt_id=x, dataset="math", task_type="math") for x in ["p1", "p2"]]
+        )
         rows = normalize_outcomes(example_rows().iloc[:-1])
         complete, missing = complete_case(rows, prompts, ["a", "b"])
         self.assertEqual(set(complete.prompt_id), {"p1"})
@@ -105,10 +142,12 @@ class MatrixTests(unittest.TestCase):
 
     def test_coverage_uses_full_prompt_universe(self):
         rows = normalize_outcomes(example_rows().iloc[:-1])
-        prompts = pd.DataFrame([dict(prompt_id=x, dataset="math", task_type="math") for x in ["p1", "p2", "p3"]])
+        prompts = pd.DataFrame(
+            [dict(prompt_id=x, dataset="math", task_type="math") for x in ["p1", "p2", "p3"]]
+        )
         table = coverage_table(rows, prompts, ["a", "b"], ["model_id"]).set_index("model_id")
-        self.assertAlmostEqual(table.loc["a", "coverage"], 2/3)
-        self.assertAlmostEqual(table.loc["b", "coverage"], 1/3)
+        self.assertAlmostEqual(table.loc["a", "coverage"], 2 / 3)
+        self.assertAlmostEqual(table.loc["b", "coverage"], 1 / 3)
         self.assertEqual(table.loc["b", "missing_pairs"], 2)
 
 
@@ -118,13 +157,18 @@ class SplitFeatureBaselineTests(unittest.TestCase):
         a = make_splits(prompts, SPLIT_CONFIG)
         b = make_splits(prompts.sample(frac=1, random_state=77), SPLIT_CONFIG)
         pd.testing.assert_frame_equal(a, b)
-        self.assertEqual(a.standard_split.value_counts().to_dict(), {"train": 28, "validation": 6, "test": 6})
+        self.assertEqual(
+            a.standard_split.value_counts().to_dict(), {"train": 28, "validation": 6, "test": 6}
+        )
 
     def test_duplicate_question_templates_grouped(self):
         p = example_prompts()
         p.loc[1, "origin_query"] = "  QUESTION   0 "
         p = add_leakage_groups(p)
-        self.assertEqual(p.set_index("prompt_id").loc["p0", "leakage_group"], p.set_index("prompt_id").loc["p1", "leakage_group"])
+        self.assertEqual(
+            p.set_index("prompt_id").loc["p0", "leakage_group"],
+            p.set_index("prompt_id").loc["p1", "leakage_group"],
+        )
         s = make_splits(p, SPLIT_CONFIG).set_index("prompt_id")
         self.assertEqual(s.loc["p0", "standard_split"], s.loc["p1", "standard_split"])
 
@@ -177,8 +221,12 @@ class SplitFeatureBaselineTests(unittest.TestCase):
         self.assertEqual(f["contains_math"], 1)
 
     def test_best_single_validation_only_even_if_test_winner_differs(self):
-        val = pd.DataFrame([dict(model_id="a", success=1, standard_split="validation"),
-                            dict(model_id="b", success=0, standard_split="validation")])
+        val = pd.DataFrame(
+            [
+                dict(model_id="a", success=1, standard_split="validation"),
+                dict(model_id="b", success=0, standard_split="validation"),
+            ]
+        )
         self.assertEqual(choose_best_single(val, "standard_split", {"a": 2, "b": 1}), "a")
         test = val.copy()
         test["success"] = 1 - test.success
@@ -213,29 +261,70 @@ class PipelineTests(unittest.TestCase):
         cls.base = Path(cls.temp.name)
         cls.raw = cls.base / "raw"
         cls.config = cls.base / "config"
-        cls.raw.mkdir(); cls.config.mkdir()
-        tasks = dict(SPLIT_CONFIG, schema_version=1, tasks=[dict(dataset=d, source_split="test", task_type=d, label_rule="binary") for d in ["math", "code"]])
-        pool = dict(models=[dict(model_id=f"m{i}", coverage=1.0, reason_selected="Fixture coverage") for i in range(5)])
+        cls.raw.mkdir()
+        cls.config.mkdir()
+        tasks = dict(
+            SPLIT_CONFIG,
+            schema_version=1,
+            tasks=[
+                dict(dataset=d, source_split="test", task_type=d, label_rule="binary")
+                for d in ["math", "code"]
+            ],
+        )
+        pool = dict(
+            models=[
+                dict(model_id=f"m{i}", coverage=1.0, reason_selected="Fixture coverage")
+                for i in range(5)
+            ]
+        )
         cls.archive = cls.raw / "bench-release.tar.gz"
         with tarfile.open(cls.archive, "w:gz") as tar:
             for dataset in ["math", "code"]:
                 for model in range(5):
                     records = []
                     for idx in range(30):
-                        records.append(dict(index=idx, prompt=f"{dataset} question {idx}", origin_query=f"{dataset} question {idx}",
-                                            score=float((idx + model) % 3 != 0), cost=(model + 1) / 1000,
-                                            prompt_tokens=10, completion_tokens=20, raw_output="answer", prediction="answer", ground_truth="reference"))
+                        records.append(
+                            dict(
+                                index=idx,
+                                prompt=f"{dataset} question {idx}",
+                                origin_query=f"{dataset} question {idx}",
+                                score=float((idx + model) % 3 != 0),
+                                cost=(model + 1) / 1000,
+                                prompt_tokens=10,
+                                completion_tokens=20,
+                                raw_output="answer",
+                                prediction="answer",
+                                ground_truth="reference",
+                            )
+                        )
                     if dataset == "math" and model == 0:
                         records[0]["score"] = None
-                    data = dict(dataset_name=dataset, split="test", model_name=f"m{model}", counts=len(records), records=records,
-                                performance=0.5, cost=sum(r["cost"] for r in records), demo=False)
+                    data = dict(
+                        dataset_name=dataset,
+                        split="test",
+                        model_name=f"m{model}",
+                        counts=len(records),
+                        records=records,
+                        performance=0.5,
+                        cost=sum(r["cost"] for r in records),
+                        demo=False,
+                    )
                     payload = json.dumps(data).encode()
-                    member = tarfile.TarInfo(f"bench-release/{dataset}/test/m{model}/20250101_000000.json")
+                    member = tarfile.TarInfo(
+                        f"bench-release/{dataset}/test/m{model}/20250101_000000.json"
+                    )
                     member.size = len(payload)
                     tar.addfile(member, io.BytesIO(payload))
-        source = dict(dataset_revision="fixture-revision", repository_commit="fixture-commit",
-                      archive=dict(filename=cls.archive.name, size_bytes=cls.archive.stat().st_size,
-                                   sha256=file_hash(cls.archive), url="https://example.invalid/never-called"))
+        source = dict(
+            dataset_revision="fixture-revision",
+            repository_commit="fixture-commit",
+            archive=dict(
+                filename=cls.archive.name,
+                size_bytes=cls.archive.stat().st_size,
+                sha256=file_hash(cls.archive),
+                url="https://example.invalid/never-called",
+            ),
+        )
         for name, cfg in zip(CONFIG_NAMES, [source, pool, tasks]):
             write_json(cls.config / name, cfg)
         cls.output = cls.base / "processed"
@@ -253,7 +342,18 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(len(prompts), 59)
         self.assertEqual(len(outcomes), 295)
         validate_processed(outcomes, prompts, features, [f"m{i}" for i in range(5)])
-        self.assertTrue({"raw_score", "success", "success_label", "cost_usd", "input_tokens", "output_tokens", "standard_split", "ood_split"}.issubset(outcomes.columns))
+        self.assertTrue(
+            {
+                "raw_score",
+                "success",
+                "success_label",
+                "cost_usd",
+                "input_tokens",
+                "output_tokens",
+                "standard_split",
+                "ood_split",
+            }.issubset(outcomes.columns)
+        )
         features["output_tokens"] = 1
         with self.assertRaisesRegex(ValueError, "allowlist"):
             validate_processed(outcomes, prompts, features, [f"m{i}" for i in range(5)])
@@ -286,10 +386,16 @@ class PipelineTests(unittest.TestCase):
         outcomes = pd.read_parquet(self.output / "outcomes.parquet")
         _, _, _, before = baseline_artifacts(outcomes)
         outcomes.loc[outcomes.standard_split == "test", "success"] = 0
-        outcomes.loc[(outcomes.standard_split == "test") & (outcomes.model_id == "m4"), "success"] = 1
+        outcomes.loc[
+            (outcomes.standard_split == "test") & (outcomes.model_id == "m4"), "success"
+        ] = 1
         _, _, _, after = baseline_artifacts(outcomes)
-        self.assertEqual(before["standard"]["best_single_model"], after["standard"]["best_single_model"])
-        self.assertEqual(before["standard"]["always_cheapest_model"], after["standard"]["always_cheapest_model"])
+        self.assertEqual(
+            before["standard"]["best_single_model"], after["standard"]["best_single_model"]
+        )
+        self.assertEqual(
+            before["standard"]["always_cheapest_model"], after["standard"]["always_cheapest_model"]
+        )
 
     def test_oracle_unsolved_prompt_fallback_and_null_success_cost(self):
         outcomes = pd.read_parquet(self.output / "outcomes.parquet")
@@ -325,7 +431,9 @@ class PipelineTests(unittest.TestCase):
     def test_archive_path_identity_mismatch_rejected(self):
         bad = self.base / "bad.tar.gz"
         with tarfile.open(bad, "w:gz") as tar:
-            payload = json.dumps(dict(dataset_name="math", split="test", model_name="different", records=[])).encode()
+            payload = json.dumps(
+                dict(dataset_name="math", split="test", model_name="different", records=[])
+            ).encode()
             member = tarfile.TarInfo("bench-release/math/test/m0/file.json")
             member.size = len(payload)
             tar.addfile(member, io.BytesIO(payload))
@@ -335,7 +443,9 @@ class PipelineTests(unittest.TestCase):
     def test_duplicate_archive_members_rejected(self):
         bad = self.base / "duplicate.tar.gz"
         with tarfile.open(bad, "w:gz") as tar:
-            payload = json.dumps(dict(dataset_name="math", split="test", model_name="m0", records=[], counts=0)).encode()
+            payload = json.dumps(
+                dict(dataset_name="math", split="test", model_name="m0", records=[], counts=0)
+            ).encode()
             for _ in range(2):
                 member = tarfile.TarInfo("bench-release/math/test/m0/file.json")
                 member.size = len(payload)

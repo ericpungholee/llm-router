@@ -1,0 +1,53 @@
+{
+  "audit_date": "2026-09-14",
+  "fresh_checkout_environment": "Clean temporary Python 3.9.6 venv; requirements-dev.txt only; no data, artifacts, credentials, or optional encoder packages.",
+  "fresh_checkout_suite": {
+    "command": "python3 tests/run_offline_suite.py",
+    "elapsed_seconds": 6.673,
+    "errors": 0,
+    "failures": 0,
+    "network_access_blocked": true,
+    "passed": true,
+    "skipped": 27,
+    "tests_run": 246,
+    "unexpected_network_attempts": 0
+  },
+  "full_local_suite": {
+    "command": "python3 tests/run_offline_suite.py",
+    "elapsed_seconds": 26.906,
+    "errors": 0,
+    "failures": 0,
+    "network_access_blocked": true,
+    "passed": true,
+    "skipped": 0,
+    "tests_run": 246,
+    "unexpected_network_attempts": 0
+  },
+  "github_ci": "Configured for Python 3.9 and 3.11; hosted status is reported by the workflow run, not inferred from local results.",
+  "license": "Original code left unlicensed at the repository owner's request.",
+  "no_provider_calls": true,
+  "publication_scan": {
+    "changed_frozen_inputs_or_reports": [],
+    "changed_pinned_pilot_source": [],
+    "credential_pattern_matches": [],
+    "files_over_5_mib": [],
+    "forbidden_tracked_files": [],
+    "history_blobs_scanned": 233,
+    "scope_note": "Pattern scan, not a guarantee that all possible secrets are detectable.",
+    "working_files_scanned": 168
+  },
+  "reproduction": {
+    "v4_label_free_cli": "passed; returned a frozen policy/model choice and eight probabilities.",
+    "v4_markdown_difference": "Only the separately recorded historical test-run footer is absent from report-only output.",
+    "v4_results_json_byte_identical": true
+  },
+  "scope": "Public-release cleanup, with frozen experiments and provider contracts preserved.",
+  "static_checks": {
+    "broken_local_markdown_links": [],
+    "git_diff_check": "passed",
+    "pip_check": "passed in both environments",
+    "python_files_parsed": 72,
+    "ruff_check": "passed",
+    "ruff_format": "passed"
+  }
+}

@@ -6,8 +6,13 @@ from dataclasses import asdict
 from pathlib import Path
 
 from generate_dataset import generate_results, load_dotenv, write_results
-from hard_pilot_experiment import (ROOT, frozen_inputs, grading_records, treatment_plan,
-                                   validate_treatment_output)
+from hard_pilot_experiment import (
+    ROOT,
+    frozen_inputs,
+    grading_records,
+    treatment_plan,
+    validate_treatment_output,
+)
 from offline_guard import offline_only
 from providers import missing_api_keys
 from spend_control import SpendPreflightError
@@ -19,8 +24,11 @@ def prepare(budget, output, spend_cap, root=ROOT):
         rows, models, _, provenance = frozen_inputs(root, verify_configuration=True)
         report, plan, calls = treatment_plan(rows, models, budget, spend_cap)
         records = grading_records(root, [r for r, _, _, _ in calls])
-        report.update(parent_sha256=provenance["frozen_sha256"], output=str(output),
-                      generation_configuration=[asdict(m) for _, m, _, _ in calls])
+        report.update(
+            parent_sha256=provenance["frozen_sha256"],
+            output=str(output),
+            generation_configuration=[asdict(m) for _, m, _, _ in calls],
+        )
         return report, plan, calls, records, output
 
 
@@ -34,7 +42,8 @@ def execute(prepared, root=ROOT):
         raise SpendPreflightError(
             "Paid treatment blocked: strict spend preflight failed. "
             "Resolve observed Qwen output/cap discrepancies offline; registry-contract "
-            "estimates are not verified worst-case monetary bounds. No provider calls made.")
+            "estimates are not verified worst-case monetary bounds. No provider calls made."
+        )
     load_dotenv()
     missing = missing_api_keys(tuple(m for _, m, _, _ in calls))
     if missing:
@@ -43,16 +52,26 @@ def execute(prepared, root=ROOT):
     # A crash cannot authorize a second attempt: this sidecar is never resumed.
     sidecar = output.with_suffix(output.suffix + ".experiment.json")
     with sidecar.open("x", encoding="utf-8") as handle:
-        handle.write(json.dumps({**report, "execution_started": True}, indent=2, sort_keys=True) + "\n")
+        handle.write(
+            json.dumps({**report, "execution_started": True}, indent=2, sort_keys=True) + "\n"
+        )
     with output.open("x", encoding="utf-8"):
         pass
     results = []
     for row, model, prompt, budget in calls:
         results = generate_results(
-            [records[row["prompt_id"]]], dry_run=False, models=[model],
-            run_plan=plan, completed_results=results, max_output_tokens=budget,
-            max_retries=0, max_api_attempts=1, exclude_xai=True,
-            on_result=lambda saved: write_results(saved, output), print_before_call=True)
+            [records[row["prompt_id"]]],
+            dry_run=False,
+            models=[model],
+            run_plan=plan,
+            completed_results=results,
+            max_output_tokens=budget,
+            max_retries=0,
+            max_api_attempts=1,
+            exclude_xai=True,
+            on_result=lambda saved: write_results(saved, output),
+            print_before_call=True,
+        )
         # A runtime spend stop cannot be bypassed by starting another pair.
         if any(r["error_type"] == "spend_limit_error" for r in results):
             break

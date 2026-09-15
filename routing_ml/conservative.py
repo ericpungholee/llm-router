@@ -34,14 +34,18 @@ class NoveltyGate:
         values = np.asarray(values, dtype=np.float32)
         scores = []
         for start in range(0, len(values), 128):
-            similarity = finite_product(values[start:start + 128], self.reference.T)
+            similarity = finite_product(values[start : start + 128], self.reference.T)
             if (np.abs(similarity) > 1.0001).any():
                 raise ValueError("Novelty requires unit-normalized embeddings")
             # Independent non-BLAS check of one column in each block.
-            reference = np.einsum("ij,j->i", values[start:start + 128], self.reference[0], optimize=False)
+            reference = np.einsum(
+                "ij,j->i", values[start : start + 128], self.reference[0], optimize=False
+            )
             np.testing.assert_allclose(similarity[:, 0], reference, atol=2e-6)
             if groups is not None:
-                similarity[np.asarray(groups[start:start + 128])[:, None] == self.groups[None, :]] = -np.inf
+                similarity[
+                    np.asarray(groups[start : start + 128])[:, None] == self.groups[None, :]
+                ] = -np.inf
             best = similarity.max(axis=1)
             if not np.isfinite(best).all():
                 raise ValueError("No independent training group for novelty reference")
@@ -79,7 +83,9 @@ def candidates():
         rules += [(f"advantage_{m:.2f}", "advantage", m) for m in MARGINS]
         for policy_id, kind, value in rules:
             for q in GATE_QUANTILES:
-                result.append(Candidate(f"{family}__{policy_id}__gate_{q:.2f}", family, kind, value, q))
+                result.append(
+                    Candidate(f"{family}__{policy_id}__gate_{q:.2f}", family, kind, value, q)
+                )
     return result
 
 
@@ -87,8 +93,15 @@ def comparative_route(prediction, costs, baseline_index, margin):
     p = np.asarray(prediction, dtype=float)
     c = np.asarray(costs, dtype=float)
     eligible = (c < c[baseline_index])[None, :] & (p >= p[:, baseline_index, None] + margin)
-    order = np.lexsort((np.broadcast_to(np.asarray(MODEL_IDS), p.shape), -p,
-                       np.broadcast_to(c, p.shape), ~eligible), axis=1)[:, 0]
+    order = np.lexsort(
+        (
+            np.broadcast_to(np.asarray(MODEL_IDS), p.shape),
+            -p,
+            np.broadcast_to(c, p.shape),
+            ~eligible,
+        ),
+        axis=1,
+    )[:, 0]
     return np.where(eligible.any(axis=1), order, baseline_index)
 
 
@@ -97,10 +110,15 @@ def candidate_actions(predictions, costs, baseline_index, similarities, gate, ch
     arrays = []
     for candidate in choices:
         p = predictions[candidate.family].to_numpy()
-        action = (comparative_route(p, costs, baseline_index, candidate.value) if candidate.kind == "advantage" else
-                  route(p, Policy(candidate.candidate_id, candidate.kind, candidate.value), costs))
+        action = (
+            comparative_route(p, costs, baseline_index, candidate.value)
+            if candidate.kind == "advantage"
+            else route(p, Policy(candidate.candidate_id, candidate.kind, candidate.value), costs)
+        )
         if candidate.gate_quantile:
-            action = np.where(similarities < gate.cutoffs[candidate.gate_quantile], baseline_index, action)
+            action = np.where(
+                similarities < gate.cutoffs[candidate.gate_quantile], baseline_index, action
+            )
         arrays.append(action)
     return np.column_stack(arrays).astype(np.int8)
 
@@ -132,8 +150,12 @@ def simultaneous_bounds(prompts, selected_y, baseline_y, replicates=2000, seed=S
         if name == "micro":
             observed_r, observed_b = selected_y.mean(axis=0), baseline_y.mean(axis=0)
         else:
-            observed_r = np.mean([selected_y[datasets == d].mean(axis=0) for d in sorted(set(datasets))], axis=0)
-            observed_b = np.mean([baseline_y[datasets == d].mean(axis=0) for d in sorted(set(datasets))], axis=0)
+            observed_r = np.mean(
+                [selected_y[datasets == d].mean(axis=0) for d in sorted(set(datasets))], axis=0
+            )
+            observed_b = np.mean(
+                [baseline_y[datasets == d].mean(axis=0) for d in sorted(set(datasets))], axis=0
+            )
         boot_r, boot_b = finite_product(w, selected_y), finite_product(w, baseline_y)
         delta = observed_r[:, None] - observed_b[None, :]
         standard_error = np.empty_like(delta)
@@ -148,12 +170,24 @@ def simultaneous_bounds(prompts, selected_y, baseline_y, replicates=2000, seed=S
         statistics[name] = dict(delta=delta, standard_error=standard_error)
     critical = float(np.quantile(max_t, 0.95))
     for name in statistics:
-        statistics[name]["lower"] = statistics[name]["delta"] - critical * statistics[name]["standard_error"]
-    metadata = dict(method="paired stratified whole-group simultaneous bootstrap max-t", replicates=replicates,
-                    seed=seed, critical_value=critical, confidence=0.95, comparators=list(MODEL_IDS),
-                    metrics=["micro", "macro"], unique_action_vectors=selected_y.shape[1],
-                    approximate_not_distribution_free=True,
-                    group_counts={d: int(prompts.loc[prompts.dataset == d, "leakage_group"].nunique()) for d in sorted(set(datasets))})
+        statistics[name]["lower"] = (
+            statistics[name]["delta"] - critical * statistics[name]["standard_error"]
+        )
+    metadata = dict(
+        method="paired stratified whole-group simultaneous bootstrap max-t",
+        replicates=replicates,
+        seed=seed,
+        critical_value=critical,
+        confidence=0.95,
+        comparators=list(MODEL_IDS),
+        metrics=["micro", "macro"],
+        unique_action_vectors=selected_y.shape[1],
+        approximate_not_distribution_free=True,
+        group_counts={
+            d: int(prompts.loc[prompts.dataset == d, "leakage_group"].nunique())
+            for d in sorted(set(datasets))
+        },
+    )
     return statistics, pd.DataFrame(dict(replicate=np.arange(replicates), max_t=max_t)), metadata
 
 
@@ -166,13 +200,23 @@ def conservative_select(validation, predictions, costs, similarities, gate, repl
     best = best_single(validation, costs)
     baseline_index = MODEL_IDS.index(best.model_id)
     choices = candidates()
-    all_anchors = [np.column_stack([candidate_actions(predictions, costs, j, similarities, gate, choices),
-                                   np.full(len(validation.prompts), j, dtype=np.int8)])
-                   for j in range(len(MODEL_IDS))]
+    all_anchors = [
+        np.column_stack(
+            [
+                candidate_actions(predictions, costs, j, similarities, gate, choices),
+                np.full(len(validation.prompts), j, dtype=np.int8),
+            ]
+        )
+        for j in range(len(MODEL_IDS))
+    ]
     actions = all_anchors[baseline_index]
     choices.append(Candidate("best_single", "static", "static", 0, 0))
-    unique, _, inverse = np.unique(np.column_stack(all_anchors), axis=1, return_index=True, return_inverse=True)
-    inverse = inverse.reshape(-1)[baseline_index * len(choices):(baseline_index + 1) * len(choices)]
+    unique, _, inverse = np.unique(
+        np.column_stack(all_anchors), axis=1, return_index=True, return_inverse=True
+    )
+    inverse = inverse.reshape(-1)[
+        baseline_index * len(choices) : (baseline_index + 1) * len(choices)
+    ]
     rows = np.arange(len(validation.prompts))[:, None]
     y = validation.y.to_numpy(dtype=float)
     selected_y = y[rows, unique]
@@ -199,12 +243,26 @@ def conservative_select(validation, predictions, costs, similarities, gate, repl
     table["worst_dataset_delta"] = np.min(domain_deltas, axis=0)
     for dataset, values in domain_values.items():
         table["delta_" + dataset] = values
-    table["feasible"] = (table.micro_lower >= -0.005) & (table.macro_lower >= -0.005) & (table.worst_dataset_delta >= -0.005)
+    table["feasible"] = (
+        (table.micro_lower >= -0.005)
+        & (table.macro_lower >= -0.005)
+        & (table.worst_dataset_delta >= -0.005)
+    )
     # Mathematically identical action vectors have zero difference from fallback.
     table.loc[table.candidate_id == "best_single", "feasible"] = True
-    winner = table[table.feasible].sort_values(["mean_cost_usd", "quality", "candidate_id"], ascending=[True, False, True]).iloc[0]
+    winner = (
+        table[table.feasible]
+        .sort_values(["mean_cost_usd", "quality", "candidate_id"], ascending=[True, False, True])
+        .iloc[0]
+    )
     chosen = next(c for c in choices if c.candidate_id == winner.candidate_id)
-    metadata.update(candidate_count=len(choices), possible_anchor_identities=list(MODEL_IDS),
-                    anchor_candidate_count=sum(a.shape[1] for a in all_anchors), feasible_count=int(table.feasible.sum()),
-                    best_single=best.to_dict(), selection_split="validation", selected_candidate=chosen.to_dict())
+    metadata.update(
+        candidate_count=len(choices),
+        possible_anchor_identities=list(MODEL_IDS),
+        anchor_candidate_count=sum(a.shape[1] for a in all_anchors),
+        feasible_count=int(table.feasible.sum()),
+        best_single=best.to_dict(),
+        selection_split="validation",
+        selected_candidate=chosen.to_dict(),
+    )
     return chosen, best, table, samples, metadata, actions

@@ -5,7 +5,6 @@ from pathlib import Path
 
 from benchmark_loaders import load_enabled_benchmarks, load_hard_pilot
 
-
 MANIFEST = Path("benchmarks/manifest.json")
 HARD_PILOT = Path("benchmarks/hard_pilot.json")
 
@@ -26,12 +25,8 @@ def main() -> None:
     _, records = load_enabled_benchmarks(MANIFEST)
     hard_pilot = load_hard_pilot(HARD_PILOT, records)
     benchmark_counts = Counter(record.benchmark_name for record in records)
-    difficulty_counts = Counter(
-        (record.benchmark_name, record.difficulty) for record in records
-    )
-    split_counts = Counter(
-        (record.benchmark_name, record.source_split) for record in records
-    )
+    difficulty_counts = Counter((record.benchmark_name, record.difficulty) for record in records)
+    split_counts = Counter((record.benchmark_name, record.source_split) for record in records)
     issues = [
         (record.prompt_id, issue)
         for record in records
@@ -51,10 +46,7 @@ def main() -> None:
     print("Hard-pilot prompt IDs:")
     for record in hard_pilot:
         date = f" / {record.problem_date}" if record.problem_date else ""
-        print(
-            f"- {record.prompt_id} / {record.difficulty} / "
-            f"{record.task_category}{date}"
-        )
+        print(f"- {record.prompt_id} / {record.difficulty} / {record.task_category}{date}")
     print("Deterministic grading issues for stored references/tests:")
     if issues:
         for prompt_id, issue in issues:

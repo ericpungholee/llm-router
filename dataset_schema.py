@@ -4,7 +4,6 @@ import math
 from datetime import datetime
 from typing import Mapping, Optional, Sequence
 
-
 RESULT_FIELDS = (
     "prompt_id",
     "prompt",
@@ -87,7 +86,9 @@ def validate_result(row: Mapping[str, object]) -> None:
         raise ValueError(f"Missing result fields: {missing_fields}")
 
     empty_fields = [
-        field for field in ALWAYS_REQUIRED_TEXT_FIELDS if not str(row[field]).strip()
+        field
+        for field in ALWAYS_REQUIRED_TEXT_FIELDS
+        if row[field] is None or not str(row[field]).strip()
     ]
     if empty_fields:
         raise ValueError(f"Empty result fields: {empty_fields}")
@@ -112,7 +113,10 @@ def validate_result(row: Mapping[str, object]) -> None:
 
     success = row["status"] == "success"
     if success:
-        if not str(row["raw_response"]).strip() or not str(row["parsed_answer"]).strip():
+        if any(
+            not isinstance(row[field], str) or not row[field].strip()
+            for field in ("raw_response", "parsed_answer")
+        ):
             raise ValueError("Successful results require raw_response and parsed_answer")
         if not isinstance(row["correct"], bool):
             raise ValueError("Successful result correct must be a boolean")
@@ -122,7 +126,9 @@ def validate_result(row: Mapping[str, object]) -> None:
     else:
         if not _is_null(row["score"]) or not _is_null(row["correct"]):
             raise ValueError("Failed/skipped results must have null score and correct")
-        if row["status"] != "skipped_model" and not str(row["error_type"]).strip():
+        if row["status"] != "skipped_model" and (
+            row["error_type"] is None or not str(row["error_type"]).strip()
+        ):
             raise ValueError("Failed results require error_type metadata")
 
     for field in ("max_output_tokens", "retry_count"):
@@ -164,7 +170,9 @@ def validate_results(
 ) -> None:
     if not rows:
         raise ValueError("No evaluation results were generated")
-    keys = [(row["prompt_id"], row["inference_provider"], row["api_model_identifier"]) for row in rows]
+    keys = [
+        (row["prompt_id"], row["inference_provider"], row["api_model_identifier"]) for row in rows
+    ]
     if len(keys) != len(set(keys)):
         raise ValueError("Duplicate prompt/model pairs")
     for row in rows:

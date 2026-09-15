@@ -12,9 +12,12 @@ def choose_best_single(validation, split_column, training_costs):
 
 def model_summary(rows, prompt_count):
     summary = rows.groupby("model_id").agg(
-        outcomes=("prompt_id", "size"), accuracy=("success", "mean"),
-        mean_raw_score=("raw_score", "mean"), mean_cost_usd=("cost_usd", "mean"),
-        median_cost_usd=("cost_usd", "median"))
+        outcomes=("prompt_id", "size"),
+        accuracy=("success", "mean"),
+        mean_raw_score=("raw_score", "mean"),
+        mean_cost_usd=("cost_usd", "mean"),
+        median_cost_usd=("cost_usd", "median"),
+    )
     summary["coverage"] = summary.outcomes / prompt_count
     return summary.reset_index()
 
@@ -40,7 +43,9 @@ def baseline_artifacts(outcomes):
                 sm["regime"], sm["split"], sm["dataset"] = regime, split, dataset
                 summaries.append(sm)
         for policy, model in [("always_cheapest", cheapest), ("best_single", best)]:
-            part = test[test.model_id == model][["prompt_id", "model_id", "success", "cost_usd"]].copy()
+            part = test[test.model_id == model][
+                ["prompt_id", "model_id", "success", "cost_usd"]
+            ].copy()
             part["regime"], part["policy"] = regime, policy
             choices.append(part)
         for pid, group in test.groupby("prompt_id", sort=True):
@@ -49,25 +54,62 @@ def baseline_artifacts(outcomes):
             any_success = int(not successful.empty)
             fallback = group[group.model_id == cheapest].iloc[0]
             winner = successful.iloc[0] if any_success else fallback
-            oracles.append(dict(regime=regime, prompt_id=pid, any_success=any_success,
-                                cheapest_success_model_id=winner.model_id if any_success else None,
-                                cheapest_success_cost_usd=float(winner.cost_usd) if any_success else None,
-                                fallback_model_id=cheapest, oracle_policy_cost_usd=float(winner.cost_usd)))
-            for policy, row in [("oracle_cheapest_success_with_fallback", winner), ("hindsight_cheapest_cost", ranked.iloc[0])]:
-                choices.append(pd.DataFrame([dict(regime=regime, policy=policy, prompt_id=pid,
-                                                  model_id=row.model_id, success=int(row.success), cost_usd=float(row.cost_usd))]))
-        metadata[regime] = dict(always_cheapest_model=cheapest, best_single_model=best,
-                                best_single_selection_split="validation", cost_estimation_split="train",
-                                cheapest_single_on_test_descriptive=test_cheapest,
-                                training_mean_cost_usd=costs,
-                                validation_success=val.groupby("model_id").success.mean().to_dict(),
-                                test_prompt_count=int(test.prompt_id.nunique()))
-    choice_table = pd.concat(choices, ignore_index=True).sort_values(["regime", "policy", "prompt_id"]).reset_index(drop=True)
+            oracles.append(
+                dict(
+                    regime=regime,
+                    prompt_id=pid,
+                    any_success=any_success,
+                    cheapest_success_model_id=winner.model_id if any_success else None,
+                    cheapest_success_cost_usd=float(winner.cost_usd) if any_success else None,
+                    fallback_model_id=cheapest,
+                    oracle_policy_cost_usd=float(winner.cost_usd),
+                )
+            )
+            for policy, row in [
+                ("oracle_cheapest_success_with_fallback", winner),
+                ("hindsight_cheapest_cost", ranked.iloc[0]),
+            ]:
+                choices.append(
+                    pd.DataFrame(
+                        [
+                            dict(
+                                regime=regime,
+                                policy=policy,
+                                prompt_id=pid,
+                                model_id=row.model_id,
+                                success=int(row.success),
+                                cost_usd=float(row.cost_usd),
+                            )
+                        ]
+                    )
+                )
+        metadata[regime] = dict(
+            always_cheapest_model=cheapest,
+            best_single_model=best,
+            best_single_selection_split="validation",
+            cost_estimation_split="train",
+            cheapest_single_on_test_descriptive=test_cheapest,
+            training_mean_cost_usd=costs,
+            validation_success=val.groupby("model_id").success.mean().to_dict(),
+            test_prompt_count=int(test.prompt_id.nunique()),
+        )
+    choice_table = (
+        pd.concat(choices, ignore_index=True)
+        .sort_values(["regime", "policy", "prompt_id"])
+        .reset_index(drop=True)
+    )
     for regime in metadata:
         sub = choice_table[choice_table.regime == regime]
-        stats = sub.groupby("policy").agg(success_rate=("success", "mean"), mean_cost_usd=("cost_usd", "mean"))
+        stats = sub.groupby("policy").agg(
+            success_rate=("success", "mean"), mean_cost_usd=("cost_usd", "mean")
+        )
         metadata[regime]["test_policies"] = stats.to_dict(orient="index")
-        metadata[regime]["oracle_success_headroom"] = float(stats.loc["oracle_cheapest_success_with_fallback", "success_rate"] - stats.loc["best_single", "success_rate"])
+        metadata[regime]["oracle_success_headroom"] = float(
+            stats.loc["oracle_cheapest_success_with_fallback", "success_rate"]
+            - stats.loc["best_single", "success_rate"]
+        )
         baseline_cost = stats.loc["best_single", "mean_cost_usd"]
-        metadata[regime]["oracle_cost_savings_vs_best_single"] = float(1 - stats.loc["oracle_cheapest_success_with_fallback", "mean_cost_usd"] / baseline_cost)
+        metadata[regime]["oracle_cost_savings_vs_best_single"] = float(
+            1 - stats.loc["oracle_cheapest_success_with_fallback", "mean_cost_usd"] / baseline_cost
+        )
     return choice_table, pd.concat(summaries, ignore_index=True), pd.DataFrame(oracles), metadata

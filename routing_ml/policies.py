@@ -24,8 +24,9 @@ class Policy:
 
 
 def grid():
-    return ([Policy(f"threshold_{t:.2f}", "threshold", t) for t in THRESHOLDS] +
-            [Policy(f"utility_{v:g}", "utility", v) for v in LAMBDAS])
+    return [Policy(f"threshold_{t:.2f}", "threshold", t) for t in THRESHOLDS] + [
+        Policy(f"utility_{v:g}", "utility", v) for v in LAMBDAS
+    ]
 
 
 def estimate_costs(train):
@@ -37,7 +38,10 @@ def estimate_costs(train):
 def validate_predictions(part, prediction):
     if not prediction.index.equals(part.prompts.index) or tuple(prediction.columns) != MODEL_IDS:
         raise ValueError("Predictions do not align with prompt IDs and frozen model order")
-    if not np.isfinite(prediction.to_numpy()).all() or not ((prediction >= 0) & (prediction <= 1)).all().all():
+    if (
+        not np.isfinite(prediction.to_numpy()).all()
+        or not ((prediction >= 0) & (prediction <= 1)).all().all()
+    ):
         raise ValueError("Invalid probabilities")
 
 
@@ -87,17 +91,36 @@ def select_validation(validation, prediction, costs):
     records = []
     for policy in candidates:
         selected = route(prediction, policy, costs)
-        records.append(dict(**policy.to_dict(), quality=float(y[rows, selected].mean()),
-                            mean_cost_usd=float(c[rows, selected].mean())))
+        records.append(
+            dict(
+                **policy.to_dict(),
+                quality=float(y[rows, selected].mean()),
+                mean_cost_usd=float(c[rows, selected].mean()),
+            )
+        )
     table = pd.DataFrame(records)
     target = float(table.loc[table.policy_id == "best_single", "quality"].iloc[0]) - EPSILON
     table["feasible"] = table.quality >= target
-    winner = table[table.feasible].sort_values(["mean_cost_usd", "quality", "policy_id"], ascending=[True, False, True]).iloc[0]
+    winner = (
+        table[table.feasible]
+        .sort_values(["mean_cost_usd", "quality", "policy_id"], ascending=[True, False, True])
+        .iloc[0]
+    )
     selected = next(p for p in candidates if p.policy_id == winner.policy_id)
     budgets = []
     for fraction in (0.25, 0.5, 0.75, 1.0):
         budget = fraction * costs[MODEL_IDS.index(best.model_id)]
         feasible = table[(table.kind != "static") & (table.mean_cost_usd <= budget)]
-        chosen = None if feasible.empty else feasible.sort_values(["quality", "mean_cost_usd", "policy_id"], ascending=[False, True, True]).iloc[0].policy_id
-        budgets.append(dict(fraction=fraction, budget_usd=float(budget), validation_selected_policy_id=chosen))
+        chosen = (
+            None
+            if feasible.empty
+            else feasible.sort_values(
+                ["quality", "mean_cost_usd", "policy_id"], ascending=[False, True, True]
+            )
+            .iloc[0]
+            .policy_id
+        )
+        budgets.append(
+            dict(fraction=fraction, budget_usd=float(budget), validation_selected_policy_id=chosen)
+        )
     return selected, best, table, budgets

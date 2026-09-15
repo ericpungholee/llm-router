@@ -3,10 +3,10 @@
 import unittest
 
 import numpy as np
+from test_router_v1 import synthetic
 
 from experiments.router_domain_diagnostic import select_domain_models
 from routing_ml.training import MODEL_IDS
-from test_router_v1 import synthetic
 
 
 class DomainDiagnosticTests(unittest.TestCase):

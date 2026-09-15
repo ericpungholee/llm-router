@@ -1,7 +1,7 @@
 import os
 import unittest
 from dataclasses import replace
-from decimal import Decimal, ROUND_CEILING
+from decimal import ROUND_CEILING, Decimal
 from pathlib import Path
 from unittest.mock import patch
 
@@ -70,11 +70,17 @@ class SpendControlTests(unittest.TestCase):
         self.assertIn("$1.00", confirmation)
 
     def test_retry_aware_plan_bounds_three_attempts_for_each_pending_pair(self):
-        calls = [(model, "pending prompt", 128) for model in enabled_models()
-                 if model.inference_provider != "xai"]
+        calls = [
+            (model, "pending prompt", 128)
+            for model in enabled_models()
+            if model.inference_provider != "xai"
+        ]
         plan = build_run_plan(calls, spend_cap="2.00", max_retries=2)
         expected = sum((max_call_cost_usd(*call) * 3 for call in calls), Decimal(0))
-        self.assertEqual(plan.estimated_max_cost_usd, expected.quantize(Decimal("0.000001"), rounding=ROUND_CEILING))
+        self.assertEqual(
+            plan.estimated_max_cost_usd,
+            expected.quantize(Decimal("0.000001"), rounding=ROUND_CEILING),
+        )
         self.assertEqual(plan.planned_calls, 4)
         self.assertEqual(plan.maximum_provider_attempts, 12)
         self.assertEqual(plan.configured_spend_cap_usd, Decimal("2.00"))
@@ -134,24 +140,35 @@ class SpendControlTests(unittest.TestCase):
                 lambda: tracker.assert_can_call(grok, "prompt", limit),
                 lambda: tracker.record_failed_attempt(grok, "prompt", limit),
             ):
-                with self.subTest(limit=limit), self.assertRaisesRegex(SpendPreflightError, "xAI pre-dispatch cost bound is unresolved"):
+                with (
+                    self.subTest(limit=limit),
+                    self.assertRaisesRegex(
+                        SpendPreflightError, "xAI pre-dispatch cost bound is unresolved"
+                    ),
+                ):
                     operation()
         self.assertEqual(tracker.spent_usd, Decimal(0))
         self.assertEqual(tracker.attempted_calls, 0)
 
     def test_xai_reported_billing_overrides_token_estimate_after_response(self):
         from provider_clients.normalization import normalize_response
+
         grok = next(m for m in enabled_models() if m.inference_provider == "xai")
         # Recording an already returned response needs no dispatch authorization.
         tracker = SpendTracker(build_run_plan([], spend_cap="2.00"), initial_spend_usd="0.8135937")
         data = {
             "status": "completed",
             "output": [{"type": "message", "content": [{"type": "output_text", "text": "B"}]}],
-            "usage": {"input_tokens": 13, "output_tokens": 10015,
-                      "output_tokens_details": {"reasoning_tokens": 9500},
-                      "cost_in_usd_ticks": 37_756_000},
+            "usage": {
+                "input_tokens": 13,
+                "output_tokens": 10015,
+                "output_tokens_details": {"reasoning_tokens": 9500},
+                "cost_in_usd_ticks": 37_756_000,
+            },
         }
-        response = normalize_response(data, "xai", grok.api_model_identifier, 1.0, 4096, "responses")
+        response = normalize_response(
+            data, "xai", grok.api_model_identifier, 1.0, 4096, "responses"
+        )
         cost = tracker.record_call(grok, response)
         self.assertEqual(cost, Decimal("0.0037756"))
         self.assertNotEqual(cost, Decimal("0.060116"))
@@ -161,8 +178,12 @@ class SpendControlTests(unittest.TestCase):
     def test_xai_reported_zero_cost_is_authoritative(self):
         grok = next(m for m in enabled_models() if m.inference_provider == "xai")
         tracker = SpendTracker(build_run_plan([]))
-        self.assertEqual(tracker.record_call(grok, ProviderResponse("B", 13, 10015, 1.0,
-                                                                  provider_reported_cost_usd=0.0)), Decimal(0))
+        self.assertEqual(
+            tracker.record_call(
+                grok, ProviderResponse("B", 13, 10015, 1.0, provider_reported_cost_usd=0.0)
+            ),
+            Decimal(0),
+        )
 
 
 if __name__ == "__main__":

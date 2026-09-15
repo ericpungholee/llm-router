@@ -8,6 +8,7 @@ from pathlib import Path
 try:
     from dotenv import load_dotenv
 except ImportError:
+
     def load_dotenv() -> bool:
         path = Path(".env")
         if not path.exists():
@@ -19,11 +20,12 @@ except ImportError:
             os.environ.setdefault(key.strip(), value.strip().strip("\"'"))
         return True
 
+
 from benchmark_loaders import load_enabled_benchmarks
 from dataset_schema import RESULT_FIELDS
+from generate_dataset import planned_calls
 from model_registry import enabled_models, validate_registry
 from providers import missing_api_keys, provider_display_name
-from generate_dataset import planned_calls
 from spend_control import (
     DEFAULT_RUN_SPEND_CAP_USD,
     SpendPreflightError,
@@ -108,8 +110,7 @@ def main() -> None:
     unresolved_prices = [
         model
         for model in models
-        if model.input_price_per_million_usd is None
-        or model.output_price_per_million_usd is None
+        if model.input_price_per_million_usd is None or model.output_price_per_million_usd is None
     ]
     print("\nModels with unresolved pricing:")
     if unresolved_prices:

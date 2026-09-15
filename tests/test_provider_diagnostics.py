@@ -11,13 +11,18 @@ from decimal import Decimal
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from generate_dataset import (generate_results, planned_calls, read_results,
-                              render_prompt, smoke_test_prompt, write_results)
+from generate_dataset import (
+    generate_results,
+    planned_calls,
+    read_results,
+    render_prompt,
+    smoke_test_prompt,
+    write_results,
+)
 from model_registry import enabled_models
-from providers import LIVE_CALLERS, call_model_with_retries
 from provider_clients.base import ProviderError
+from providers import LIVE_CALLERS, call_model_with_retries
 from spend_control import build_run_plan, max_call_cost_usd
-
 
 FIXTURES = json.loads((Path(__file__).parent / "fixtures/provider_responses.json").read_text())
 
@@ -32,7 +37,11 @@ class DiagnosticTests(unittest.TestCase):
             return LIVE_CALLERS[provider](model_for(provider), "prompt", "dummy", 4096)
 
     def test_output_budget_fixtures_are_nontransient_pair_outcomes(self):
-        for provider, name in (("openai", "openai_incomplete"), ("anthropic", "anthropic_limit"), ("deepseek", "deepseek_limit")):
+        for provider, name in (
+            ("openai", "openai_incomplete"),
+            ("anthropic", "anthropic_limit"),
+            ("deepseek", "deepseek_limit"),
+        ):
             with self.subTest(provider=provider), self.assertRaises(ProviderError) as caught:
                 self.call_fixture(provider, FIXTURES[name])
             error = caught.exception
@@ -87,7 +96,12 @@ class DiagnosticTests(unittest.TestCase):
         for provider in ("openai", "anthropic", "deepseek"):
             fixture = copy.deepcopy(FIXTURES[provider + "_completed"])
             if provider == "openai":
-                fixture["output"] = [{"type": "message", "content": [{"type": "refusal", "refusal": "SYNTHETIC_PRIVATE"}]}]
+                fixture["output"] = [
+                    {
+                        "type": "message",
+                        "content": [{"type": "refusal", "refusal": "SYNTHETIC_PRIVATE"}],
+                    }
+                ]
             elif provider == "anthropic":
                 fixture["stop_reason"] = "refusal"
             else:
@@ -127,13 +141,28 @@ class DiagnosticTests(unittest.TestCase):
 
     def test_openrouter_affordability_rejection_dispatches_only_once(self):
         rejection = urllib.error.HTTPError(
-            "https://example.invalid", 402, "Payment required", {},
-            io.BytesIO(json.dumps({"error": {"message": "This request requires more credits, or fewer max_tokens"}}).encode()),
+            "https://example.invalid",
+            402,
+            "Payment required",
+            {},
+            io.BytesIO(
+                json.dumps(
+                    {
+                        "error": {
+                            "message": "This request requires more credits, or fewer max_tokens"
+                        }
+                    }
+                ).encode()
+            ),
         )
         with patch.dict("os.environ", {"OPENROUTER_API_KEY": "dummy"}):
-            with patch("provider_clients.base.urllib.request.urlopen", side_effect=rejection) as http:
+            with patch(
+                "provider_clients.base.urllib.request.urlopen", side_effect=rejection
+            ) as http:
                 with self.assertRaises(ProviderError) as caught:
-                    call_model_with_retries(model_for("openrouter"), "prompt", dry_run=False, max_retries=2)
+                    call_model_with_retries(
+                        model_for("openrouter"), "prompt", dry_run=False, max_retries=2
+                    )
         self.assertEqual(http.call_count, 1)
         self.assertEqual(caught.exception.error_type, "quota_or_billing_error")
         self.assertFalse(caught.exception.retryable)
@@ -145,7 +174,10 @@ class DiagnosticTests(unittest.TestCase):
         model = model_for("openai")
         record = smoke_test_prompt()
         bound = max_call_cost_usd(model, render_prompt(record), 128)
-        plan = build_run_plan(planned_calls([record], [model], max_output_tokens=128), spend_cap=bound * Decimal("1.5"))
+        plan = build_run_plan(
+            planned_calls([record], [model], max_output_tokens=128),
+            spend_cap=bound * Decimal("1.5"),
+        )
         response = MagicMock()
         response.__enter__.return_value = response
         response.status, response.headers = 200, {"x-request-id": "req_interrupted"}
@@ -153,10 +185,18 @@ class DiagnosticTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "checkpoint.csv"
             with patch.dict("os.environ", {"OPENAI_API_KEY": "dummy"}):
-                with patch("provider_clients.base.urllib.request.urlopen", return_value=response) as http:
+                with patch(
+                    "provider_clients.base.urllib.request.urlopen", return_value=response
+                ) as http:
                     with self.assertRaises(KeyboardInterrupt):
-                        generate_results([record], dry_run=False, models=[model], run_plan=plan,
-                                         max_output_tokens=128, on_result=lambda rows: write_results(rows, path))
+                        generate_results(
+                            [record],
+                            dry_run=False,
+                            models=[model],
+                            run_plan=plan,
+                            max_output_tokens=128,
+                            on_result=lambda rows: write_results(rows, path),
+                        )
             self.assertEqual(http.call_count, 1)
             saved = read_results(path)
             row = saved[0]
@@ -168,16 +208,30 @@ class DiagnosticTests(unittest.TestCase):
             self.assertTrue(row["failure_retryable"])
             self.assertEqual(row["provider_request_id"], "req_interrupted")
             with patch("providers.call_model") as calls:
-                blocked = generate_results([record], dry_run=False, models=[model], run_plan=plan,
-                                           max_output_tokens=128, completed_results=saved)
+                blocked = generate_results(
+                    [record],
+                    dry_run=False,
+                    models=[model],
+                    run_plan=plan,
+                    max_output_tokens=128,
+                    completed_results=saved,
+                )
             calls.assert_not_called()
             self.assertEqual(blocked[0]["provider_attempts"], 1)
             self.assertEqual(blocked[0]["estimated_cost_usd"], row["estimated_cost_usd"])
-            larger = build_run_plan(planned_calls([record], [model], max_output_tokens=128), spend_cap=bound * 3)
+            larger = build_run_plan(
+                planned_calls([record], [model], max_output_tokens=128), spend_cap=bound * 3
+            )
             ok = self.call_fixture("openai", FIXTURES["openai_completed"])
             with patch("providers.call_model", return_value=ok) as calls:
-                resumed = generate_results([record], dry_run=False, models=[model], run_plan=larger,
-                                           max_output_tokens=128, completed_results=saved)
+                resumed = generate_results(
+                    [record],
+                    dry_run=False,
+                    models=[model],
+                    run_plan=larger,
+                    max_output_tokens=128,
+                    completed_results=saved,
+                )
             self.assertEqual(calls.call_count, 1)
             self.assertEqual(resumed[0]["provider_attempts"], 2)
             self.assertEqual(resumed[0]["status"], "success")
@@ -185,13 +239,20 @@ class DiagnosticTests(unittest.TestCase):
             self.assertEqual(len(json.loads(resumed[0]["provider_diagnostics"])), 2)
 
     def test_interrupt_during_backoff_does_not_charge_a_phantom_dispatch(self):
-        error = ProviderError("xai", "grok-4.6", "timeout", error_type="network_error", retryable=True)
+        error = ProviderError(
+            "xai", "grok-4.6", "timeout", error_type="network_error", retryable=True
+        )
         with patch("providers.call_model", side_effect=error) as calls:
             with patch("providers.time.sleep", side_effect=KeyboardInterrupt) as sleep:
                 failures = []
                 with self.assertRaises(KeyboardInterrupt):
-                    call_model_with_retries(model_for("xai"), "prompt", dry_run=False,
-                                            on_failed_attempt=failures.append, sleep=sleep)
+                    call_model_with_retries(
+                        model_for("xai"),
+                        "prompt",
+                        dry_run=False,
+                        on_failed_attempt=failures.append,
+                        sleep=sleep,
+                    )
         self.assertEqual(calls.call_count, 1)
         self.assertEqual(failures, [error])
 
@@ -215,11 +276,19 @@ class DiagnosticTests(unittest.TestCase):
             write_results(rows, path)
             saved = read_results(path)
         with patch("providers.call_model") as calls:
-            resumed = generate_results(records, dry_run=False, models=[model], completed_results=saved)
+            resumed = generate_results(
+                records, dry_run=False, models=[model], completed_results=saved
+            )
         calls.assert_not_called()
         self.assertEqual(resumed, saved)
         with patch("providers.call_model", return_value=ok) as calls:
-            changed = generate_results(records, dry_run=False, models=[model], max_output_tokens=2048, completed_results=saved)
+            changed = generate_results(
+                records,
+                dry_run=False,
+                models=[model],
+                max_output_tokens=2048,
+                completed_results=saved,
+            )
         self.assertEqual(calls.call_count, 1)
         self.assertEqual(changed[1], saved[1])
 
@@ -227,30 +296,51 @@ class DiagnosticTests(unittest.TestCase):
         model, record = model_for("openai"), smoke_test_prompt()
         bound = max_call_cost_usd(model, render_prompt(record))
         plan = build_run_plan(planned_calls([record], [model]), spend_cap=bound * 3)
-        timeout = ProviderError("openai", model.api_model_identifier, "timeout", error_type="network_error", retryable=True)
+        timeout = ProviderError(
+            "openai",
+            model.api_model_identifier,
+            "timeout",
+            error_type="network_error",
+            retryable=True,
+        )
         snapshots = []
         with patch("providers.call_model", side_effect=[timeout, KeyboardInterrupt]) as calls:
             from functools import partial
-            with patch("generate_dataset.call_model_with_retries", partial(call_model_with_retries, sleep=lambda _: None)):
+
+            with patch(
+                "generate_dataset.call_model_with_retries",
+                partial(call_model_with_retries, sleep=lambda _: None),
+            ):
                 with self.assertRaises(KeyboardInterrupt):
-                    generate_results([record], dry_run=False, models=[model], run_plan=plan,
-                                     on_result=lambda rows: snapshots.append(copy.deepcopy(rows)))
+                    generate_results(
+                        [record],
+                        dry_run=False,
+                        models=[model],
+                        run_plan=plan,
+                        on_result=lambda rows: snapshots.append(copy.deepcopy(rows)),
+                    )
         self.assertEqual(calls.call_count, 2)
         row = snapshots[-1][0]
         self.assertEqual(row["provider_attempts"], 2)
         self.assertEqual(row["retry_count"], 1)
         self.assertEqual(Decimal(str(row["estimated_cost_usd"])), bound * 2)
-        self.assertEqual([d["outcome"] for d in json.loads(row["provider_diagnostics"])],
-                         ["network_error", "interrupted_inflight"])
+        self.assertEqual(
+            [d["outcome"] for d in json.loads(row["provider_diagnostics"])],
+            ["network_error", "interrupted_inflight"],
+        )
 
     def test_interruption_before_attempt_does_not_reserve_or_dispatch(self):
         with patch("providers.call_model") as calls:
             with patch("builtins.print", side_effect=KeyboardInterrupt):
                 failures = []
                 with self.assertRaises(KeyboardInterrupt):
-                    call_model_with_retries(model_for("xai"), "prompt", dry_run=False,
-                                            before_attempt=lambda: print("before dispatch"),
-                                            on_failed_attempt=failures.append)
+                    call_model_with_retries(
+                        model_for("xai"),
+                        "prompt",
+                        dry_run=False,
+                        before_attempt=lambda: print("before dispatch"),
+                        on_failed_attempt=failures.append,
+                    )
         calls.assert_not_called()
         self.assertEqual(failures, [])
 
@@ -275,10 +365,12 @@ class DiagnosticTests(unittest.TestCase):
         self.assertTrue(response.diagnostics["output_tokens_exceed_requested_limit"])
 
     def test_xai_cost_ticks_convert_exactly_before_float_boundary(self):
-        for ticks, expected in ((1, Decimal("0.0000000001")),
-                                (37_756_000, Decimal("0.0037756")),
-                                (10_000_000_000, Decimal("1")),
-                                (0, Decimal("0"))):
+        for ticks, expected in (
+            (1, Decimal("0.0000000001")),
+            (37_756_000, Decimal("0.0037756")),
+            (10_000_000_000, Decimal("1")),
+            (0, Decimal("0")),
+        ):
             fixture = copy.deepcopy(FIXTURES["openai_completed"])
             fixture["usage"]["cost_in_usd_ticks"] = ticks
             with self.subTest(ticks=ticks):
@@ -293,13 +385,21 @@ class DiagnosticTests(unittest.TestCase):
             encrypted_content="SYNTHETIC_PRIVATE_ENCRYPTED_REASONING",
             summary=[{"type": "summary_text", "text": "SYNTHETIC_PRIVATE_REASONING"}],
         )
-        fixture["usage"].update(cost_in_usd_ticks=37_756_000, total_tokens=93,
-                                context_details={"output_tokens": 80}, num_server_side_tools_used=0)
+        fixture["usage"].update(
+            cost_in_usd_ticks=37_756_000,
+            total_tokens=93,
+            context_details={"output_tokens": 80},
+            num_server_side_tools_used=0,
+        )
         response = self.call_fixture("xai", fixture)
         self.assertEqual(response.diagnostics["provider_reported_cost_status"], "available")
-        for name, expected in (("cost_in_usd_ticks", 37_756_000),
-                               ("reasoning_tokens", 79), ("response_max_output_tokens", 4096),
-                               ("context_output_tokens", 80), ("total_tokens", 93)):
+        for name, expected in (
+            ("cost_in_usd_ticks", 37_756_000),
+            ("reasoning_tokens", 79),
+            ("response_max_output_tokens", 4096),
+            ("context_output_tokens", 80),
+            ("total_tokens", 93),
+        ):
             self.assertEqual(response.diagnostics[name], expected)
         self.assertNotIn("SYNTHETIC_PRIVATE", str(response))
         self.assertNotIn("encrypted_content", json.dumps(response.diagnostics))
@@ -312,8 +412,10 @@ class DiagnosticTests(unittest.TestCase):
                 response = self.call_fixture("xai", fixture)
                 self.assertIsNone(response.provider_reported_cost_usd)
                 self.assertIsNone(response.diagnostics["cost_in_usd_ticks"])
-                self.assertEqual(response.diagnostics["provider_reported_cost_status"],
-                                 "missing" if ticks is None else "invalid")
+                self.assertEqual(
+                    response.diagnostics["provider_reported_cost_status"],
+                    "missing" if ticks is None else "invalid",
+                )
                 self.assertNotIn("SYNTHETIC_PRIVATE", str(response))
 
 

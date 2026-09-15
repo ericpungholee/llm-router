@@ -2,12 +2,11 @@
 
 import os
 from dataclasses import dataclass
-from decimal import Decimal, InvalidOperation, ROUND_CEILING
+from decimal import ROUND_CEILING, Decimal, InvalidOperation
 from typing import Optional, Sequence, Tuple, Union
 
 from model_registry import ModelConfig
 from providers import ProviderResponse
-
 
 DEFAULT_RUN_SPEND_CAP_USD = Decimal("1.00")
 DEFAULT_GLOBAL_MAX_SPEND_USD = Decimal("10.00")
@@ -69,10 +68,7 @@ def max_call_cost_usd(
             "the requested limit despite the documented shared output/reasoning ceiling. "
             "Exclude xAI with --exclude-xai; reported billed cost is available only after dispatch."
         )
-    if (
-        model.input_price_per_million_usd is None
-        or model.output_price_per_million_usd is None
-    ):
+    if model.input_price_per_million_usd is None or model.output_price_per_million_usd is None:
         raise SpendPreflightError(
             f"Cannot estimate maximum spend: {model.canonical_model_name} has unresolved pricing."
         )
@@ -93,11 +89,16 @@ def estimate_max_spend_usd(
     max_retries: int = 0,
 ) -> Decimal:
     """Bound all attempts for pending pairs, including paid failed attempts."""
-    if not isinstance(max_retries, int) or isinstance(max_retries, bool) or not 0 <= max_retries <= 2:
+    if (
+        not isinstance(max_retries, int)
+        or isinstance(max_retries, bool)
+        or not 0 <= max_retries <= 2
+    ):
         raise ValueError("max_retries must be between 0 and 2")
     return sum(
         (
-            max_call_cost_usd(call[0], call[1], call[2] if len(call) == 3 else None) * (1 + max_retries)
+            max_call_cost_usd(call[0], call[1], call[2] if len(call) == 3 else None)
+            * (1 + max_retries)
             for call in calls
         ),
         Decimal("0"),
@@ -197,20 +198,13 @@ class SpendTracker:
             )
 
     def record_call(self, model: ModelConfig, response: ProviderResponse) -> Decimal:
-        if (
-            model.input_price_per_million_usd is None
-            or model.output_price_per_million_usd is None
-        ):
+        if model.input_price_per_million_usd is None or model.output_price_per_million_usd is None:
             raise SpendPreflightError(
                 f"Cannot record spend: {model.canonical_model_name} has unresolved pricing."
             )
         for field_name in ("input_tokens", "output_tokens"):
             token_count = getattr(response, field_name)
-            if (
-                not isinstance(token_count, int)
-                or isinstance(token_count, bool)
-                or token_count < 0
-            ):
+            if not isinstance(token_count, int) or isinstance(token_count, bool) or token_count < 0:
                 raise SpendLimitError(f"Provider returned invalid {field_name}.")
         input_price = Decimal(str(model.input_price_per_million_usd))
         output_price = Decimal(str(model.output_price_per_million_usd))

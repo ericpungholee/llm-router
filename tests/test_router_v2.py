@@ -1,22 +1,35 @@
 """Tests of the new semantic representation and conservative selection protocol."""
 
-import importlib.util
-import json
-from pathlib import Path
 import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 import numpy as np
 import pandas as pd
+from test_router_v1 import synthetic
 
-from routing_ml.conservative import (Candidate, GATE_QUANTILES, NoveltyGate, candidate_actions, candidates,
-                                     comparative_route, conservative_select, resampling_weights, simultaneous_bounds)
-from routing_ml.embeddings import (DIMENSIONS, ENCODER_CONFIG, load_cache, prompt_identity, token_chunks,
-                                   weighted_prompt_vectors)
+from routing_ml.conservative import (
+    GATE_QUANTILES,
+    Candidate,
+    NoveltyGate,
+    candidate_actions,
+    candidates,
+    comparative_route,
+    conservative_select,
+    resampling_weights,
+    simultaneous_bounds,
+)
+from routing_ml.embeddings import (
+    DIMENSIONS,
+    ENCODER_CONFIG,
+    load_cache,
+    prompt_identity,
+    token_chunks,
+    weighted_prompt_vectors,
+)
 from routing_ml.semantic_training import FAMILIES, dense_inputs, train_semantic
 from routing_ml.training import MODEL_IDS
-from test_router_v1 import synthetic
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -53,6 +66,7 @@ class EmbeddingTests(unittest.TestCase):
 
     def test_cache_rejects_wrong_source_identity_and_corruption(self):
         from routing_ml.embeddings import file_hash, json_file
+
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp)
             rows = pd.DataFrame(dict(prompt_id=["a", "b"], prompt=["one", "two"]))
@@ -60,8 +74,11 @@ class EmbeddingTests(unittest.TestCase):
             values[:, 0] = 1
             np.save(path / "vectors.npy", values, allow_pickle=False)
             rows[["prompt_id"]].to_parquet(path / "prompt_index.parquet", index=False)
-            manifest = dict(encoder_config=ENCODER_CONFIG, prompt_text_identity=prompt_identity(rows),
-                            files={p.name: file_hash(p) for p in path.iterdir()})
+            manifest = dict(
+                encoder_config=ENCODER_CONFIG,
+                prompt_text_identity=prompt_identity(rows),
+                files={p.name: file_hash(p) for p in path.iterdir()},
+            )
             json_file(path / "manifest.json", manifest)
             actual, _ = load_cache(path, rows)
             self.assertEqual(actual.index.tolist(), ["a", "b"])
@@ -162,13 +179,17 @@ class ConservativeTests(unittest.TestCase):
         p.iloc[:, 0] = 0.9
         gate = NoveltyGate("standard", np.eye(2), np.array(["a", "b"]), {0.05: 0.8})
         candidate = Candidate("x", "embedding", "threshold", 0.5, 0.05)
-        scores = np.array([0.79, 0.8] + [0.9]*10)
-        selected = candidate_actions({"embedding": p}, np.arange(1, 9), 6, scores, gate, [candidate])[:, 0]
+        scores = np.array([0.79, 0.8] + [0.9] * 10)
+        selected = candidate_actions(
+            {"embedding": p}, np.arange(1, 9), 6, scores, gate, [candidate]
+        )[:, 0]
         self.assertEqual(selected[0], 6)
         np.testing.assert_array_equal(selected[1:], 0)
 
     def test_resampling_preserves_groups_and_equal_dataset_macro_weights(self):
-        prompts = pd.DataFrame(dict(dataset=["a", "a", "a", "b", "b"], leakage_group=["x", "x", "y", "z", "w"]))
+        prompts = pd.DataFrame(
+            dict(dataset=["a", "a", "a", "b", "b"], leakage_group=["x", "x", "y", "z", "w"])
+        )
         micro, macro = resampling_weights(prompts, replicates=30)
         np.testing.assert_allclose(micro.sum(axis=1), 1)
         np.testing.assert_allclose(macro.sum(axis=1), 1)
@@ -194,8 +215,12 @@ class ConservativeTests(unittest.TestCase):
         validation.y["gpt-5"] = 1
         p = pd.DataFrame(0.1, index=validation.prompts.index, columns=MODEL_IDS)
         p.iloc[:, 0] = 0.99
-        gate = NoveltyGate("standard", np.eye(2), np.array(["a", "b"]), {q: 0.0 for q in GATE_QUANTILES[1:]})
-        chosen, best, table, _, metadata, actions = conservative_select(validation, {f: p for f in FAMILIES}, np.arange(1, 9), np.ones(20), gate, replicates=30)
+        gate = NoveltyGate(
+            "standard", np.eye(2), np.array(["a", "b"]), {q: 0.0 for q in GATE_QUANTILES[1:]}
+        )
+        chosen, best, table, _, metadata, actions = conservative_select(
+            validation, {f: p for f in FAMILIES}, np.arange(1, 9), np.ones(20), gate, replicates=30
+        )
         self.assertEqual(chosen.candidate_id, "best_single")
         self.assertEqual(best.model_id, "gpt-5")
         self.assertEqual(metadata["anchor_candidate_count"], 545 * 8)
@@ -208,6 +233,7 @@ class ConservativeTests(unittest.TestCase):
 class CampaignIntegrationTests(unittest.TestCase):
     def test_freeze_precedes_test_outcome_load(self):
         from experiments.embedding_logreg_router import run_regime
+
         parts = {s: synthetic(s, n=20) for s in ("train", "validation", "test")}
         embeddings = pd.concat([synthetic_embeddings(p) for p in parts.values()])
         for part in parts.values():
@@ -215,15 +241,34 @@ class CampaignIntegrationTests(unittest.TestCase):
             part.y["gpt-5"] = 1
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
+
             def read(data, regime, split):
                 if split == "test":
                     self.assertTrue((root / "standard/frozen_selection.json").exists())
                 return parts[split]
+
             from routing_ml.conservative import conservative_select as original
+
             def quick_select(*args, **kwargs):
                 return original(*args, **kwargs, replicates=30)
-            with patch("experiments.embedding_logreg_router.checked_read", side_effect=read), patch("experiments.embedding_logreg_router.verify_source", return_value={}), patch("experiments.embedding_logreg_router.conservative_select", side_effect=quick_select):
-                result = run_regime(root, root, root, "standard", embeddings, {}, {"source_processed_data_hashes": {}, "protocol_sha256": "fixture"})
+
+            with (
+                patch("experiments.embedding_logreg_router.checked_read", side_effect=read),
+                patch("experiments.embedding_logreg_router.verify_source", return_value={}),
+                patch(
+                    "experiments.embedding_logreg_router.conservative_select",
+                    side_effect=quick_select,
+                ),
+            ):
+                result = run_regime(
+                    root,
+                    root,
+                    root,
+                    "standard",
+                    embeddings,
+                    {},
+                    {"source_processed_data_hashes": {}, "protocol_sha256": "fixture"},
+                )
             self.assertTrue(result["semantic_training_replay_exact"])
             self.assertEqual(result["comparison"]["primary"]["cost_savings"], 0)
             self.assertFalse(result["comparison"]["primary"]["promising_exploratory"])

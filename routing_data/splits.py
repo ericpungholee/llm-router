@@ -3,8 +3,6 @@
 import hashlib
 import unicodedata
 
-import pandas as pd
-
 
 def digest(text):
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
@@ -54,11 +52,11 @@ def _assign_groups(prompts, seed, regime, fractions, labels):
         ideals = [len(order) * f for f in fractions]
         sizes = [int(n) for n in ideals]
         remainder_order = sorted(range(len(sizes)), key=lambda i: (-(ideals[i] - sizes[i]), i))
-        for i in remainder_order[:len(order) - sum(sizes)]:
+        for i in remainder_order[: len(order) - sum(sizes)]:
             sizes[i] += 1
         start = 0
         for label, size in zip(labels, sizes):
-            result.update({g: label for g in order[start:start + size]})
+            result.update({g: label for g in order[start : start + size]})
             start += size
     return result
 
@@ -72,7 +70,9 @@ def make_splits(prompts, config):
     val_fraction = config["ood_validation_fraction"]
     if not 0 < val_fraction < 1:
         raise ValueError("Invalid OOD validation fraction")
-    standard = _assign_groups(prompts, config["seed"], "standard", fractions, ["train", "validation", "test"])
+    standard = _assign_groups(
+        prompts, config["seed"], "standard", fractions, ["train", "validation", "test"]
+    )
     held = set(config["ood_held_out_datasets"])
     if not held or not held.issubset(set(prompts.dataset)):
         raise ValueError("Unknown/empty OOD holdout")
@@ -80,13 +80,17 @@ def make_splits(prompts, config):
     remaining = prompts[~prompts.leakage_group.isin(test_groups)]
     if remaining.empty:
         raise ValueError("OOD holdout leaves no training prompts")
-    ood = _assign_groups(remaining, config["seed"], "ood", [1-val_fraction, val_fraction], ["train", "validation"])
+    ood = _assign_groups(
+        remaining, config["seed"], "ood", [1 - val_fraction, val_fraction], ["train", "validation"]
+    )
     out = prompts[["prompt_id", "leakage_group"]].copy()
     out["standard_split"] = out.leakage_group.map(standard)
     # If a training-domain prompt duplicates a held-out one, purge it; do not
     # expand OOD test with in-domain data or expose its labels during training.
-    out["ood_split"] = ["test" if ds in held else "excluded_overlap" if g in test_groups else ood[g]
-                        for ds, g in zip(prompts.dataset, prompts.leakage_group)]
+    out["ood_split"] = [
+        "test" if ds in held else "excluded_overlap" if g in test_groups else ood[g]
+        for ds, g in zip(prompts.dataset, prompts.leakage_group)
+    ]
     return out.sort_values("prompt_id").reset_index(drop=True)
 
 
@@ -103,7 +107,12 @@ def validate_splits(prompts, outcomes, splits, config):
             if (active.groupby(key)[column].nunique() > 1).any():
                 raise ValueError("Prompt leakage across splits")
         if column in outcomes:
-            joined = outcomes[["prompt_id", column]].merge(splits[["prompt_id", column]], on="prompt_id", suffixes=("_row", "_prompt"), validate="many_to_one")
+            joined = outcomes[["prompt_id", column]].merge(
+                splits[["prompt_id", column]],
+                on="prompt_id",
+                suffixes=("_row", "_prompt"),
+                validate="many_to_one",
+            )
             if not joined[f"{column}_row"].equals(joined[f"{column}_prompt"]):
                 raise ValueError("Outcomes for a prompt disagree on split")
     if p[p.ood_split == "train"].dataset.isin(config["ood_held_out_datasets"]).any():

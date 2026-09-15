@@ -13,9 +13,15 @@ def offline_only():
         raise RuntimeError("Network/provider access is forbidden in this offline workflow")
 
     with ExitStack() as stack:
-        for target in ("socket.socket.connect", "socket.socket.connect_ex",
-                       "socket.create_connection", "socket.getaddrinfo", "urllib.request.urlopen",
-                       "providers.call_model", "providers.call_model_with_retries",
-                       "generate_dataset.call_model_with_retries"):
+        for target in (
+            "socket.socket.connect",
+            "socket.socket.connect_ex",
+            "socket.create_connection",
+            "socket.getaddrinfo",
+            "urllib.request.urlopen",
+            "providers.call_model",
+            "providers.call_model_with_retries",
+            "generate_dataset.call_model_with_retries",
+        ):
             stack.enter_context(patch(target, side_effect=blocked))
         yield audit

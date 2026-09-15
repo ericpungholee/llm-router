@@ -11,7 +11,7 @@ from benchmark_loaders import (
     load_manifest,
     validate_benchmark_records,
 )
-from dataset_schema import validate_result, validate_results
+from dataset_schema import ALWAYS_REQUIRED_TEXT_FIELDS, validate_result, validate_results
 from graders import (
     MalformedModelOutput,
     UnsafeGeneratedCode,
@@ -72,15 +72,11 @@ class ValidationTests(unittest.TestCase):
         code = [row for row in records if row.benchmark_name == "livecodebench"]
         self.assertTrue(all(row.problem_date for row in code))
         self.assertTrue(all(row.difficulty in {"medium", "hard"} for row in code))
-        self.assertTrue(
-            all(row.task_category == "competitive_programming:atcoder" for row in code)
-        )
+        self.assertTrue(all(row.task_category == "competitive_programming:atcoder" for row in code))
         self.assertFalse(any("fixture" in row.prompt_id for row in records))
 
     def test_duplicate_prompt_ids_are_rejected(self):
-        record = BenchmarkRecord(
-            "duplicate", "Question", "math", "math_500", "1"
-        )
+        record = BenchmarkRecord("duplicate", "Question", "math", "math_500", "1")
         with self.assertRaisesRegex(ValueError, "Duplicate prompt IDs"):
             validate_benchmark_records([record, record])
 
@@ -98,6 +94,29 @@ class ValidationTests(unittest.TestCase):
         row = valid_result()
         row["estimated_cost_usd"] = -1
         with self.assertRaisesRegex(ValueError, "estimated_cost_usd"):
+            validate_result(row)
+
+    def test_null_required_fields_are_rejected(self):
+        for field in ALWAYS_REQUIRED_TEXT_FIELDS:
+            with self.subTest(field=field):
+                row = valid_result()
+                row[field] = None
+                with self.assertRaisesRegex(ValueError, "Empty result fields"):
+                    validate_result(row)
+
+    def test_success_requires_nonempty_response_strings(self):
+        for field in ("raw_response", "parsed_answer"):
+            for value in (None, 0, False, "", "   "):
+                with self.subTest(field=field, value=value):
+                    row = valid_result()
+                    row[field] = value
+                    with self.assertRaisesRegex(ValueError, "raw_response and parsed_answer"):
+                        validate_result(row)
+
+    def test_failed_result_requires_error_type(self):
+        row = valid_result()
+        row.update(status="provider_error", score=None, correct=None, error_type=None)
+        with self.assertRaisesRegex(ValueError, "error_type"):
             validate_result(row)
 
     def test_inconsistent_result_task_type_is_rejected(self):
@@ -139,9 +158,7 @@ class ValidationTests(unittest.TestCase):
                 run_trusted_dry_run_tests,
             )
         )
-        self.assertFalse(
-            grade_code("print(0)", tests, run_trusted_dry_run_tests)
-        )
+        self.assertFalse(grade_code("print(0)", tests, run_trusted_dry_run_tests))
 
     def test_pilot_math_equivalence_regressions(self):
         cases = (
@@ -212,13 +229,9 @@ class ValidationTests(unittest.TestCase):
             "import sys, math, collections, itertools, functools, heapq, bisect\n"
             "print(math.floor(functools.reduce(lambda a,b:a+b, itertools.repeat(1, 1))))"
         )
-        self.assertTrue(
-            run_trusted_dry_run_tests(code, ({"input": "", "output": "1"},))
-        )
+        self.assertTrue(run_trusted_dry_run_tests(code, ({"input": "", "output": "1"},)))
         with self.assertRaises(UnsafeGeneratedCode):
-            run_trusted_dry_run_tests(
-                "import os\nprint(1)", ({"input": "", "output": "1"},)
-            )
+            run_trusted_dry_run_tests("import os\nprint(1)", ({"input": "", "output": "1"},))
 
 
 if __name__ == "__main__":

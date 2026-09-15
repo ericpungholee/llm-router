@@ -1,25 +1,25 @@
-import unittest
 import tempfile
+import unittest
 from dataclasses import replace
-from functools import partial
 from decimal import Decimal
+from functools import partial
 from pathlib import Path
 from unittest.mock import Mock, patch
 
 from benchmark_loaders import BenchmarkRecord, load_enabled_benchmarks, load_hard_pilot
 from generate_dataset import (
-    HARD_PILOT_PAIR_COUNT,
-    HARD_PILOT_MAX_RETRIES,
     HARD_PILOT_MAX_ATTEMPTS,
+    HARD_PILOT_MAX_RETRIES,
+    HARD_PILOT_PAIR_COUNT,
     generate_results,
     is_completed_result,
     main,
     parse_args,
     planned_calls,
+    read_results,
     regrade_results,
     select_pilot_prompts,
     smoke_test_prompt,
-    read_results,
     write_results,
 )
 from graders import MalformedModelOutput, parse_math_answer, parse_multiple_choice
@@ -42,8 +42,25 @@ class ModeSelectionTests(unittest.TestCase):
         self.assertEqual(HARD_PILOT_MAX_ATTEMPTS, 225)
         for mode in ("--hard-pilot", "--pilot"):
             with self.subTest(mode=mode), tempfile.TemporaryDirectory() as directory:
-                with patch("sys.argv", ["generate_dataset.py", mode, "--max-spend-usd", "2.00", "--exclude-xai", "--confirm", "--output", str(Path(directory) / "pilot.csv")]):
-                    with patch("generate_dataset.generate_results", return_value=rows) as generator, patch("generate_dataset.write_results"), patch("generate_dataset.load_dotenv"), patch("builtins.print") as printer:
+                with patch(
+                    "sys.argv",
+                    [
+                        "generate_dataset.py",
+                        mode,
+                        "--max-spend-usd",
+                        "2.00",
+                        "--exclude-xai",
+                        "--confirm",
+                        "--output",
+                        str(Path(directory) / "pilot.csv"),
+                    ],
+                ):
+                    with (
+                        patch("generate_dataset.generate_results", return_value=rows) as generator,
+                        patch("generate_dataset.write_results"),
+                        patch("generate_dataset.load_dotenv"),
+                        patch("builtins.print") as printer,
+                    ):
                         main()
                 kwargs = generator.call_args.kwargs
                 self.assertEqual(kwargs["max_retries"], 2)
@@ -51,19 +68,45 @@ class ModeSelectionTests(unittest.TestCase):
                 self.assertTrue(kwargs["exclude_xai"])
                 self.assertEqual(kwargs["run_plan"].planned_calls, 60)
                 self.assertEqual(kwargs["run_plan"].maximum_provider_attempts, 180)
-                self.assertEqual(kwargs["run_plan"].estimated_max_cost_usd,
-                                 build_run_plan([c for c in planned_calls(records) if c[0].inference_provider != "xai"], spend_cap="2.00", max_retries=2).estimated_max_cost_usd)
+                self.assertEqual(
+                    kwargs["run_plan"].estimated_max_cost_usd,
+                    build_run_plan(
+                        [c for c in planned_calls(records) if c[0].inference_provider != "xai"],
+                        spend_cap="2.00",
+                        max_retries=2,
+                    ).estimated_max_cost_usd,
+                )
                 output = "\n".join(str(call.args[0]) for call in printer.call_args_list)
-                for label in ("Remaining prompt/model pairs: 60", "Maximum provider attempts for pending pairs: 180",
-                              "Previously recorded spend:", "Conservative maximum additional spend:",
-                              "Conservative maximum total spend:", "Configured spend cap: $2.00",
-                              "Conservative maximum exceeds the configured cap"):
+                for label in (
+                    "Remaining prompt/model pairs: 60",
+                    "Maximum provider attempts for pending pairs: 180",
+                    "Previously recorded spend:",
+                    "Conservative maximum additional spend:",
+                    "Conservative maximum total spend:",
+                    "Configured spend cap: $2.00",
+                    "Conservative maximum exceeds the configured cap",
+                ):
                     self.assertIn(label, output)
 
     def test_hard_pilot_cap_above_two_dollars_is_rejected_before_dispatch(self):
         with tempfile.TemporaryDirectory() as directory:
-            with patch("sys.argv", ["generate_dataset.py", "--hard-pilot", "--max-spend-usd", "2.01", "--confirm", "--output", str(Path(directory) / "pilot.csv")]):
-                with patch("generate_dataset.generate_results") as generator, patch("generate_dataset.load_dotenv"), patch("builtins.print"):
+            with patch(
+                "sys.argv",
+                [
+                    "generate_dataset.py",
+                    "--hard-pilot",
+                    "--max-spend-usd",
+                    "2.01",
+                    "--confirm",
+                    "--output",
+                    str(Path(directory) / "pilot.csv"),
+                ],
+            ):
+                with (
+                    patch("generate_dataset.generate_results") as generator,
+                    patch("generate_dataset.load_dotenv"),
+                    patch("builtins.print"),
+                ):
                     with self.assertRaisesRegex(SystemExit, "cap cannot exceed"):
                         main()
                 generator.assert_not_called()
@@ -71,26 +114,64 @@ class ModeSelectionTests(unittest.TestCase):
     def test_resumed_retry_budget_excludes_paid_pairs_and_includes_transient_failure(self):
         records, rows = self.hard_pilot_fixture()
         existing = [dict(r) for r in rows[:4]]
-        for row, status in zip(existing[1:], ("parsing_failure", "grading_failure", "provider_error")):
-            row.update(status=status, score=None, correct=None,
-                       error_type="network_error" if status == "provider_error" else status)
-        existing[-1].update(raw_response="", parsed_answer="", failure_retryable=True, failure_scope="pair",
-                            stop_reason="", provider_attempts=3, provider_response_count=0, estimated_cost_usd=0.01)
+        for row, status in zip(
+            existing[1:], ("parsing_failure", "grading_failure", "provider_error")
+        ):
+            row.update(
+                status=status,
+                score=None,
+                correct=None,
+                error_type="network_error" if status == "provider_error" else status,
+            )
+        existing[-1].update(
+            raw_response="",
+            parsed_answer="",
+            failure_retryable=True,
+            failure_scope="pair",
+            stop_reason="",
+            provider_attempts=3,
+            provider_response_count=0,
+            estimated_cost_usd=0.01,
+        )
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "pilot.csv"
             write_results(existing, path)
-            with patch("sys.argv", ["generate_dataset.py", "--hard-pilot", "--max-spend-usd", "2.00", "--resume", "--exclude-xai", "--confirm", "--output", str(path)]):
-                with patch("generate_dataset.build_run_plan", wraps=build_run_plan) as planner, patch("generate_dataset.generate_results", return_value=rows) as generator, patch("generate_dataset.write_results"), patch("generate_dataset.load_dotenv"), patch("builtins.print"):
+            with patch(
+                "sys.argv",
+                [
+                    "generate_dataset.py",
+                    "--hard-pilot",
+                    "--max-spend-usd",
+                    "2.00",
+                    "--resume",
+                    "--exclude-xai",
+                    "--confirm",
+                    "--output",
+                    str(path),
+                ],
+            ):
+                with (
+                    patch("generate_dataset.build_run_plan", wraps=build_run_plan) as planner,
+                    patch("generate_dataset.generate_results", return_value=rows) as generator,
+                    patch("generate_dataset.write_results"),
+                    patch("generate_dataset.load_dotenv"),
+                    patch("builtins.print"),
+                ):
                     main()
         pending = planner.call_args.args[0]
-        self.assertEqual(pending, [c for c in planned_calls(records)[3:] if c[0].inference_provider != "xai"])
+        self.assertEqual(
+            pending, [c for c in planned_calls(records)[3:] if c[0].inference_provider != "xai"]
+        )
         self.assertEqual(planner.call_args.kwargs["max_retries"], 2)
         self.assertEqual(generator.call_args.kwargs["run_plan"].planned_calls, 58)
         self.assertEqual(generator.call_args.kwargs["run_plan"].maximum_provider_attempts, 174)
         self.assertEqual(generator.call_args.kwargs["initial_spend_usd"], Decimal("0.01"))
 
     def test_hard_pilot_alias_requires_confirmation_before_calls(self):
-        with patch("sys.argv", ["generate_dataset.py", "--hard-pilot", "--max-spend-usd", "2.00", "--exclude-xai"]):
+        with patch(
+            "sys.argv",
+            ["generate_dataset.py", "--hard-pilot", "--max-spend-usd", "2.00", "--exclude-xai"],
+        ):
             self.assertTrue(parse_args().pilot)
             with patch("generate_dataset.call_model_with_retries") as caller:
                 with patch("builtins.print"):
@@ -121,7 +202,16 @@ class ModeSelectionTests(unittest.TestCase):
         selected = select_pilot_prompts(records)
         self.assertEqual(len(selected), 15)
         self.assertEqual(len(planned_calls(selected, enabled_models())), 75)
-        self.assertEqual(len({(r.prompt_id, m.inference_provider, m.api_model_identifier) for r in selected for m in enabled_models()}), 75)
+        self.assertEqual(
+            len(
+                {
+                    (r.prompt_id, m.inference_provider, m.api_model_identifier)
+                    for r in selected
+                    for m in enabled_models()
+                }
+            ),
+            75,
+        )
         for name in ("mmlu_pro", "math_500", "livecodebench"):
             self.assertEqual(sum(row.benchmark_name == name for row in selected), 5)
 
@@ -131,10 +221,26 @@ class ModeSelectionTests(unittest.TestCase):
     def test_full_hard_pilot_resume_rejects_unresolved_xai_before_dispatch_or_write(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "pilot.csv"
-            with patch("sys.argv", ["generate_dataset.py", "--hard-pilot", "--resume",
-                                    "--max-spend-usd", "2.00", "--confirm", "--output", str(path)]):
-                with patch("generate_dataset.generate_results") as generator, patch("generate_dataset.write_results") as writer:
-                    with self.assertRaisesRegex(SystemExit, "xAI pre-dispatch cost bound is unresolved"):
+            with patch(
+                "sys.argv",
+                [
+                    "generate_dataset.py",
+                    "--hard-pilot",
+                    "--resume",
+                    "--max-spend-usd",
+                    "2.00",
+                    "--confirm",
+                    "--output",
+                    str(path),
+                ],
+            ):
+                with (
+                    patch("generate_dataset.generate_results") as generator,
+                    patch("generate_dataset.write_results") as writer,
+                ):
+                    with self.assertRaisesRegex(
+                        SystemExit, "xAI pre-dispatch cost bound is unresolved"
+                    ):
                         main()
             generator.assert_not_called()
             writer.assert_not_called()
@@ -144,7 +250,9 @@ class ModeSelectionTests(unittest.TestCase):
 class ParsingTests(unittest.TestCase):
     def test_normalizes_multiple_choice_and_math_final_answer(self):
         self.assertEqual(parse_multiple_choice("Final answer: (b).", ["A", "B"]), "B")
-        self.assertEqual(parse_math_answer("Work\nTherefore the final answer is: \\frac{3}{2}"), "\\frac{3}{2}")
+        self.assertEqual(
+            parse_math_answer("Work\nTherefore the final answer is: \\frac{3}{2}"), "\\frac{3}{2}"
+        )
 
     def test_parses_standalone_bold_option_without_guessing(self):
         self.assertEqual(parse_multiple_choice("**F**", ["A", "F"]), "F")
@@ -163,22 +271,41 @@ class ParsingTests(unittest.TestCase):
 class ExecutionSafetyTests(unittest.TestCase):
     def setUp(self):
         self.model = enabled_models()[0]
-        self.records = [smoke_test_prompt(), replace(smoke_test_prompt(), prompt_id="smoke_test:second")]
+        self.records = [
+            smoke_test_prompt(),
+            replace(smoke_test_prompt(), prompt_id="smoke_test:second"),
+        ]
         self.response = ProviderResponse("B", 5, 1, 12.0)
 
     def run_mocked(self, effects, records=None, **kwargs):
         # Exercise the real retry loop and attempt callbacks, with no HTTP/sleep.
         with patch("providers.call_model", side_effect=effects) as calls:
-            with patch("generate_dataset.call_model_with_retries", partial(call_model_with_retries, sleep=lambda _: None)):
-                rows = generate_results(records or self.records, dry_run=False, models=kwargs.pop("models", [self.model]), **kwargs)
+            with patch(
+                "generate_dataset.call_model_with_retries",
+                partial(call_model_with_retries, sleep=lambda _: None),
+            ):
+                rows = generate_results(
+                    records or self.records,
+                    dry_run=False,
+                    models=kwargs.pop("models", [self.model]),
+                    **kwargs,
+                )
         return rows, calls.call_count
 
     def error(self, error_type="network_error", retryable=True, **kwargs):
-        return ProviderError(self.model.inference_provider, self.model.api_model_identifier,
-                             "test failure", error_type=error_type, retryable=retryable, **kwargs)
+        return ProviderError(
+            self.model.inference_provider,
+            self.model.api_model_identifier,
+            "test failure",
+            error_type=error_type,
+            retryable=retryable,
+            **kwargs,
+        )
 
     def test_timeout_exhaustion_continues_same_model_on_prompt_two(self):
-        rows, calls = self.run_mocked([self.error(), self.error(), self.error(), self.response], max_retries=2)
+        rows, calls = self.run_mocked(
+            [self.error(), self.error(), self.error(), self.response], max_retries=2
+        )
         self.assertEqual(calls, 4)
         self.assertEqual([r["status"] for r in rows], ["provider_error", "success"])
         self.assertEqual(rows[0]["retry_count"], 2)
@@ -186,8 +313,11 @@ class ExecutionSafetyTests(unittest.TestCase):
         self.assertEqual([r["provider_attempts"] for r in rows], [3, 1])
 
     def test_third_attempt_success_still_allows_later_pairs(self):
-        rows, calls = self.run_mocked([self.error(), self.error(), self.response, self.response],
-                                      max_retries=HARD_PILOT_MAX_RETRIES, max_api_attempts=HARD_PILOT_MAX_ATTEMPTS)
+        rows, calls = self.run_mocked(
+            [self.error(), self.error(), self.response, self.response],
+            max_retries=HARD_PILOT_MAX_RETRIES,
+            max_api_attempts=HARD_PILOT_MAX_ATTEMPTS,
+        )
         self.assertEqual(calls, 4)
         self.assertEqual([r["status"] for r in rows], ["success", "success"])
         self.assertEqual([r["provider_attempts"] for r in rows], [3, 1])
@@ -196,27 +326,55 @@ class ExecutionSafetyTests(unittest.TestCase):
     def test_two_dollar_cap_stops_resumed_pilot_before_unsafe_attempt(self):
         paid = generate_results([self.records[0]], dry_run=True, models=[self.model])[0]
         paid["estimated_cost_usd"] = 1.999
-        plan = build_run_plan(planned_calls(self.records, [self.model]),
-                              spend_cap="2.00", max_retries=HARD_PILOT_MAX_RETRIES)
-        rows, calls = self.run_mocked([], completed_results=[paid], run_plan=plan,
-                                      max_retries=HARD_PILOT_MAX_RETRIES, max_api_attempts=HARD_PILOT_MAX_ATTEMPTS)
+        plan = build_run_plan(
+            planned_calls(self.records, [self.model]),
+            spend_cap="2.00",
+            max_retries=HARD_PILOT_MAX_RETRIES,
+        )
+        rows, calls = self.run_mocked(
+            [],
+            completed_results=[paid],
+            run_plan=plan,
+            max_retries=HARD_PILOT_MAX_RETRIES,
+            max_api_attempts=HARD_PILOT_MAX_ATTEMPTS,
+        )
         self.assertEqual(calls, 0)
         self.assertEqual(rows[-1]["error_type"], "spend_limit_error")
         self.assertEqual(rows[-1]["provider_attempts"], 0)
-        self.assertLessEqual(sum(Decimal(str(r["estimated_cost_usd"])) for r in rows), Decimal("2.00"))
+        self.assertLessEqual(
+            sum(Decimal(str(r["estimated_cost_usd"])) for r in rows), Decimal("2.00")
+        )
 
     def test_225_attempt_ceiling_allows_three_attempts_for_all_75_pairs(self):
         records = [replace(smoke_test_prompt(), prompt_id=f"mock-pilot:{i}") for i in range(15)]
         models = enabled_models()
-        effects = [ProviderError(m.inference_provider, m.api_model_identifier, "mock timeout",
-                                 error_type="network_error", retryable=True)
-                   for _ in records for m in models for _ in range(3)]
+        effects = [
+            ProviderError(
+                m.inference_provider,
+                m.api_model_identifier,
+                "mock timeout",
+                error_type="network_error",
+                retryable=True,
+            )
+            for _ in records
+            for m in models
+            for _ in range(3)
+        ]
         with patch("builtins.print"):
-            rows, calls = self.run_mocked(effects, records=records, models=models,
-                                          max_retries=HARD_PILOT_MAX_RETRIES, max_api_attempts=HARD_PILOT_MAX_ATTEMPTS)
+            rows, calls = self.run_mocked(
+                effects,
+                records=records,
+                models=models,
+                max_retries=HARD_PILOT_MAX_RETRIES,
+                max_api_attempts=HARD_PILOT_MAX_ATTEMPTS,
+            )
         self.assertEqual(calls, 225)
         self.assertEqual(len(rows), 75)
-        self.assertTrue(all(r["status"] == "provider_error" and r["error_type"] == "network_error" for r in rows))
+        self.assertTrue(
+            all(
+                r["status"] == "provider_error" and r["error_type"] == "network_error" for r in rows
+            )
+        )
         self.assertEqual(sum(r["provider_attempts"] for r in rows), 225)
         self.assertTrue(all(r["retry_count"] == 2 for r in rows))
 
@@ -231,7 +389,10 @@ class ExecutionSafetyTests(unittest.TestCase):
                 self.assertEqual(rows[0]["retry_count"], 1)
 
     def test_429_retry_can_succeed_before_next_prompt(self):
-        rows, calls = self.run_mocked([self.error("transient_provider_error", status_code=429), self.response, self.response], max_retries=2)
+        rows, calls = self.run_mocked(
+            [self.error("transient_provider_error", status_code=429), self.response, self.response],
+            max_retries=2,
+        )
         self.assertEqual(calls, 3)
         self.assertEqual([r["status"] for r in rows], ["success", "success"])
         self.assertEqual(rows[0]["retry_count"], 1)
@@ -240,23 +401,49 @@ class ExecutionSafetyTests(unittest.TestCase):
 
     def test_invalid_model_blocks_only_exact_provider_model(self):
         other = replace(self.model, key="other", api_model_identifier="other-id")
-        rows, calls = self.run_mocked([
-            self.error("invalid_model_error", False, invalid_model=True), self.response, self.response,
-        ], models=[self.model, other])
+        rows, calls = self.run_mocked(
+            [
+                self.error("invalid_model_error", False, invalid_model=True),
+                self.response,
+                self.response,
+            ],
+            models=[self.model, other],
+        )
         self.assertEqual(calls, 3)
-        self.assertEqual([r["status"] for r in rows], ["provider_error", "success", "skipped_model", "success"])
+        self.assertEqual(
+            [r["status"] for r in rows], ["provider_error", "success", "skipped_model", "success"]
+        )
         self.assertEqual(rows[2]["failure_scope"], "model")
         self.assertEqual(rows[2]["provider_attempts"], 0)
 
     def test_authentication_blocks_provider_this_run_and_rechecks_on_resume(self):
         same_provider = replace(self.model, key="other", api_model_identifier="other-id")
         independent = enabled_models()[1]
-        rows, calls = self.run_mocked([
-            self.error("authentication_error", False, status_code=401), self.response, self.response,
-        ], models=[self.model, same_provider, independent])
+        rows, calls = self.run_mocked(
+            [
+                self.error("authentication_error", False, status_code=401),
+                self.response,
+                self.response,
+            ],
+            models=[self.model, same_provider, independent],
+        )
         self.assertEqual(calls, 3)
-        self.assertEqual([r["status"] for r in rows], ["provider_error", "skipped_model", "success", "skipped_model", "skipped_model", "success"])
-        resumed, calls = self.run_mocked([self.response] * 4, models=[self.model, same_provider, independent], completed_results=rows)
+        self.assertEqual(
+            [r["status"] for r in rows],
+            [
+                "provider_error",
+                "skipped_model",
+                "success",
+                "skipped_model",
+                "skipped_model",
+                "success",
+            ],
+        )
+        resumed, calls = self.run_mocked(
+            [self.response] * 4,
+            models=[self.model, same_provider, independent],
+            completed_results=rows,
+        )
         self.assertEqual(calls, 4)
         self.assertTrue(all(r["status"] == "success" for r in resumed))
 
@@ -265,15 +452,21 @@ class ExecutionSafetyTests(unittest.TestCase):
         self.assertEqual(calls, 1)
         _, calls = self.run_mocked([], completed_results=rows)
         self.assertEqual(calls, 0)
-        changed = replace(self.model, generation=replace(self.model.generation, reasoning_setting="changed"))
-        resumed, calls = self.run_mocked([self.response, self.response], models=[changed], completed_results=rows)
+        changed = replace(
+            self.model, generation=replace(self.model.generation, reasoning_setting="changed")
+        )
+        resumed, calls = self.run_mocked(
+            [self.response, self.response], models=[changed], completed_results=rows
+        )
         self.assertEqual(calls, 2)
         self.assertTrue(all(r["status"] == "success" for r in resumed))
 
     def test_invalid_model_block_releases_when_identifier_changes(self):
         rows, _ = self.run_mocked([self.error("invalid_model_error", False, invalid_model=True)])
         changed = replace(self.model, api_model_identifier="fixed-model-id")
-        _, calls = self.run_mocked([self.response, self.response], models=[changed], completed_results=rows)
+        _, calls = self.run_mocked(
+            [self.response, self.response], models=[changed], completed_results=rows
+        )
         self.assertEqual(calls, 2)
 
     def test_prompt_specific_parameters_and_empty_outputs_stay_local(self):
@@ -300,17 +493,26 @@ class ExecutionSafetyTests(unittest.TestCase):
         self.assertEqual(resumed[1], saved[1])
 
     def test_resume_preserves_legacy_paid_and_retries_legacy_skips_and_failures(self):
-        from dataset_schema import RESULT_FIELDS
         rows, _ = self.run_mocked([self.error(), self.response], max_retries=0)
         third = replace(self.records[0], prompt_id="smoke_test:third")
-        skipped = dict(rows[0], prompt_id=third.prompt_id, status="skipped_model", error_type="model_disabled_after_provider_failure")
+        skipped = dict(
+            rows[0],
+            prompt_id=third.prompt_id,
+            status="skipped_model",
+            error_type="model_disabled_after_provider_failure",
+        )
         from dataset_schema import LEGACY_RESULT_FIELDS
-        legacy = [{k: v for k, v in r.items() if k in LEGACY_RESULT_FIELDS} for r in rows + [skipped]]
+
+        legacy = [
+            {k: v for k, v in r.items() if k in LEGACY_RESULT_FIELDS} for r in rows + [skipped]
+        ]
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "legacy.csv"
             write_results(legacy, path)
             saved = read_results(path)
-        resumed, calls = self.run_mocked([self.response, self.response], records=self.records + [third], completed_results=saved)
+        resumed, calls = self.run_mocked(
+            [self.response, self.response], records=self.records + [third], completed_results=saved
+        )
         self.assertEqual(calls, 2)
         self.assertEqual(resumed[1], saved[1])
         self.assertEqual([r["provider_attempts"] for r in (resumed[0], resumed[2])], [2, 1])
@@ -326,7 +528,11 @@ class ExecutionSafetyTests(unittest.TestCase):
     def test_grading_failure_has_null_correctness_and_paid_raw_response_checkpoint(self):
         snapshots = []
         with patch("generate_dataset.grade_parsed", side_effect=RuntimeError("grader unavailable")):
-            rows, _ = self.run_mocked([self.response], records=[self.records[0]], on_result=lambda r: snapshots.append([dict(x) for x in r]))
+            rows, _ = self.run_mocked(
+                [self.response],
+                records=[self.records[0]],
+                on_result=lambda r: snapshots.append([dict(x) for x in r]),
+            )
         self.assertEqual(rows[0]["status"], "grading_failure")
         self.assertIsNone(rows[0]["correct"])
         self.assertIsNone(rows[0]["score"])
@@ -337,8 +543,26 @@ class ExecutionSafetyTests(unittest.TestCase):
         same = replace(self.model, key="other", api_model_identifier="other-id")
         independent = enabled_models()[1]
         for scope, effects, expected_calls in (
-            ("model", [self.error("quota_or_billing_error", False, failure_scope="model"), self.response, self.response, self.response, self.response], 5),
-            ("provider", [self.error("quota_or_billing_error", False, failure_scope="provider"), self.response, self.response], 3),
+            (
+                "model",
+                [
+                    self.error("quota_or_billing_error", False, failure_scope="model"),
+                    self.response,
+                    self.response,
+                    self.response,
+                    self.response,
+                ],
+                5,
+            ),
+            (
+                "provider",
+                [
+                    self.error("quota_or_billing_error", False, failure_scope="provider"),
+                    self.response,
+                    self.response,
+                ],
+                3,
+            ),
         ):
             with self.subTest(scope=scope):
                 rows, calls = self.run_mocked(effects, models=[self.model, same, independent])
@@ -349,11 +573,20 @@ class ExecutionSafetyTests(unittest.TestCase):
 
     def test_retry_reserves_are_checkpointed_and_cannot_evade_spend_cap(self):
         from generate_dataset import render_prompt
+
         bound = max_call_cost_usd(self.model, render_prompt(self.records[0]), 128)
-        plan = build_run_plan(planned_calls(self.records, [self.model], max_output_tokens=128), spend_cap=bound * Decimal("2.5"))
+        plan = build_run_plan(
+            planned_calls(self.records, [self.model], max_output_tokens=128),
+            spend_cap=bound * Decimal("2.5"),
+        )
         snapshots = []
-        rows, calls = self.run_mocked([self.error(), self.error()], run_plan=plan, max_output_tokens=128,
-                                      max_retries=2, on_result=lambda r: snapshots.append([dict(x) for x in r]))
+        rows, calls = self.run_mocked(
+            [self.error(), self.error()],
+            run_plan=plan,
+            max_output_tokens=128,
+            max_retries=2,
+            on_result=lambda r: snapshots.append([dict(x) for x in r]),
+        )
         self.assertEqual(calls, 2)
         self.assertEqual(rows[0]["error_type"], "spend_limit_error")
         self.assertAlmostEqual(rows[0]["estimated_cost_usd"], float(bound * 2))
@@ -361,7 +594,9 @@ class ExecutionSafetyTests(unittest.TestCase):
         self.assertEqual(rows[0]["provider_attempts"], 2)
 
     def test_response_reporting_spend_above_cap_is_saved_and_not_repaid(self):
-        plan = build_run_plan(planned_calls(self.records, [self.model], max_output_tokens=128), spend_cap="0.01")
+        plan = build_run_plan(
+            planned_calls(self.records, [self.model], max_output_tokens=128), spend_cap="0.01"
+        )
         response = replace(self.response, provider_reported_cost_usd=0.02)
         rows, calls = self.run_mocked([response], run_plan=plan, max_output_tokens=128)
         self.assertEqual(calls, 1)
@@ -378,8 +613,12 @@ class ExecutionSafetyTests(unittest.TestCase):
     def test_resume_tracker_includes_prior_cost_by_default(self):
         row = generate_results([self.records[0]], dry_run=True, models=[self.model])[0]
         row.update(estimated_cost_usd=0.01)
-        plan = build_run_plan(planned_calls(self.records, [self.model], max_output_tokens=128), spend_cap="0.01")
-        rows, calls = self.run_mocked([], run_plan=plan, max_output_tokens=128, completed_results=[row])
+        plan = build_run_plan(
+            planned_calls(self.records, [self.model], max_output_tokens=128), spend_cap="0.01"
+        )
+        rows, calls = self.run_mocked(
+            [], run_plan=plan, max_output_tokens=128, completed_results=[row]
+        )
         self.assertEqual(calls, 0)
         self.assertEqual(rows[-1]["error_type"], "spend_limit_error")
 
@@ -389,8 +628,16 @@ class ExecutionSafetyTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "hard_pilot.csv"
             write_results([row], path)
-            with patch("sys.argv", ["generate_dataset.py", "--regrade-results", "--output", str(path)]):
-                with patch("providers.call_model", side_effect=AssertionError("offline only")), patch("generate_dataset.load_dotenv", side_effect=AssertionError("no keys needed")), patch("builtins.print"):
+            with patch(
+                "sys.argv", ["generate_dataset.py", "--regrade-results", "--output", str(path)]
+            ):
+                with (
+                    patch("providers.call_model", side_effect=AssertionError("offline only")),
+                    patch(
+                        "generate_dataset.load_dotenv", side_effect=AssertionError("no keys needed")
+                    ),
+                    patch("builtins.print"),
+                ):
                     main()
             regraded = read_results(path)
         self.assertEqual(regraded[0]["status"], "success")
@@ -399,14 +646,36 @@ class ExecutionSafetyTests(unittest.TestCase):
 
     def test_cli_resume_corrected_invalid_model_id_preserves_pending_spend(self):
         row = generate_results([self.records[0]], dry_run=True, models=[self.model])[0]
-        row.update(api_model_identifier="invalid-old-id", status="provider_error", error_type="invalid_model_error",
-                   score=None, correct=None, estimated_cost_usd=0.005,
-                   configuration_fingerprint="old-configuration", provider_attempts=1)
+        row.update(
+            api_model_identifier="invalid-old-id",
+            status="provider_error",
+            error_type="invalid_model_error",
+            score=None,
+            correct=None,
+            estimated_cost_usd=0.005,
+            configuration_fingerprint="old-configuration",
+            provider_attempts=1,
+        )
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "smoke.csv"
             write_results([row], path)
-            with patch("sys.argv", ["generate_dataset.py", "--smoke-test", "--max-spend-usd", "0.25", "--resume", "--exclude-xai", "--output", str(path)]):
-                with patch("providers.call_model", return_value=self.response) as calls, patch("builtins.print"):
+            with patch(
+                "sys.argv",
+                [
+                    "generate_dataset.py",
+                    "--smoke-test",
+                    "--max-spend-usd",
+                    "0.25",
+                    "--resume",
+                    "--exclude-xai",
+                    "--output",
+                    str(path),
+                ],
+            ):
+                with (
+                    patch("providers.call_model", return_value=self.response) as calls,
+                    patch("builtins.print"),
+                ):
                     main()
             saved = read_results(path)
         self.assertEqual(calls.call_count, 4)
@@ -418,15 +687,31 @@ class ExecutionSafetyTests(unittest.TestCase):
     def test_qwen_billing_rejection_and_historical_skip_are_eligible_on_new_run(self):
         qwen = next(m for m in enabled_models() if m.inference_provider == "openrouter")
         prior = generate_results(self.records, dry_run=True, models=[qwen])
-        for row, status, cost in zip(prior, ("provider_error", "skipped_model"), (0.032152, 0.030254)):
-            row.update(status=status, score=None, correct=None, raw_response="", parsed_answer="",
-                       stop_reason="", error_type="quota_or_billing_error" if status == "provider_error" else "blocked_by_permanent_failure",
-                       error_message="prior billing rejection", failure_scope="provider",
-                       failure_retryable=False, provider_attempts=3 if status == "provider_error" else 1,
-                       provider_response_count=0, response_cost_usd=0.0, estimated_cost_usd=cost)
+        for row, status, cost in zip(
+            prior, ("provider_error", "skipped_model"), (0.032152, 0.030254)
+        ):
+            row.update(
+                status=status,
+                score=None,
+                correct=None,
+                raw_response="",
+                parsed_answer="",
+                stop_reason="",
+                error_type="quota_or_billing_error"
+                if status == "provider_error"
+                else "blocked_by_permanent_failure",
+                error_message="prior billing rejection",
+                failure_scope="provider",
+                failure_retryable=False,
+                provider_attempts=3 if status == "provider_error" else 1,
+                provider_response_count=0,
+                response_cost_usd=0.0,
+                estimated_cost_usd=cost,
+            )
         plan = build_run_plan(planned_calls(self.records, [qwen]), spend_cap="2.00")
-        rows, calls = self.run_mocked([self.response, self.response], models=[qwen],
-                                      completed_results=prior, run_plan=plan)
+        rows, calls = self.run_mocked(
+            [self.response, self.response], models=[qwen], completed_results=prior, run_plan=plan
+        )
         self.assertEqual(calls, 2)
         self.assertTrue(all(r["status"] == "success" for r in rows))
         self.assertEqual([r["provider_attempts"] for r in rows], [4, 2])
@@ -436,29 +721,60 @@ class ExecutionSafetyTests(unittest.TestCase):
     def test_exclude_xai_preserves_full_matrix_paid_rows_and_all_recorded_reservations(self):
         grok = next(m for m in enabled_models() if m.inference_provider == "xai")
         prior = generate_results(self.records, dry_run=True, models=[self.model, grok])
-        prior[1].update(output_tokens=10015, estimated_cost_usd=0.061516,
-                        response_cost_usd=0.061516, stop_reason="completed", provider_response_count=1)
-        prior[3].update(status="provider_error", score=None, correct=None, raw_response="", parsed_answer="",
-                        error_type="interrupted_inflight", error_message="Interrupted historical dispatch",
-                        failure_retryable=True, failure_scope="pair", stop_reason="", estimated_cost_usd=0.115856,
-                        provider_response_count=0, provider_attempts=4,
-                        provider_diagnostics='[{"outcome": "interrupted_inflight"}]')
+        prior[1].update(
+            output_tokens=10015,
+            estimated_cost_usd=0.061516,
+            response_cost_usd=0.061516,
+            stop_reason="completed",
+            provider_response_count=1,
+        )
+        prior[3].update(
+            status="provider_error",
+            score=None,
+            correct=None,
+            raw_response="",
+            parsed_answer="",
+            error_type="interrupted_inflight",
+            error_message="Interrupted historical dispatch",
+            failure_retryable=True,
+            failure_scope="pair",
+            stop_reason="",
+            estimated_cost_usd=0.115856,
+            provider_response_count=0,
+            provider_attempts=4,
+            provider_diagnostics='[{"outcome": "interrupted_inflight"}]',
+        )
         for row in (prior[0], prior[2]):
-            row.update(status="skipped_model", score=None, correct=None, raw_response="", parsed_answer="",
-                       error_type="model_disabled_after_provider_failure", estimated_cost_usd=0.0)
+            row.update(
+                status="skipped_model",
+                score=None,
+                correct=None,
+                raw_response="",
+                parsed_answer="",
+                error_type="model_disabled_after_provider_failure",
+                estimated_cost_usd=0.0,
+            )
         # A cap equal to prior Grok spend cannot dispatch another provider either.
         total = Decimal("0.177372")
         plan = build_run_plan(planned_calls(self.records, [self.model]), spend_cap=total)
-        rows, calls = self.run_mocked([], models=[self.model, grok], completed_results=prior,
-                                      run_plan=plan, exclude_xai=True)
+        rows, calls = self.run_mocked(
+            [], models=[self.model, grok], completed_results=prior, run_plan=plan, exclude_xai=True
+        )
         self.assertEqual(calls, 0)
         self.assertEqual(len(rows), 4)
         self.assertEqual(rows[1], prior[1])
         self.assertEqual(rows[3], prior[3])
-        self.assertEqual(sum((Decimal(str(r["estimated_cost_usd"])) for r in rows), Decimal(0)), total)
+        self.assertEqual(
+            sum((Decimal(str(r["estimated_cost_usd"])) for r in rows), Decimal(0)), total
+        )
         larger = build_run_plan(planned_calls(self.records, [self.model]), spend_cap="2.00")
-        rows, calls = self.run_mocked([self.response, self.response], models=[self.model, grok],
-                                      completed_results=prior, run_plan=larger, exclude_xai=True)
+        rows, calls = self.run_mocked(
+            [self.response, self.response],
+            models=[self.model, grok],
+            completed_results=prior,
+            run_plan=larger,
+            exclude_xai=True,
+        )
         self.assertEqual(calls, 2)
         self.assertEqual(len(rows), 4)
         self.assertEqual(rows[1], prior[1])
@@ -467,8 +783,13 @@ class ExecutionSafetyTests(unittest.TestCase):
     def test_historical_xai_without_billed_ticks_is_never_rewritten_or_dispatched(self):
         grok = next(m for m in enabled_models() if m.inference_provider == "xai")
         prior = generate_results([self.records[0]], dry_run=True, models=[grok])[0]
-        prior.update(output_tokens=10610, estimated_cost_usd=0.066436,
-                     response_cost_usd=0.066436, stop_reason="completed", provider_diagnostics="[]")
+        prior.update(
+            output_tokens=10610,
+            estimated_cost_usd=0.066436,
+            response_cost_usd=0.066436,
+            stop_reason="completed",
+            provider_diagnostics="[]",
+        )
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "historical.csv"
             write_results([prior], path)
@@ -478,9 +799,14 @@ class ExecutionSafetyTests(unittest.TestCase):
             self.assertEqual(regraded[0]["estimated_cost_usd"], prior["estimated_cost_usd"])
             self.assertEqual(regraded[0]["response_cost_usd"], prior["response_cost_usd"])
             for excluded in (False, True):
-                rows, calls = self.run_mocked([], records=[self.records[0]], models=[grok],
-                                              completed_results=saved, exclude_xai=excluded,
-                                              run_plan=build_run_plan([], spend_cap="2.00"))
+                rows, calls = self.run_mocked(
+                    [],
+                    records=[self.records[0]],
+                    models=[grok],
+                    completed_results=saved,
+                    exclude_xai=excluded,
+                    run_plan=build_run_plan([], spend_cap="2.00"),
+                )
                 self.assertEqual(calls, 0)
                 self.assertEqual(rows, saved)
             self.assertEqual(path.read_bytes(), before)
@@ -488,27 +814,50 @@ class ExecutionSafetyTests(unittest.TestCase):
 
     def test_successful_xai_response_checkpoints_billed_cost_despite_token_limit_discrepancy(self):
         from provider_clients.normalization import normalize_response
+
         grok = next(m for m in enabled_models() if m.inference_provider == "xai")
-        response = normalize_response({
-            "status": "completed", "model": grok.api_model_identifier,
-            "output": [{"type": "message", "content": [{"type": "output_text", "text": "B"}]}],
-            "usage": {"input_tokens": 13, "output_tokens": 10015, "cost_in_usd_ticks": 37_756_000},
-        }, "xai", grok.api_model_identifier, 1.0, 4096, "responses")
+        response = normalize_response(
+            {
+                "status": "completed",
+                "model": grok.api_model_identifier,
+                "output": [{"type": "message", "content": [{"type": "output_text", "text": "B"}]}],
+                "usage": {
+                    "input_tokens": 13,
+                    "output_tokens": 10015,
+                    "cost_in_usd_ticks": 37_756_000,
+                },
+            },
+            "xai",
+            grok.api_model_identifier,
+            1.0,
+            4096,
+            "responses",
+        )
         # Replay an already returned response offline; the real dispatch guard
         # remains closed for Grok. This mock deliberately makes no dispatch.
-        with patch("generate_dataset.call_model_with_retries", return_value=(response, 0)), patch("provider_clients.base.urllib.request.urlopen", side_effect=AssertionError("offline only")):
-            rows = generate_results([self.records[0]], dry_run=False, models=[grok],
-                                    run_plan=build_run_plan([], spend_cap="2.00"))
+        with (
+            patch("generate_dataset.call_model_with_retries", return_value=(response, 0)),
+            patch(
+                "provider_clients.base.urllib.request.urlopen",
+                side_effect=AssertionError("offline only"),
+            ),
+        ):
+            rows = generate_results(
+                [self.records[0]],
+                dry_run=False,
+                models=[grok],
+                run_plan=build_run_plan([], spend_cap="2.00"),
+            )
         self.assertEqual(rows[0]["status"], "success")
         self.assertEqual(rows[0]["raw_response"], "B")
         self.assertEqual(rows[0]["output_tokens"], 10015)
         self.assertEqual(rows[0]["response_cost_usd"], 0.0037756)
         self.assertEqual(rows[0]["estimated_cost_usd"], 0.0037756)
         import json
+
         diagnostics = json.loads(rows[0]["provider_diagnostics"])[0]
         self.assertEqual(diagnostics["cost_in_usd_ticks"], 37_756_000)
         self.assertTrue(diagnostics["output_tokens_exceed_requested_limit"])
-
 
     def test_offline_regrade_preserves_raw_response_and_api_telemetry(self):
         model = enabled_models()[0]
@@ -558,9 +907,7 @@ class ExecutionSafetyTests(unittest.TestCase):
         model = enabled_models()[0]
         fake = ProviderResponse("I decline to answer.", 5, 5, 1.0)
         with patch("generate_dataset.call_model_with_retries", return_value=(fake, 0)):
-            rows = generate_results(
-                [smoke_test_prompt()], dry_run=False, models=[model]
-            )
+            rows = generate_results([smoke_test_prompt()], dry_run=False, models=[model])
         self.assertEqual(rows[0]["status"], "parsing_failure")
         self.assertIsNone(rows[0]["score"])
         self.assertIsNone(rows[0]["correct"])
@@ -579,9 +926,7 @@ class ExecutionSafetyTests(unittest.TestCase):
             "generate_dataset.call_model_with_retries",
             side_effect=[error, (response, 0)],
         ):
-            rows = generate_results(
-                [smoke_test_prompt()], dry_run=False, models=[first, second]
-            )
+            rows = generate_results([smoke_test_prompt()], dry_run=False, models=[first, second])
         self.assertEqual([row["status"] for row in rows], ["provider_error", "success"])
         self.assertEqual(rows[0]["error_message"], "exact provider error")
 

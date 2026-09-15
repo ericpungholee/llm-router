@@ -2,9 +2,9 @@
 
 import importlib.util
 import json
-from pathlib import Path
 import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 import numpy as np
@@ -14,21 +14,43 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from routing_data.features import FEATURE_COLUMNS, feature_table
 from routing_ml.bootstrap import group_strata, paired_bootstrap, sample_groups
 from routing_ml.metrics import calibration, nondominated, oracle_actions
-from routing_ml.policies import Policy, best_single, estimate_costs, grid, route, select_validation, validate_predictions
+from routing_ml.policies import (
+    Policy,
+    best_single,
+    estimate_costs,
+    grid,
+    route,
+    select_validation,
+    validate_predictions,
+)
 from routing_ml.training import MODEL_IDS, Split, fit_predictors, inputs, train_router
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def synthetic(name="train", regime="standard", n=60):
-    prompts = pd.DataFrame([dict(prompt_id=f"{regime}_{name}_{i:03d}",
-                                 prompt=f"{'algebra equation' if i % 2 else 'history question'} common word identifier{i} {name}token",
-                                 dataset="math" if i < n // 2 else "knowledge",
-                                 leakage_group=f"{regime}_{name}_group{i // 2}",
-                                 standard_split=name, ood_split=name) for i in range(n)]).set_index("prompt_id")
+    prompts = pd.DataFrame(
+        [
+            dict(
+                prompt_id=f"{regime}_{name}_{i:03d}",
+                prompt=f"{'algebra equation' if i % 2 else 'history question'} common word identifier{i} {name}token",
+                dataset="math" if i < n // 2 else "knowledge",
+                leakage_group=f"{regime}_{name}_group{i // 2}",
+                standard_split=name,
+                ood_split=name,
+            )
+            for i in range(n)
+        ]
+    ).set_index("prompt_id")
     features = feature_table(prompts.reset_index()).set_index("prompt_id")
-    y = pd.DataFrame([[int((i + j) % 3 != 0) for j in range(8)] for i in range(n)], index=prompts.index, columns=MODEL_IDS)
-    costs = pd.DataFrame(np.tile(np.arange(1, 9) / 1000, (n, 1)), index=prompts.index, columns=MODEL_IDS)
+    y = pd.DataFrame(
+        [[int((i + j) % 3 != 0) for j in range(8)] for i in range(n)],
+        index=prompts.index,
+        columns=MODEL_IDS,
+    )
+    costs = pd.DataFrame(
+        np.tile(np.arange(1, 9) / 1000, (n, 1)), index=prompts.index, columns=MODEL_IDS
+    )
     return Split(regime, name, prompts, features, y, costs)
 
 
@@ -37,10 +59,18 @@ class TrainingTests(unittest.TestCase):
         train = synthetic()
         calls = []
         original = TfidfVectorizer.fit_transform
+
         def observe(vectorizer, documents, *args, **kwargs):
             calls.append((vectorizer, list(documents)))
             return original(vectorizer, documents, *args, **kwargs)
-        with patch.object(TfidfVectorizer, "fit_transform", observe), patch("routing_ml.training.load_split", side_effect=AssertionError("CV cannot load any split")):
+
+        with (
+            patch.object(TfidfVectorizer, "fit_transform", observe),
+            patch(
+                "routing_ml.training.load_split",
+                side_effect=AssertionError("CV cannot load any split"),
+            ),
+        ):
             model, cv, assignments = train_router(train)
         self.assertEqual(len(calls), 6)
         self.assertEqual(len({id(p) for p, _ in calls}), 6)
@@ -64,7 +94,15 @@ class TrainingTests(unittest.TestCase):
     def test_only_prompt_and_allowlisted_features_enter_x(self):
         a = synthetic()
         text_before, numeric_before = inputs(a, "tfidf"), inputs(a, "handcrafted")
-        for column in ("raw_output", "success", "cost_usd", "latency", "output_tokens", "ground_truth", "actual_model"):
+        for column in (
+            "raw_output",
+            "success",
+            "cost_usd",
+            "latency",
+            "output_tokens",
+            "ground_truth",
+            "actual_model",
+        ):
             a.prompts[column] = "forbidden"
             a.features[column] = -123456
         a.prompts["dataset"] = "forbidden"
@@ -88,7 +126,15 @@ class TrainingTests(unittest.TestCase):
             Split(a.regime, a.name, a.prompts, a.features, a.y.iloc[:, ::-1], a.costs)
         with self.assertRaisesRegex(ValueError, "alignment"):
             Split(a.regime, a.name, a.prompts, a.features.iloc[::-1], a.y, a.costs)
-        self.assertEqual(tuple(json.loads((ROOT / "configs/router_model_pool.json").read_text())["models"][i]["model_id"] for i in range(8)), MODEL_IDS)
+        self.assertEqual(
+            tuple(
+                json.loads((ROOT / "configs/router_model_pool.json").read_text())["models"][i][
+                    "model_id"
+                ]
+                for i in range(8)
+            ),
+            MODEL_IDS,
+        )
 
     def test_single_class_predictor_fallback(self):
         x = np.ones((10, 2))
@@ -152,8 +198,12 @@ class PolicyTests(unittest.TestCase):
 
     def test_threshold_fallback_probability_cost_and_id_ties(self):
         p = [[0.3, 0.4, 0.2], [0.4, 0.4, 0.4], [0.1, 0.1, 0.2]]
-        np.testing.assert_array_equal(route(p, Policy("t", "threshold", 1), [2, 2, 3], ("z", "a", "b")), [1, 1, 2])
-        np.testing.assert_array_equal(route([[0.2, 0.2]], Policy("t", "threshold", 1), [1, 2], ("z", "a")), [0])
+        np.testing.assert_array_equal(
+            route(p, Policy("t", "threshold", 1), [2, 2, 3], ("z", "a", "b")), [1, 1, 2]
+        )
+        np.testing.assert_array_equal(
+            route([[0.2, 0.2]], Policy("t", "threshold", 1), [1, 2], ("z", "a")), [0]
+        )
 
     def test_utility_uses_normalized_training_cost_and_ties(self):
         p = [[0.6, 0.9]]
@@ -206,12 +256,19 @@ class PolicyTests(unittest.TestCase):
         val.costs.iloc[:, 0] = 0.0001
         p = pd.DataFrame(0.9, index=val.prompts.index, columns=MODEL_IDS)
         chosen, _, table, _ = select_validation(val, p, np.arange(1, 9))
-        self.assertAlmostEqual(table[table.policy_id == chosen.policy_id].mean_cost_usd.iloc[0], 0.0001)
+        self.assertAlmostEqual(
+            table[table.policy_id == chosen.policy_id].mean_cost_usd.iloc[0], 0.0001
+        )
 
 
 class EvaluationTests(unittest.TestCase):
     def test_bootstrap_samples_whole_groups_within_strata(self):
-        prompts = pd.DataFrame(dict(dataset=["a", "a", "a", "b", "b", "b"], leakage_group=["g1", "g1", "g2", "g3", "g4", "g4"]))
+        prompts = pd.DataFrame(
+            dict(
+                dataset=["a", "a", "a", "b", "b", "b"],
+                leakage_group=["g1", "g1", "g2", "g3", "g4", "g4"],
+            )
+        )
         rng, strata = np.random.default_rng(3407), group_strata(prompts)
         for _ in range(30):
             idx = sample_groups(strata, rng)
@@ -227,11 +284,15 @@ class EvaluationTests(unittest.TestCase):
     def test_paired_bootstrap_known_delta_and_savings_and_seed(self):
         prompts = synthetic().prompts
         n = len(prompts)
-        samples, summary = paired_bootstrap(prompts, np.ones(n), np.ones(n), np.ones(n), np.full(n, 2), replicates=50)
+        samples, summary = paired_bootstrap(
+            prompts, np.ones(n), np.ones(n), np.ones(n), np.full(n, 2), replicates=50
+        )
         self.assertEqual(summary["ci_95"]["quality_delta"], [0, 0])
         self.assertEqual(summary["ci_95"]["cost_savings"], [0.5, 0.5])
         self.assertTrue(summary["noninferiority_supported"])
-        other, _ = paired_bootstrap(prompts, np.ones(n), np.ones(n), np.ones(n), np.full(n, 2), replicates=50)
+        other, _ = paired_bootstrap(
+            prompts, np.ones(n), np.ones(n), np.ones(n), np.full(n, 2), replicates=50
+        )
         pd.testing.assert_frame_equal(samples, other, check_exact=True)
 
     def test_calibration_bins_include_one_and_loss_is_clipped(self):
@@ -256,17 +317,25 @@ class EvaluationTests(unittest.TestCase):
         np.testing.assert_array_equal(actions[1:], 0)
 
     def test_offline_run_freezes_policy_before_loading_test(self):
-        spec = importlib.util.spec_from_file_location("router_v1_experiment", ROOT / "experiments/tfidf_logreg_router.py")
+        spec = importlib.util.spec_from_file_location(
+            "router_v1_experiment", ROOT / "experiments/tfidf_logreg_router.py"
+        )
         experiment = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(experiment)
         with tempfile.TemporaryDirectory() as tmp:
             output = Path(tmp) / "standard"
+
             def read(directory, regime, split):
                 if split == "test":
                     self.assertTrue((output / "frozen_policy.json").exists())
                     self.assertTrue((output / "models.joblib").exists())
                 return synthetic(split, regime)
-            with patch.object(experiment, "checked_read", side_effect=read), patch.object(experiment, "verify_source", return_value={}), patch.object(experiment, "figures"):
+
+            with (
+                patch.object(experiment, "checked_read", side_effect=read),
+                patch.object(experiment, "verify_source", return_value={}),
+                patch.object(experiment, "figures"),
+            ):
                 result = experiment.run_one(Path(tmp), output, Path(tmp), "standard", "tfidf")
             self.assertTrue(result["determinism_full_training_replay_verified"])
             self.assertEqual(len(pd.read_parquet(output / "bootstrap_samples.parquet")), 2000)

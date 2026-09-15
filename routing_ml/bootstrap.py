@@ -18,8 +18,12 @@ def group_strata(prompts):
 
 
 def sample_groups(strata, rng):
-    return np.concatenate([np.concatenate([groups[i] for i in rng.integers(0, len(groups), len(groups))])
-                           for groups in strata])
+    return np.concatenate(
+        [
+            np.concatenate([groups[i] for i in rng.integers(0, len(groups), len(groups))])
+            for groups in strata
+        ]
+    )
 
 
 def paired_bootstrap(prompts, router_y, best_y, router_c, best_c, replicates=2000, seed=SEED):
@@ -34,13 +38,28 @@ def paired_bootstrap(prompts, router_y, best_y, router_c, best_c, replicates=200
         ry, by, rc, bc = values[:, idx]
         macro = [values[:, idx[datasets[idx] == d]].mean(axis=1) for d in sorted(set(datasets))]
         mry, mby, mrc, mbc = np.mean(macro, axis=0)
-        samples.append(dict(replicate=replicate, quality_delta=float((ry - by).mean()),
-                            cost_savings=float(1 - rc.mean() / bc.mean()),
-                            macro_quality_delta=float(mry - mby), macro_cost_savings=float(1 - mrc / mbc)))
+        samples.append(
+            dict(
+                replicate=replicate,
+                quality_delta=float((ry - by).mean()),
+                cost_savings=float(1 - rc.mean() / bc.mean()),
+                macro_quality_delta=float(mry - mby),
+                macro_cost_savings=float(1 - mrc / mbc),
+            )
+        )
     samples = pd.DataFrame(samples)
-    ci = {name: np.quantile(samples[name], [0.025, 0.975]).tolist() for name in samples if name != "replicate"}
-    return samples, dict(replicates=replicates, seed=seed, method="paired stratified whole-group percentile",
-                         percentile_method="linear", ci_95=ci,
-                         noninferiority_supported=bool(ci["quality_delta"][0] >= -0.005),
-                         training_and_selection_fixed=True,
-                         groups_per_stratum={d: len(g) for d, g in zip(sorted(set(datasets)), strata)})
+    ci = {
+        name: np.quantile(samples[name], [0.025, 0.975]).tolist()
+        for name in samples
+        if name != "replicate"
+    }
+    return samples, dict(
+        replicates=replicates,
+        seed=seed,
+        method="paired stratified whole-group percentile",
+        percentile_method="linear",
+        ci_95=ci,
+        noninferiority_supported=bool(ci["quality_delta"][0] >= -0.005),
+        training_and_selection_fixed=True,
+        groups_per_stratum={d: len(g) for d, g in zip(sorted(set(datasets)), strata)},
+    )
